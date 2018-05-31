@@ -12,7 +12,13 @@
 # long: all
 # 	bin/main exp/vetor2-Eclipses.class
 
-all: src/main.cpp src/Constant_pool.cpp 
-	g++ -o bin/main src/main.cpp src/Reader.cpp src/Constant_pool.cpp src/Displayer.cpp
+all: src/main.cpp src/Constant_pool.cpp src/Interface.cpp
+	g++ -o bin/main src/main.cpp src/Reader.cpp src/Constant_pool.cpp src/Displayer.cpp src/Interface.cpp
+
 run: all
 	bin/main E exp/Jogador.class
+
+eclipse: all
+	bin/main E exp/vetor2-Eclipses.class
+negativo: all
+	bin/main E exp/Negativo.class

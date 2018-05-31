@@ -2,35 +2,38 @@
 #include <stdio.h>
 #include <math.h>
 #include <string>
+#include <iostream>
 
 using namespace std;
+
+
 
 void Displayer::version(U2 min_version, U2 max_version){
 	printf("\nCLASS VERSION: (%d.%d)\t (MaxVersion.MinVersion)\n\n",max_version, min_version);
 }
 
-void init_name_types(vector <string> &name_types){
+// void init_name_types(vector <string> &name_types){
 
-	name_types.push_back("-");
-	name_types.push_back("UTF-8");
-	name_types.push_back("-");
-	name_types.push_back("Integer");
-	name_types.push_back("Float");
-	name_types.push_back("Long");
-	name_types.push_back("Double");
-	name_types.push_back("Class");
-	name_types.push_back("String");
-	name_types.push_back("Field");
-	name_types.push_back("Method");
-	name_types.push_back("Interface");
-	name_types.push_back("Name and Type");
-}
+// 	name_types.push_back("-");
+// 	name_types.push_back("UTF-8");
+// 	name_types.push_back("-");
+// 	name_types.push_back("Integer");
+// 	name_types.push_back("Float");
+// 	name_types.push_back("Long");
+// 	name_types.push_back("Double");
+// 	name_types.push_back("Class");
+// 	name_types.push_back("String");
+// 	name_types.push_back("Field");
+// 	name_types.push_back("Method");
+// 	name_types.push_back("Interface");
+// 	name_types.push_back("Name and Type");
+// }
 
 long u4_to_long(U4 high, U4 low) {
 	long ret;
-	
-	ret = (((long) high) << 32) | low;
-	
+	ret = (unsigned int)high;
+	ret<<= 32;
+	ret+= (unsigned int)low;
 	return ret;
 }
 
@@ -94,46 +97,20 @@ string display_UTF8(vector <U1> v, U2 size){
 	return ret;
 }
 
-
-// char* display_dereference_index(Cp_info *cp, U2 index) {
-// 	char* aux = (char*)malloc(sizeof(char)*255);
-// 	switch (cp[index].tag) {
-// 		case UTF8: 
-// 			return get_UTF8(cp[index].info[1].array, cp[index].info[0].u2);
-// 		case CLASS: 
-// 		case STRING:
-// 			return display_dereference_index(cp, cp[index].info[0].u2);
-// 		case NAMEANDTYPE: 
-// 			strcat(aux, display_dereference_index(cp, cp[index].info[0].u2));
-// 			strcat(aux, ":");
-// 			return strcat(aux, display_dereference_index(cp, cp[index].info[1].u2));
-			
-			
-// 		case METHODREF: 
-// 		case INTERFACEMETHODREF:
-// 		case FIELDREF:
-// 			strcat(aux, display_dereference_index(cp, cp[index].info[0].u2));
-// 			strcat(aux, ".");
-// 			return strcat(aux, display_dereference_index(cp, cp[index].info[1].u2));
-			
-// 	}
-// 	return "";
-// }
-
-string dereference_Index (vector <Cp_info> cp, U2 index) {
+string Displayer::dereference_index (vector <Cp_info> cp_vector, U2 index) {
 	
-	switch (cp[index].tag) {
+	switch (cp_vector[index].tag) {
 		case UTF8: 
-			return display_UTF8(cp[index].info[0].array, cp[index].info[0].u2);
+			return display_UTF8(cp_vector[index].info[0].array, cp_vector[index].info[0].u2);
 		case CLASS: 
 		case STRING:
-			return dereference_Index(cp, cp[index].info[0].u2);
+			return dereference_index(cp_vector, cp_vector[index].info[0].u2);
 		case NAMEANDTYPE: 
-			return (dereference_Index(cp, cp[index].info[0].u2) + ":" + dereference_Index(cp, cp[index].info[1].u2));
+			return (dereference_index(cp_vector, cp_vector[index].info[0].u2) + ":" + dereference_index(cp_vector, cp_vector[index].info[1].u2));
 		case METHODREF: 
 		case INTERFACEMETHODREF:
 		case FIELDREF:
-			return (dereference_Index(cp, cp[index].info[0].u2) + "." + dereference_Index(cp, cp[index].info[1].u2));
+			return (dereference_index(cp_vector, cp_vector[index].info[0].u2) + "." + dereference_index(cp_vector, cp_vector[index].info[1].u2));
 	}
 	
 	return "";
@@ -145,9 +122,8 @@ void Displayer::cp(Constant_pool *constant_pool, U2 cp_length){
 
 	int index;
 
-	vector <string> name_types;
 
-	init_name_types(name_types);
+	// init_name_types(name_types);
    
     printf("______________________________________________Constant__Pool______________________________________________\n\n");
 
@@ -159,46 +135,47 @@ void Displayer::cp(Constant_pool *constant_pool, U2 cp_length){
 
 		switch (cp[i].tag) {
 			case UTF8: 
-                printf("\t ");
-				printf(" \t\t %s", display_UTF8(cp[i].info[0].array, cp[i].info[0].u2).c_str());
+                cout << "\t\t\t";
+				cout <<  display_UTF8(cp[i].info[0].array, cp[i].info[0].u2).c_str();
 				break;
 			case INTEGER: 
-				printf("\t ");
-				printf(" \t\t %d", cp[i].info[0].u4);
+				cout << "\t\t\t";
+				cout << cp[i].info[0].u4;
 				break;
 			case FLOAT: 
-				printf("\t ");
-				printf(" \t\t %.2f", u4_to_float(cp[i].info[0].u4));
+				cout << "\t\t\t";
+				cout << u4_to_float(cp[i].info[0].u4);
 				break;
 			case LONG: 
-				printf("\t ");
-				printf(" \t\t %li", u4_to_long(cp[i].info[0].u4, cp[i+1].info[0].u4));
+				cout << "\t\t\t";
 				
+				//cout << u4_to_long(cp[i].info[0].u4, cp[i+1].info[0].u4);
+				// printf("%x-%x\t", cp[i].info[0].u4, cp[i+1].info[0].u4);
+				
+				printf("%ld", u4_to_long(cp[i].info[0].u4, cp[i+1].info[0].u4));
 				i++; 
 				break;
 			case DOUBLE: 
-				printf("\t ");
-				printf(" \t %lf", u4_to_double(cp[i].info[0].u4, cp[i+1].info[0].u4));
-				
+				cout << "\t\t\t";
+				cout << u4_to_double(cp[i].info[0].u4, cp[i+1].info[0].u4);
 				i++; 
 				break;
 			case CLASS: 
 				
 			case STRING:
-				printf(" \t\t");
-				printf(" %d", cp[i].info[0].u2);
-				// printf("\t\t\t\t//%s", dereference_Index(cp,i));
+				cout << "\t\t\t";
+				cout << cp[i].info[0].u2;
+				cout << "\t\t\t\t//" << dereference_index(cp,i);
 				break;
 			case NAMEANDTYPE: 
-				printf(" \t %d:%d ", cp[i].info[0].u2, cp[i].info[1].u2);
-				// printf("\t\t\t\t//%s", dereference_Index(cp,i));
+				cout << "\t\t" <<  cp[i].info[0].u2 << ":" << cp[i].info[1].u2;
+				cout << "\t\t\t\t//" << dereference_index(cp,i);
 				break;
 			case METHODREF: 
-			
 			case INTERFACEMETHODREF:
 			case FIELDREF:
-				printf(" \t\t %d.%d ", cp[i].info[0].u2, cp[i].info[1].u2);
-				// printf("\t\t\t\t//%s", dereference_Index(cp,i));
+				cout << "\t\t" <<  cp[i].info[0].u2 << "." <<  cp[i].info[1].u2;
+				cout << "\t\t\t\t//" << dereference_index(cp,i);
 				break;
 		}
 		printf("\n");
@@ -248,34 +225,33 @@ void Displayer::cp(Constant_pool *constant_pool, U2 cp_length){
 // }
 
 
-// void display_class_names(U2 this_class, U2 super_class,Cp_info *cp){
+void Displayer::class_names(U2 this_class, U2 super_class, vector<Cp_info> cp_vector){
 
-// 	printf("This class: %s\n", display_dereference_index(cp, this_class) );
-// 	printf("Super class : %s\n", display_dereference_index(cp,super_class) );
+	cout << "This class: " << dereference_index(cp_vector, this_class) << endl;
+	cout << "Super class: " << dereference_index(cp_vector,super_class) << endl;
 
-// }
+}
 
 
 
-// void display_flags(U2 access_flags){
-// 	init_flag_names();
-// 	printf("flags: ");
-
-// 	if (access_flags & 0x01) 
-// 		printf("%s ", flag_names[0] );
-// 	if(access_flags & 0x010) 
-// 		printf("%s ", flag_names[0] );
-// 	if(access_flags & 0x020) 
-// 		printf("%s ", flag_names[0] );
-// 	if(access_flags & 0x0200) 
-// 		printf("%s ", flag_names[0] );
-// 	if(access_flags & 0x0400) 	
-// 		printf("%s ", flag_names[0] );
+void Displayer::access_flags(U2 access_flags){
+	
+	printf("flags: ");
+	if (access_flags & 0x01) 
+		cout << " " << flag_names[0];
+	if(access_flags & 0x010) 
+		cout << " " << flag_names[1];
+	if(access_flags & 0x020) 
+		cout << " " << flag_names[2];
+	if(access_flags & 0x0200) 
+		cout << " " << flag_names[3];
+	if(access_flags & 0x0400) 	
+		cout << " " << flag_names[4];
 	
 	
-// 	printf(" 0x%x\n", access_flags);
+	printf(" 0x%x\n", access_flags);
 
-// }
+}
 
 
 // void display_interfaces(U2 *interfaces, Cp_info *cp, int length) {

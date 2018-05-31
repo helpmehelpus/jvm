@@ -37,7 +37,7 @@ Constant_pool::Constant_pool(int cp_length, FILE *fp)
 			break;
 		case LONG:
 		case DOUBLE:
-			cp_vector[i].info[i].u4 = reader.read_U4(fp);
+			cp_vector[i].info[0].u4 = reader.read_U4(fp);
 			
 			i++;
 			

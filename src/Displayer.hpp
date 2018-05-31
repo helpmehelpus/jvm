@@ -5,18 +5,23 @@
 #include<stdlib.h>
 #include "Base_types.hpp"
 #include "Constant_pool.hpp"
-
+#include <string>
 using namespace std;
 
+const string name_types[] = {"-", "UTF-8", "-", "Integer", "Float", "Long", "Double", "Class", "String", "Field", "Method", "Interface", "Name and Type"};
+
+const string flag_names[] = {"ACC_PUBLIC", "ACC_FINAL", "ACC_SUPER", "ACC_INTERFACE", "ACC_ABSTRACT"};
 class Displayer
 {
 public:
 	static void version(U2 min_version, U2 max_version);
-	
 	static void cp(Constant_pool *cp, U2 cp_length);
+	static void access_flags(U2 access_flags);
+	static void class_names(U2 this_class, U2 super_class, vector<Cp_info> cp_vector);
 
-	
-	
+
+	static string dereference_index(vector<Cp_info> cp_vector, U2 index);
+
 };
 
 // char flag_names[5][20];
