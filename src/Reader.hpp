@@ -5,9 +5,14 @@
 #include "Base_types.hpp"
 #include "Cp_info.hpp"
 #include <vector>
+#include "Constant_pool.hpp"
+#include "Interface.hpp"
 
 class Reader{
   public:
+    Constant_pool* cp;
+    Interface* interface;
+
     FILE *fp;
 
     U2 min_version;
@@ -21,7 +26,6 @@ class Reader{
     U2 methods_count;
     U2 attributes_count;
 
-    U2 *interfaces;
 
     U4 magic_number;
 

@@ -32,7 +32,7 @@ int Reader::read(char* file_name){
   
   cp_length = read_U2(fp);
 	
-  Constant_pool* cp = new Constant_pool(cp_length,fp);
+  cp = new Constant_pool(cp_length,fp);
 
   Displayer::cp(cp,cp_length);
 
@@ -42,10 +42,11 @@ int Reader::read(char* file_name){
   this_class = read_U2(fp);
   super_class = read_U2(fp);
   Displayer::class_names(this_class,super_class, cp->cp_vector);
-  // printf("__________________________________________________________________________________________________________\n\n");
-	// interfaces_count = read_U2(fp);
-	// interfaces = read_interfaces(fp, interfaces_count);
-  // display_interfaces(interfaces, cp, interfaces_count);
+  printf("__________________________________________________________________________________________________________\n\n");
+	interfaces_count = read_U2(fp);
+  interface = new Interface(fp, interfaces_count);
+  
+  //Displayer::interfaces(interface, cp->cp_vector);
 
 	// fields_count = read_U2(fp);
   // fields = read_fields(fp, cp, fields_count);
