@@ -8,9 +8,9 @@
 #include <string>
 using namespace std;
 
+const string name_types[] = {"-", "UTF-8", "-", "Integer", "Float", "Long", "Double", "Class", "String", "Field", "Method", "Interface", "Name and Type"};
 
 const string flag_names[] = {"ACC_PUBLIC", "ACC_FINAL", "ACC_SUPER", "ACC_INTERFACE", "ACC_ABSTRACT"};
-
 class Displayer
 {
 public:

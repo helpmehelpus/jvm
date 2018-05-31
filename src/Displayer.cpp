@@ -6,26 +6,28 @@
 
 using namespace std;
 
+
+
 void Displayer::version(U2 min_version, U2 max_version){
 	printf("\nCLASS VERSION: (%d.%d)\t (MaxVersion.MinVersion)\n\n",max_version, min_version);
 }
 
-void init_name_types(vector <string> &name_types){
+// void init_name_types(vector <string> &name_types){
 
-	name_types.push_back("-");
-	name_types.push_back("UTF-8");
-	name_types.push_back("-");
-	name_types.push_back("Integer");
-	name_types.push_back("Float");
-	name_types.push_back("Long");
-	name_types.push_back("Double");
-	name_types.push_back("Class");
-	name_types.push_back("String");
-	name_types.push_back("Field");
-	name_types.push_back("Method");
-	name_types.push_back("Interface");
-	name_types.push_back("Name and Type");
-}
+// 	name_types.push_back("-");
+// 	name_types.push_back("UTF-8");
+// 	name_types.push_back("-");
+// 	name_types.push_back("Integer");
+// 	name_types.push_back("Float");
+// 	name_types.push_back("Long");
+// 	name_types.push_back("Double");
+// 	name_types.push_back("Class");
+// 	name_types.push_back("String");
+// 	name_types.push_back("Field");
+// 	name_types.push_back("Method");
+// 	name_types.push_back("Interface");
+// 	name_types.push_back("Name and Type");
+// }
 
 long u4_to_long(U4 high, U4 low) {
 	long ret;
@@ -120,9 +122,8 @@ void Displayer::cp(Constant_pool *constant_pool, U2 cp_length){
 
 	int index;
 
-	vector <string> name_types;
 
-	init_name_types(name_types);
+	// init_name_types(name_types);
    
     printf("______________________________________________Constant__Pool______________________________________________\n\n");
 
