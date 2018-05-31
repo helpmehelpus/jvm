@@ -1,2 +1,13 @@
 # jvm
-Systems Software 1-2018 Capstone Project - Java 2 Virtual Machine
+Basic Java Virtual Machine for SB-1-2018 at University of Brasilia
+
+This project consists of an implementation for a basic Java Virtual Machine, written in C-99.
+
+
+| Members        | Registration           |
+| ------------- |:-------------:|
+| Adriano Torres    | 160047617    |
+| André Bittencourt | 140130225    |
+| Caio Oliveira     | 140176713    |
+| Iure Brandão      | 140083197    |
+| Yuri Amaral       | 14/0033718   |
