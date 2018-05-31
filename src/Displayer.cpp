@@ -29,9 +29,9 @@ void init_name_types(vector <string> &name_types){
 
 long u4_to_long(U4 high, U4 low) {
 	long ret;
-	
-	ret = (((long) high) << 32) | low;
-	
+	ret = (unsigned int)high;
+	ret<<= 32;
+	ret+= (unsigned int)low;
 	return ret;
 }
 
@@ -160,43 +160,46 @@ void Displayer::cp(Constant_pool *constant_pool, U2 cp_length){
 
 		switch (cp[i].tag) {
 			case UTF8: 
-                printf("\t ");
-				printf(" \t\t %s", display_UTF8(cp[i].info[0].array, cp[i].info[0].u2).c_str());
+                cout << "\t\t\t";
+				cout <<  display_UTF8(cp[i].info[0].array, cp[i].info[0].u2).c_str();
 				break;
 			case INTEGER: 
-				printf("\t ");
-				printf(" \t\t %d", cp[i].info[0].u4);
+				cout << "\t\t\t";
+				cout << cp[i].info[0].u4;
 				break;
 			case FLOAT: 
-				printf("\t ");
-				printf(" \t\t %.2f", u4_to_float(cp[i].info[0].u4));
+				cout << "\t\t\t";
+				cout << u4_to_float(cp[i].info[0].u4);
 				break;
 			case LONG: 
-				printf("\t ");
-				printf(" \t\t %li", u4_to_long(cp[i].info[0].u4, cp[i+1].info[0].u4));
+				cout << "\t\t\t";
 				
+				//cout << u4_to_long(cp[i].info[0].u4, cp[i+1].info[0].u4);
+				// printf("%x-%x\t", cp[i].info[0].u4, cp[i+1].info[0].u4);
+				
+				printf("%ld", u4_to_long(cp[i].info[0].u4, cp[i+1].info[0].u4));
 				i++; 
 				break;
 			case DOUBLE: 
-				printf("\t ");
-				printf(" \t %lf", u4_to_double(cp[i].info[0].u4, cp[i+1].info[0].u4));
+				cout << "\t\t\t";
+				cout << u4_to_double(cp[i].info[0].u4, cp[i+1].info[0].u4);
 				i++; 
 				break;
 			case CLASS: 
 				
 			case STRING:
-				printf(" \t\t");
-				printf(" %d", cp[i].info[0].u2);
+				cout << "\t\t\t";
+				cout << cp[i].info[0].u2;
 				cout << "\t\t\t\t//" << dereference_index(cp,i);
 				break;
 			case NAMEANDTYPE: 
-				printf(" \t %d:%d ", cp[i].info[0].u2, cp[i].info[1].u2);
+				cout << "\t\t" <<  cp[i].info[0].u2 << ":" << cp[i].info[1].u2;
 				cout << "\t\t\t\t//" << dereference_index(cp,i);
 				break;
 			case METHODREF: 
 			case INTERFACEMETHODREF:
 			case FIELDREF:
-				printf(" \t\t %d.%d ", cp[i].info[0].u2, cp[i].info[1].u2);
+				cout << "\t\t" <<  cp[i].info[0].u2 << "." <<  cp[i].info[1].u2;
 				cout << "\t\t\t\t//" << dereference_index(cp,i);
 				break;
 		}
