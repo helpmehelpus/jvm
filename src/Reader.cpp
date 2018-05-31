@@ -39,9 +39,9 @@ int Reader::read(char* file_name){
   access_flags = read_U2(fp);
   Displayer::access_flags(access_flags);
   
-  // this_class = read_U2(fp);
-  // super_class = read_U2(fp);
-  // display_class_names(this_class,super_class,cp);
+  this_class = read_U2(fp);
+  super_class = read_U2(fp);
+  Displayer::class_names(this_class,super_class, cp->cp_vector);
   // printf("__________________________________________________________________________________________________________\n\n");
 	// interfaces_count = read_U2(fp);
 	// interfaces = read_interfaces(fp, interfaces_count);

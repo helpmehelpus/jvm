@@ -225,12 +225,12 @@ void Displayer::cp(Constant_pool *constant_pool, U2 cp_length){
 // }
 
 
-// void display_class_names(U2 this_class, U2 super_class,Cp_info *cp){
+void Displayer::class_names(U2 this_class, U2 super_class, vector<Cp_info> cp_vector){
 
-// 	printf("This class: %s\n", display_dereference_index(cp, this_class) );
-// 	printf("Super class : %s\n", display_dereference_index(cp,super_class) );
+	cout << "This class: " << dereference_index(cp_vector, this_class) << endl;
+	cout << "Super class: " << dereference_index(cp_vector,super_class) << endl;
 
-// }
+}
 
 
 

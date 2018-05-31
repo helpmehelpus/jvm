@@ -17,6 +17,7 @@ public:
 	static void version(U2 min_version, U2 max_version);
 	static void cp(Constant_pool *cp, U2 cp_length);
 	static void access_flags(U2 access_flags);
+	static void class_names(U2 this_class, U2 super_class, vector<Cp_info> cp_vector);
 
 
 	static string dereference_index(vector<Cp_info> cp_vector, U2 index);
