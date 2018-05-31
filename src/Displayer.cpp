@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <string>
+#include <iostream>
 
 using namespace std;
 
@@ -120,20 +121,20 @@ string display_UTF8(vector <U1> v, U2 size){
 // 	return "";
 // }
 
-string dereference_Index (vector <Cp_info> cp, U2 index) {
+string Displayer::dereference_index (vector <Cp_info> cp_vector, U2 index) {
 	
-	switch (cp[index].tag) {
+	switch (cp_vector[index].tag) {
 		case UTF8: 
-			return display_UTF8(cp[index].info[0].array, cp[index].info[0].u2);
+			return display_UTF8(cp_vector[index].info[0].array, cp_vector[index].info[0].u2);
 		case CLASS: 
 		case STRING:
-			return dereference_Index(cp, cp[index].info[0].u2);
+			return dereference_index(cp_vector, cp_vector[index].info[0].u2);
 		case NAMEANDTYPE: 
-			return (dereference_Index(cp, cp[index].info[0].u2) + ":" + dereference_Index(cp, cp[index].info[1].u2));
+			return (dereference_index(cp_vector, cp_vector[index].info[0].u2) + ":" + dereference_index(cp_vector, cp_vector[index].info[1].u2));
 		case METHODREF: 
 		case INTERFACEMETHODREF:
 		case FIELDREF:
-			return (dereference_Index(cp, cp[index].info[0].u2) + "." + dereference_Index(cp, cp[index].info[1].u2));
+			return (dereference_index(cp_vector, cp_vector[index].info[0].u2) + "." + dereference_index(cp_vector, cp_vector[index].info[1].u2));
 	}
 	
 	return "";
@@ -179,7 +180,6 @@ void Displayer::cp(Constant_pool *constant_pool, U2 cp_length){
 			case DOUBLE: 
 				printf("\t ");
 				printf(" \t %lf", u4_to_double(cp[i].info[0].u4, cp[i+1].info[0].u4));
-				
 				i++; 
 				break;
 			case CLASS: 
@@ -187,18 +187,17 @@ void Displayer::cp(Constant_pool *constant_pool, U2 cp_length){
 			case STRING:
 				printf(" \t\t");
 				printf(" %d", cp[i].info[0].u2);
-				// printf("\t\t\t\t//%s", dereference_Index(cp,i));
+				cout << "\t\t\t\t//" << dereference_index(cp,i);
 				break;
 			case NAMEANDTYPE: 
 				printf(" \t %d:%d ", cp[i].info[0].u2, cp[i].info[1].u2);
-				// printf("\t\t\t\t//%s", dereference_Index(cp,i));
+				cout << "\t\t\t\t//" << dereference_index(cp,i);
 				break;
 			case METHODREF: 
-			
 			case INTERFACEMETHODREF:
 			case FIELDREF:
 				printf(" \t\t %d.%d ", cp[i].info[0].u2, cp[i].info[1].u2);
-				// printf("\t\t\t\t//%s", dereference_Index(cp,i));
+				cout << "\t\t\t\t//" << dereference_index(cp,i);
 				break;
 		}
 		printf("\n");

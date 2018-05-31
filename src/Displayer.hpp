@@ -14,6 +14,7 @@ public:
 	static void version(U2 min_version, U2 max_version);
 	
 	static void cp(Constant_pool *cp, U2 cp_length);
+	static string dereference_index(vector<Cp_info> cp_vector, U2 index);
 
 	
 	
