@@ -36,8 +36,8 @@ int Reader::read(char* file_name){
 
   Displayer::cp(cp,cp_length);
 
-  // access_flags = read_flags(fp);
-  // display_flags( access_flags);
+  access_flags = read_U2(fp);
+  Displayer::access_flags(access_flags);
   
   // this_class = read_U2(fp);
   // super_class = read_U2(fp);

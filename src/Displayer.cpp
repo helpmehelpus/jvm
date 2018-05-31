@@ -95,32 +95,6 @@ string display_UTF8(vector <U1> v, U2 size){
 	return ret;
 }
 
-
-// char* display_dereference_index(Cp_info *cp, U2 index) {
-// 	char* aux = (char*)malloc(sizeof(char)*255);
-// 	switch (cp[index].tag) {
-// 		case UTF8: 
-// 			return get_UTF8(cp[index].info[1].array, cp[index].info[0].u2);
-// 		case CLASS: 
-// 		case STRING:
-// 			return display_dereference_index(cp, cp[index].info[0].u2);
-// 		case NAMEANDTYPE: 
-// 			strcat(aux, display_dereference_index(cp, cp[index].info[0].u2));
-// 			strcat(aux, ":");
-// 			return strcat(aux, display_dereference_index(cp, cp[index].info[1].u2));
-			
-			
-// 		case METHODREF: 
-// 		case INTERFACEMETHODREF:
-// 		case FIELDREF:
-// 			strcat(aux, display_dereference_index(cp, cp[index].info[0].u2));
-// 			strcat(aux, ".");
-// 			return strcat(aux, display_dereference_index(cp, cp[index].info[1].u2));
-			
-// 	}
-// 	return "";
-// }
-
 string Displayer::dereference_index (vector <Cp_info> cp_vector, U2 index) {
 	
 	switch (cp_vector[index].tag) {
@@ -259,25 +233,24 @@ void Displayer::cp(Constant_pool *constant_pool, U2 cp_length){
 
 
 
-// void display_flags(U2 access_flags){
-// 	init_flag_names();
-// 	printf("flags: ");
-
-// 	if (access_flags & 0x01) 
-// 		printf("%s ", flag_names[0] );
-// 	if(access_flags & 0x010) 
-// 		printf("%s ", flag_names[0] );
-// 	if(access_flags & 0x020) 
-// 		printf("%s ", flag_names[0] );
-// 	if(access_flags & 0x0200) 
-// 		printf("%s ", flag_names[0] );
-// 	if(access_flags & 0x0400) 	
-// 		printf("%s ", flag_names[0] );
+void Displayer::access_flags(U2 access_flags){
+	
+	printf("flags: ");
+	if (access_flags & 0x01) 
+		cout << " " << flag_names[0];
+	if(access_flags & 0x010) 
+		cout << " " << flag_names[1];
+	if(access_flags & 0x020) 
+		cout << " " << flag_names[2];
+	if(access_flags & 0x0200) 
+		cout << " " << flag_names[3];
+	if(access_flags & 0x0400) 	
+		cout << " " << flag_names[4];
 	
 	
-// 	printf(" 0x%x\n", access_flags);
+	printf(" 0x%x\n", access_flags);
 
-// }
+}
 
 
 // void display_interfaces(U2 *interfaces, Cp_info *cp, int length) {
