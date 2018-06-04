@@ -44,9 +44,11 @@ int Reader::read(char* file_name){
   Displayer::class_names(this_class,super_class, cp->cp_vector);
   printf("__________________________________________________________________________________________________________\n\n");
 	interfaces_count = read_U2(fp);
-  interface = new Interface(fp, interfaces_count);
+  Interface interface;
+  interfaces = interface.read(fp,interfaces_count);
+
   
-  //Displayer::interfaces(interface, cp->cp_vector);
+  Displayer::interfaces(interfaces, cp->cp_vector);
 
 	// fields_count = read_U2(fp);
   // fields = read_fields(fp, cp, fields_count);

@@ -11,7 +11,7 @@
 class Reader{
   public:
     Constant_pool* cp;
-    Interface* interface;
+    vector<U2> interfaces;
 
     FILE *fp;
 

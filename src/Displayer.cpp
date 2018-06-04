@@ -254,14 +254,14 @@ void Displayer::access_flags(U2 access_flags){
 }
 
 
-// void display_interfaces(U2 *interfaces, Cp_info *cp, int length) {
-// 	int i;
-// 	printf("Amount of interfaces %d\n", length);
-// 	for (i = 0; i < length; i++) {
-// 		display_interface(interfaces[i], cp, i);		
-// 	}
-// }
+void Displayer::interfaces(vector<U2> interfaces, vector<Cp_info> cp_vector) {
+	int i;
+	cout << "Amount of interfaces: " <<  interfaces.size() << endl;
+	for (i = 0; i < interfaces.size(); i++) {
+		interface_by_index(interfaces[i], cp_vector, i);		
+	}
+}
 
-// void display_interface(U2 interface, Cp_info *cp, int index) {
-// 	printf("\tInterface %d : %s\n", index, display_dereference_index(cp, interface));
-// }
+void Displayer::interface_by_index(U2 interface, vector<Cp_info> cp_vector, int index) {
+	cout << "\tInterface " << index << " : " << dereference_index(cp_vector, interface) << endl;
+}

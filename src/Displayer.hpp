@@ -18,7 +18,8 @@ public:
 	static void cp(Constant_pool *cp, U2 cp_length);
 	static void access_flags(U2 access_flags);
 	static void class_names(U2 this_class, U2 super_class, vector<Cp_info> cp_vector);
-
+	static void interfaces(vector<U2> interfaces, vector<Cp_info> cp_vector);
+	static void interface_by_index(U2 interfaces, vector<Cp_info> cp_vector, int index);
 
 	static string dereference_index(vector<Cp_info> cp_vector, U2 index);
 
