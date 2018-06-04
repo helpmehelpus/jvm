@@ -14,7 +14,7 @@ typedef struct {
   int* array;
 } Array;
 
-typedef struct attribute_info Attribute_info;
+//typedef struct attribute_info Attribute_info;
 
 typedef struct {
 	U2 constantvalue_index;
@@ -49,29 +49,10 @@ typedef union {
 	Exception_attribute exception;
 } T_info;
 
- struct attribute_info{
-	U2 name_index;
-	U4 length;
-
-	T_info* info;
-};
-
-typedef struct {
-	uint16_t access_flags;
-	uint16_t name_index;
-	uint16_t descriptor_index;
-	uint16_t attributes_count;
-	Attribute_info *attributes;
-} Method_info;
 
 
-typedef struct {
-	unsigned char accessFlags;
-	unsigned char name_index;
-	unsigned char descriptor_index;
-	unsigned char attributes_count;
-	Attribute_info *attributes;
-} Field_info;
+
+
 
 
 #endif
