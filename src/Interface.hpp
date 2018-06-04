@@ -9,8 +9,8 @@ using namespace std;
 
 class Interface {
     public:
-        int length;
-        vector<U2> read(FILE *fp, int length);
+        
+        static vector<U2> read(FILE *fp, int length);
 
 };
 
