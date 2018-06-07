@@ -10,6 +10,6 @@ class T_info {
 	Constant_value_attribute constantvalue;
 	Code_attribute code;
 	Exception_attribute exception;
-} T_info;
+};
 
 #endif

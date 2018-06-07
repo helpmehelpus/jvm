@@ -7,11 +7,13 @@
 #include <vector>
 #include "Constant_pool.hpp"
 #include "Interface.hpp"
+//#include "Field_info.hpp"
 
 class Reader{
   public:
     Constant_pool* cp;
     vector<U2> interfaces;
+    //vector<Field_info> fields;
 
     FILE *fp;
 
@@ -29,7 +31,6 @@ class Reader{
 
     U4 magic_number;
 
-    // Field_info *fields;
 
     // Method_info *methods;
 

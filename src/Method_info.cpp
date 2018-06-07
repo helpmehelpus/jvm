@@ -1,4 +1,4 @@
-#include "methods.h"
+#include "Method_info.hpp"
 
 
 Method_info read_method (FILE* fp,Cp_info *cp) {

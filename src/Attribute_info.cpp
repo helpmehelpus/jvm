@@ -1,14 +1,14 @@
-#include "attributes.h"
+#include "Attribute_info.hpp"
 
 
-T_exception_table* read_execption_handler(FILE* fp) {
+T_exception_table read_exception_handler(FILE* fp) {
+  
+  T_exception_table  exception_table_entry;
 
-  T_exception_table* exception_table_entry = (T_exception_table*) malloc(sizeof(T_exception_table));
-
-  exception_table_entry->start_pc = reader_read_u2(fp);
-  exception_table_entry->end_pc = reader_read_u2(fp);
-  exception_table_entry->handler_pc = reader_read_u2(fp);
-  exception_table_entry->catch_type = reader_read_u2(fp);
+  exception_table_entry.start_pc = reader_read_u2(fp);
+  exception_table_entry.end_pc = reader_read_u2(fp);
+  exception_table_entry.handler_pc = reader_read_u2(fp);
+  exception_table_entry.catch_type = reader_read_u2(fp);
 
   return exception_table_entry;
 }

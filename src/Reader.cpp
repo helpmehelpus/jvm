@@ -51,7 +51,7 @@ int Reader::read(char* file_name){
   Displayer::interfaces(interfaces, cp->cp_vector);
 
 	fields_count = read_U2(fp);
-  // fields = read_fields(fp, cp, fields_count);
+  //fields = read_fields(fp, cp, fields_count);
   // display_fields(fields,cp, fields_count);
 
 	// methods_count = read_U2(fp);
