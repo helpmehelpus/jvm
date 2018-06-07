@@ -40,11 +40,11 @@ class Reader{
     int read(char *file_name);
     int show();
 
-    U1 read_U1(FILE *fp);
-    U2 read_U2(FILE *fp);
-    U4 read_U4(FILE *fp);
+    static U1 read_U1(FILE *fp);
+    static U2 read_U2(FILE *fp);
+    static U4 read_U4(FILE *fp);
 
-    std::vector<U1> read_UTF8(FILE *fp, int size);
+    static std::vector<U1> read_UTF8(FILE *fp, int size);
 
     // TODO: mandar para utils
     int check_magic_number(U4 number);
