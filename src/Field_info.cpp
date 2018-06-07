@@ -20,7 +20,7 @@
 // 	}
 // }
 
-Field_info Field_info::read_field (FILE* fp,Cp_info* cp) {
+Field_info Field_info::read_field (FILE* fp, vector<Cp_info> cp_vector) {
 	Reader reader;
 	Field_info fi;
 
@@ -29,11 +29,11 @@ Field_info Field_info::read_field (FILE* fp,Cp_info* cp) {
 	fi.descriptor_index = reader.read_U2(fp);
 	fi.attributes_count = reader.read_U2(fp);
 	
-	fi.attributes = (Attribute_info *) malloc(sizeof(Attribute_info) * fi.attributes_count);
-	for (int i = 0; i < fi.attributes_count; i++) {
-		fi.attributes[i] = read_attribute(fp,cp);
+	fi.attributes = Attribute_info::read_attributes(fp, cp_vector, fi.attributes_count);
+	// for (int i = 0; i < fi.attributes_count; i++) {
+	// 	fi.attributes[i].read_attribute(fp,cp_vector);
 		
-	}
+	// }
 
 	return fi;
 }
@@ -59,12 +59,12 @@ char* get_field_flags (unsigned short flags) {
 	return fi;
 }
 
-Field_info *read_fields (FILE* fp, Cp_info* cp, int length) {
-	Field_info *fi = (Field_info *) malloc(sizeof(Field_info) * length);
+vector<Field_info> Field_info::read_fields (FILE* fp, vector<Cp_info> cp_vector, int length) {
+	vector<Field_info> fis;
 
 	for (int i = 0; i < length; i++) {
-		fi[i] = read_field(fp,cp);
+		fis.push_back(read_field(fp,cp_vector));
 		
 	}
-	return fi;
+	return fis;
 }

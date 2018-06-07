@@ -11,15 +11,15 @@ class Attribute_info {
 public:
     U2 name_index;
     U4 length;
-    T_info* info;
+    T_info info;
 
     T_exception_table read_exception_handler(FILE* fp);
 
     T_info read_attribute_info(FILE* fp, vector<Cp_info> cp_vector, U2 index, U2 length);
 
-    Attribute_info read_attribute(FILE* fp, vector<Cp_info> cp_vector);
+    static Attribute_info read_attribute(FILE* fp, vector<Cp_info> cp_vector);
 
-    vector<Attribute_info> read_attributes(FILE* fp, vector<Cp_info> cp_vector, int length);
+    static vector<Attribute_info> read_attributes(FILE* fp, vector<Cp_info> cp_vector, int length);
 
     void display_attribute(Attribute_info a, vector<Cp_info> cp_vector);
 
