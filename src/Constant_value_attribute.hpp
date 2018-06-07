@@ -4,7 +4,8 @@
 #include "Base_types.hpp"
 
 class Constant_value_attribute {
-	U2 constantvalue_index;
+public:
+    U2 constant_value_index;
 };
 
 #endif

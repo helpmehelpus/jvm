@@ -1,13 +1,13 @@
 #include "Method_info.hpp"
-
+#include "Reader.hpp"
 
 Method_info read_method (FILE* fp,Cp_info *cp) {
 	Method_info aux;
 
-	aux.access_flags = reader_read_u2(fp) & 0xFFF;
-	aux.name_index = reader_read_u2(fp);
-	aux.descriptor_index = reader_read_u2(fp);
-	aux.attributes_count = reader_read_u2(fp);
+	aux.access_flags = Reader::read_U2(fp) & 0xFFF;
+	aux.name_index = Reader::read_U2(fp);
+	aux.descriptor_index = Reader::read_U2(fp);
+	aux.attributes_count = Reader::read_U2(fp);
 	aux.attributes = (Attribute_info *) malloc(sizeof(Attribute_info) * aux.attributes_count);
 	for (int i = 0; i < aux.attributes_count; i++) {
 		aux.attributes[i] = read_attribute(fp,cp);

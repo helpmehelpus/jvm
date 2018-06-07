@@ -1,108 +1,111 @@
 #include "Attribute_info.hpp"
+#include "Reader.hpp"
+#include "Displayer.hpp"
 
-
-T_exception_table read_exception_handler(FILE* fp) {
+T_exception_table Attribute_info::read_exception_handler(FILE* fp) {
   
   T_exception_table  exception_table_entry;
 
-  exception_table_entry.start_pc = reader_read_u2(fp);
-  exception_table_entry.end_pc = reader_read_u2(fp);
-  exception_table_entry.handler_pc = reader_read_u2(fp);
-  exception_table_entry.catch_type = reader_read_u2(fp);
+  exception_table_entry.start_pc = Reader::read_U2(fp);
+  exception_table_entry.end_pc = Reader::read_U2(fp);
+  exception_table_entry.handler_pc = Reader::read_U2(fp);
+  exception_table_entry.catch_type = Reader::read_U2(fp);
 
   return exception_table_entry;
 }
 
-T_info* read_attribute_info(FILE* fp, Cp_info *cp, unsigned short index, unsigned short length) {
+T_info Attribute_info::read_attribute_info(FILE* fp, vector<Cp_info> cp_vector, unsigned short index, unsigned short length) {
 
-  T_info* info = (T_info*) malloc(sizeof(T_info));
+  T_info info;
+  
 
-  char* attribute_name = display_dereference_index(cp, index);
+  string attribute_name = Displayer::dereference_index(cp_vector, index);
 
-  if(strcmp(attribute_name,"ConstantValue") == 0) {
-    info->constantvalue.constantvalue_index = reader_read_u2(fp);
+  if(attribute_name == "ConstantValue") {
+    info.constant_value.constant_value_index = Reader::read_U2(fp);
   }
 
-  else if(strcmp(attribute_name,"Code") == 0) {
-    info->code.max_stack = reader_read_u2(fp);
-    info->code.max_locals = reader_read_u2(fp);
-    info->code.code_length = reader_read_u4(fp);
+  else if(attribute_name == "Code") {
+    info.code.max_stack = Reader::read_U2(fp);
+    info.code.max_locals = Reader::read_U2(fp);
+    info.code.code_length = Reader::read_U4(fp);
 
-    U2* code_list = (U2*) malloc(sizeof(T_exception_table) * info->code.code_length);
-    for(int i = 0; i < info->code.code_length; i++ ) {
-      code_list[i] = reader_read_u1(fp);
+    U2* code_list = (U2*) malloc(sizeof(T_exception_table) * info.code.code_length);
+    for(int i = 0; i < info.code.code_length; i++ ) {
+      code_list[i] = Reader::read_U1(fp);
     }
-    info->code.code = code_list;    
+    info.code.code = code_list;    
 
-    info->code.exception_table_length = reader_read_u2(fp);
+    info.code.exception_table_length = Reader::read_U2(fp);
 
-    T_exception_table** e_table = (T_exception_table**) malloc(sizeof(T_exception_table) * info->code.exception_table_length);
-    for(int i = 0; i < info->code.exception_table_length; i++ ) {
-      e_table[i] = read_execption_handler(fp);
+    //T_exception_table** e_table = (T_exception_table**) malloc(sizeof(T_exception_table) * info.code.exception_table_length);
+    for(int i = 0; i < info.code.exception_table_length; i++ ) {
+      //e_table[i] = read_exception_handler(fp);
+      info.code.exception_table.push_back(read_exception_handler(fp));
     }
-    info->code.exception_table = e_table;
+    //info.code.exception_table = e_table;
 
-    info->code.attribute_count = reader_read_u2(fp);
+    info.code.attribute_count = Reader::read_U2(fp);
 
-    Attribute_info* attributes = (Attribute_info*) malloc(sizeof(Attribute_info) * info->code.attribute_count);
-    for(int i = 0; i < info->code.attribute_count; i++ ) {
-      attributes[i] = read_attribute(fp, cp);
+    //Attribute_info* attributes = (Attribute_info*) malloc(sizeof(Attribute_info) * info.code.attribute_count);
+    for(int i = 0; i < info.code.attribute_count; i++ ) {
+      //attributes[i] = read_attribute(fp, cp_vector);
+      info.code.attributes.push_back(read_attribute(fp,cp_vector));
     }
-    info->code.attributes = attributes;
+    //info.code.attributes = attributes;
   }
 
-  else if(strcmp(attribute_name,"Exceptions") == 0) {
-    info->exception.number_of_exceptions = reader_read_u2(fp);
+  else if(attribute_name == "Exceptions") {
+    info.exception.number_of_exceptions = Reader::read_U2(fp);
 
-    unsigned short* exceptions = (unsigned short*) malloc(sizeof(unsigned short) * info->exception.number_of_exceptions);
-    for(int i = 0; i < info->exception.number_of_exceptions; i++ ) {
-      exceptions[i] = reader_read_u2(fp);
+    unsigned short* exceptions = (unsigned short*) malloc(sizeof(unsigned short) * info.exception.number_of_exceptions);
+    for(int i = 0; i < info.exception.number_of_exceptions; i++ ) {
+      exceptions[i] = Reader::read_U2(fp);
     }
-    info->exception.exception_index_table = exceptions;
+    info.exception.exception_index_table = exceptions;
   }
 
   else {
     for(int i = 0; i < length; i++ ) {
-      reader_read_u1(fp);
+      Reader::read_U1(fp);
     }
   }
 
   return info;
 }
 
-Attribute_info read_attribute (FILE* fp, Cp_info *cp) {
+Attribute_info Attribute_info::read_attribute (FILE* fp, vector<Cp_info> cp_vector) {
   Attribute_info atb;
 
-  atb.name_index = reader_read_u2(fp);
-  atb.length = reader_read_u4(fp);
+  atb.name_index = Reader::read_U2(fp);
+  atb.length = Reader::read_U4(fp);
 
-  atb.info = read_attribute_info(fp, cp, atb.name_index, atb.length);
+  atb.info = read_attribute_info(fp, cp_vector, atb.name_index, atb.length);
 
   return atb;
 }
 
-Attribute_info* read_attributes(FILE* fp, Cp_info *cp, int length)
+vector<Attribute_info> Attribute_info::read_attributes(FILE* fp, vector<Cp_info> cp_vector, int length)
 {
   Attribute_info* attributes = (Attribute_info*) malloc(sizeof(Attribute_info) * length);
 
   for(int i = 0; i < length; i++ ) {
-    attributes[i] = read_attribute(fp,cp);
+    attributes[i] = read_attribute(fp,cp_vector);
   }
 
   return attributes;
 }
 
-void display_attributes(Attribute_info* attributes, Cp_info* cp, int length)
+void Attribute_info::display_attributes(Attribute_info* attributes, vector<Cp_info>  cp_vector, int length)
 {
   for(int i = 0; i < length; i++ ) {
     printf("\tAttribute: %d  \n",i);
-    display_attribute(attributes[i], cp);
+    display_attribute(attributes[i], cp_vector);
   }
 }
 
-void display_attribute (Attribute_info a, Cp_info *cp) {
-  char* attribute_name = (char*)malloc(sizeof(char)* 255);
-  strcpy(attribute_name,display_dereference_index(cp, a.name_index));
+void Attribute_info::display_attribute (Attribute_info a, vector<Cp_info> cp_vector) {
+  string attribute_name = Displayer::dereference_index(cp_vector, a.name_index);
   printf("\t\tName: %s \n", attribute_name);
 
   printf("\t\tSize: %d \n", a.length);
@@ -150,7 +153,7 @@ void display_attribute (Attribute_info a, Cp_info *cp) {
   }
 }
 
-char* getMnemonic(int opcode) {
+string Attribute_info::getMnemonic(int opcode) {
   switch(opcode) {
     case(0x00): return  "nop";
     case(0x01): return  "aconst_null";
@@ -361,7 +364,7 @@ char* getMnemonic(int opcode) {
   }
 }
 
-U4 getNBytesValue(U1 n, U2* code, int* index)
+U4 Attribute_info::getNBytesValue(U1 n, U2* code, int* index)
 {
   U4 value = code[(*index)++];
 
@@ -373,7 +376,7 @@ U4 getNBytesValue(U1 n, U2* code, int* index)
   return value;
 }
 
-void getOpcodeParams(U2* code, int* index)
+void Attribute_info::getOpcodeParams(U2* code, int* index)
 {
   switch(code[(*index)++])
   {
