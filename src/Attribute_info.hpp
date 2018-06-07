@@ -13,9 +13,9 @@ public:
     U4 length;
     T_info info;
 
-    T_exception_table read_exception_handler(FILE* fp);
+    static T_exception_table read_exception_handler(FILE* fp);
 
-    T_info read_attribute_info(FILE* fp, vector<Cp_info> cp_vector, U2 index, U2 length);
+    static T_info read_attribute_info(FILE* fp, vector<Cp_info> cp_vector, U2 index, U2 length);
 
     static Attribute_info read_attribute(FILE* fp, vector<Cp_info> cp_vector);
 
