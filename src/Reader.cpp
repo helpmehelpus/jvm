@@ -4,7 +4,7 @@
 #include "Reader.hpp"
 #include "Constant_pool.hpp"
 #include "Displayer.hpp"
-// #include "fields.h"
+#include "Field_info.hpp"
 // #include "flags.h"
 // #include "interfaces.h"
 // #include "methods.h"
@@ -46,13 +46,14 @@ int Reader::read(char* file_name){
 	interfaces_count = read_U2(fp);
   
   interfaces = Interface::read(fp,interfaces_count);
-
   
   Displayer::interfaces(interfaces, cp->cp_vector);
 
 	fields_count = read_U2(fp);
-  //fields = read_fields(fp, cp, fields_count);
-  // display_fields(fields,cp, fields_count);
+
+  vector <Field_info> aux = Field_info::read_fields(fp, cp->cp_vector, fields_count);
+  
+  Displayer::display_fields(aux, cp->cp_vector, fields_count);
 
 	// methods_count = read_U2(fp);
 

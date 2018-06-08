@@ -265,3 +265,93 @@ void Displayer::interfaces(vector<U2> interfaces, vector<Cp_info> cp_vector) {
 void Displayer::interface_by_index(U2 interface, vector<Cp_info> cp_vector, int index) {
 	cout << "\tInterface " << index << " : " << dereference_index(cp_vector, interface) << endl;
 }
+
+void Displayer::display_attribute (Attribute_info attr, vector<Cp_info> cp) {
+	//Caso constatação na linha 99 seja verdadeira, apagar esse treho de código e tirar
+	//Comentários no início de cada condicional
+	
+	string attribute_name = Displayer::dereference_index(cp, attr.name_index);
+	cout << "\t\tNome: " << attribute_name << endl;
+
+	cout << "\t\tTamanho: " << attr.length << endl;
+
+	if(attribute_name == "ConstantValue") {
+		//Caso ignorar em silêncio implique em não mostrar nem nome nem tamanho
+		// string attribute_name = dereferenceIndex(cp, a.name_index);
+		// cout << "Nome: " << attribute_name << endl;
+		// cout << "Tamanho: " << a.length << endl;
+		cout << "\t\tConstant Value: " << attr.info->constant_value.constant_value_index << endl;
+	}
+
+	else if(attribute_name == "Code") {
+
+		// string attribute_name = dereferenceIndex(cp, a.name_index);
+		// cout << "Nome: " << attribute_name << endl;
+		// cout << "Tamanho: " << a.length << endl;
+		cout << "\t\tMax Stack: " << attr.info->code.max_stack << endl;
+		cout << "\t\tMax Locals: " << attr.info->code.max_locals << endl;
+		cout << "\t\tCode Length: " << attr.info->code.code_length << endl;
+
+		int i = 0;
+		
+		while(i < attr.info->code.code_length) {
+			cout << "\t\tCode #" << i << ":" << attr.getMnemonic(attr.info->code.code[i]);
+			attr.getOpcodeParams(attr.info->code.code, &i);
+			cout << endl;
+		}
+
+		cout << "\t\tException Table Length: " << attr.info->code.exception_table_length << endl;
+
+		for(int i = 0; i < attr.info->code.exception_table_length; i++ ) {
+
+			cout << "\t\tStart PC: " << attr.info->code.exception_table[i].start_pc << endl;
+
+			cout << "\t\tEnd PC: " << attr.info->code.exception_table[i].end_pc << endl;
+			cout << "\t\tHandler PC: " << attr.info->code.exception_table[i].handler_pc << endl;
+			cout << "\t\tCatch Type: " << attr.info->code.exception_table[i].catch_type << endl;
+		}
+
+		cout << "\t\tAttribute Count: " << attr.info->code.attribute_count << endl;
+
+		for(int i = 0; i < attr.info->code.attribute_count; i++ ) 
+			display_attribute(attr.info->code.attributes[i],cp);
+
+	}
+
+	else if(attribute_name == "Exceptions") {
+	
+		// string attribute_name = dereferenceIndex(cp, a.name_index);
+		// cout << "Nome: " << attribute_name << endl;
+		// cout << "Tamanho: " << a.length << endl;
+		
+		cout << "\t\tNumber of Exceptions: " << attr.info->exception.number_of_exceptions << endl;
+
+		for(int i = 0; i < attr.info->exception.number_of_exceptions; i++ )
+			cout << "\t\tException Index: " << attr.info->exception.exception_index_table[i] << endl;
+	}
+}
+
+void Displayer::display_field(Field_info f, vector <Cp_info> cp_vector, int index) {
+
+	printf("\tField %d : \n", index);
+	
+	printf("\t\tFlags: %s \n", Field_info::get_field_flags(f.accessFlags).c_str());
+
+	printf("\t\tName: %s\n" , Displayer::dereference_index(cp_vector, f.name_index).c_str() ) ;
+	
+	printf("\t\tDescription: %s \n" , Displayer::dereference_index(cp_vector, f.descriptor_index).c_str()) ;
+
+	printf("\t\tAmount of Attributes: %d \n",(int) f.attributes_count) ;
+	
+	for (int i = 0; i < f.attributes_count; i++) {
+		printf("Attribute %d: ", i);
+		Displayer::display_attribute(f.attributes[i], cp_vector);
+	}
+}
+
+void Displayer::display_fields(vector <Field_info> f, vector <Cp_info> cp_vector, int length){
+
+	for(int i = 0; i < length; i++){
+		Displayer::display_field(f[i],cp_vector,i);
+	}
+}

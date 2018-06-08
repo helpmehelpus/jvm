@@ -5,7 +5,9 @@
 #include<stdlib.h>
 #include "Base_types.hpp"
 #include "Constant_pool.hpp"
+#include "Field_info.hpp"
 #include <string>
+
 using namespace std;
 
 const string name_types[] = {"-", "UTF-8", "-", "Integer", "Float", "Long", "Double", "Class", "String", "Field", "Method", "Interface", "Name and Type"};
@@ -23,6 +25,11 @@ public:
 
 	static string dereference_index(vector<Cp_info> cp_vector, U2 index);
 
+	static void display_field(Field_info, vector<Cp_info>, int);
+
+	static void display_fields(vector <Field_info>, vector<Cp_info>, int);
+
+	static void display_attribute (Attribute_info, vector<Cp_info>);
 };
 
 // char flag_names[5][20];

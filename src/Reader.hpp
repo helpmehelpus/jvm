@@ -7,6 +7,7 @@
 #include <vector>
 #include "Constant_pool.hpp"
 #include "Interface.hpp"
+#include "Attribute_info.hpp"
 //#include "Field_info.hpp"
 
 class Reader{
