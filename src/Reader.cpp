@@ -5,6 +5,7 @@
 #include "Constant_pool.hpp"
 #include "Displayer.hpp"
 #include "Field_info.hpp"
+#include "Method_info.hpp"
 // #include "flags.h"
 // #include "interfaces.h"
 // #include "methods.h"
@@ -55,10 +56,10 @@ int Reader::read(char* file_name){
   
   Displayer::display_fields(aux, cp->cp_vector, fields_count);
 
-	// methods_count = read_U2(fp);
+  methods_count = read_U2(fp);
 
-	// methods = read_methods(fp, methods_count,cp);
-  // display_methods(methods, cp, methods_count);
+	vector <Method_info> methods = Method_info::read_methods(fp, methods_count,cp->cp_vector);
+  Displayer::display_methods(methods, cp->cp_vector, methods_count);
 
 	// attributes_count = read_U2(fp);
 

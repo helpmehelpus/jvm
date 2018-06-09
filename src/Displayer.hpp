@@ -6,6 +6,7 @@
 #include "Base_types.hpp"
 #include "Constant_pool.hpp"
 #include "Field_info.hpp"
+#include "Method_info.hpp"
 #include <string>
 
 using namespace std;
@@ -30,6 +31,10 @@ public:
 	static void display_fields(vector <Field_info>, vector<Cp_info>, int);
 
 	static void display_attribute (Attribute_info, vector<Cp_info>);
+
+	static void display_method_index(Method_info , vector<Cp_info> , int);
+	static void display_method(Method_info , vector<Cp_info> );
+	static void display_methods(vector <Method_info>, vector<Cp_info> , int );
 };
 
 // char flag_names[5][20];

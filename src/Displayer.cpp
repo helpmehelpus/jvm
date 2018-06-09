@@ -355,3 +355,46 @@ void Displayer::display_fields(vector <Field_info> f, vector <Cp_info> cp_vector
 		Displayer::display_field(f[i],cp_vector,i);
 	}
 }
+
+
+void Displayer::display_method_index(Method_info f,  vector<Cp_info> cp_vector, int index) {
+	printf("\tMethod %d : " ,index);
+    printf("\n");
+
+	printf("\tFlags: %s ",  Method_info::get_method_flag(f.access_flags).c_str());
+	
+	printf("\t\tName:  %s ", Displayer::dereference_index(cp_vector, f.name_index).c_str());
+    printf("\n");
+
+	printf("\t\tDescription:  %s ", Displayer::dereference_index(cp_vector, f.descriptor_index).c_str());
+    printf("\n");
+
+	printf("\t\tAttributes Count:  %d ", (int) f.attributes_count);
+    printf("\n");
+	for (int i = 0; i < f.attributes_count; i++) {
+		printf("\t Attribute %d: ", i);
+        printf("\n");
+		Displayer::display_attribute(f.attributes[i], cp_vector);
+	}
+}
+
+void Displayer::display_method (Method_info f,  vector<Cp_info> cp_vector) {
+	printf("\tFlags: %s \n" , Method_info::get_method_flag(f.access_flags).c_str());
+	printf("\tName: %s \n", Displayer::dereference_index(cp_vector, f.name_index).c_str());
+    printf("\tDescription: %s \n", Displayer::dereference_index(cp_vector, f.descriptor_index).c_str());
+    printf("\tAttributes Count: %d  \n", (int) f.attributes_count);
+    
+	for (int i = 0; i < f.attributes_count; i++) {
+		printf("\t\tAttributes  %d : ", i);
+        printf("\n");
+		display_attribute(f.attributes[i], cp_vector);
+	}
+}
+
+void Displayer::display_methods (vector <Method_info> f,  vector<Cp_info> cp_vector, int methods_length) {
+    cout << "Methods Count : " << methods_length << "\n";
+
+	for (int i = 0; i < methods_length; i++) {
+		Displayer::display_method_index(f[i], cp_vector, i);
+	}
+}

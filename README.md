@@ -10,4 +10,4 @@ This project consists of an implementation for a basic Java Virtual Machine, wri
 | André Bittencourt | 140130225    |
 | Caio Oliveira     | 140176713    |
 | Iure Brandão      | 140083197    |
-| Yuri Amaral       | 14/0033718   |
+| Yuri Amaral       | 140033718    |

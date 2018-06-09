@@ -23,8 +23,8 @@ class Field_info {
         
         static vector <Field_info> read_fields(FILE*, vector<Cp_info>, int);
 
-        void display_field(Field_info f, vector<Cp_info> cp, int index);
-        void display_fields(Field_info *f, vector<Cp_info> cp, int length);
+        // void display_field(Field_info f, vector<Cp_info> cp, int index);
+        // void display_fields(Field_info *f, vector<Cp_info> cp, int length);
 
 };
 
