@@ -32,8 +32,8 @@ public:
 
 	static void display_attribute (Attribute_info, vector<Cp_info>);
 
-	static void display_method_index(Method_info , vector<Cp_info> , int);
-	static void display_method(Method_info , vector<Cp_info> );
+	// static void display_method_index(Method_info , vector<Cp_info> , int);
+	static void display_method(Method_info , vector<Cp_info>, int);
 	static void display_methods(vector <Method_info>, vector<Cp_info> , int );
 };
 

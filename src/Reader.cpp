@@ -44,21 +44,17 @@ int Reader::read(char* file_name){
   super_class = read_U2(fp);
   Displayer::class_names(this_class,super_class, cp->cp_vector);
   printf("__________________________________________________________________________________________________________\n\n");
-	interfaces_count = read_U2(fp);
-  
+	
+  interfaces_count = read_U2(fp);
   interfaces = Interface::read(fp,interfaces_count);
-  
   Displayer::interfaces(interfaces, cp->cp_vector);
 
 	fields_count = read_U2(fp);
+  vector <Field_info> fields = Field_info::read_fields(fp, cp->cp_vector, fields_count);
+  Displayer::display_fields(fields, cp->cp_vector, fields_count);
 
-  vector <Field_info> aux = Field_info::read_fields(fp, cp->cp_vector, fields_count);
-  
-  Displayer::display_fields(aux, cp->cp_vector, fields_count);
-
-  methods_count = read_U2(fp);
-
-	vector <Method_info> methods = Method_info::read_methods(fp, methods_count,cp->cp_vector);
+  methods_count = read_U2(fp);  
+	vector <Method_info> methods = Method_info::read_methods(fp, cp->cp_vector, methods_count);
   Displayer::display_methods(methods, cp->cp_vector, methods_count);
 
 	// attributes_count = read_U2(fp);

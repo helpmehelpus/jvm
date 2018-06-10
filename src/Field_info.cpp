@@ -12,12 +12,11 @@
 // }
 
 Field_info Field_info::read_field(FILE* fp, vector<Cp_info> cp_vector){
-
 	Field_info aux;
 	
 	Reader reader;
 
-	aux.accessFlags = reader.read_U2(fp) & 0X0df;
+	aux.access_flags = reader.read_U2(fp) & 0X0df;
 	aux.name_index = reader.read_U2(fp);
 	aux.descriptor_index = reader.read_U2(fp);
 	aux.attributes_count = reader.read_U2(fp);
@@ -28,7 +27,7 @@ Field_info Field_info::read_field(FILE* fp, vector<Cp_info> cp_vector){
 	return aux;
 }
 
-string Field_info::get_field_flags (unsigned short flags) {
+string Field_info::get_field_flags(unsigned short flags) {
 	
 	string fi = "";
 
