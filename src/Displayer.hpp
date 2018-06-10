@@ -17,18 +17,16 @@ const string flag_names[] = {"ACC_PUBLIC", "ACC_FINAL", "ACC_SUPER", "ACC_INTERF
 class Displayer
 {
 public:
-	static void version(U2 min_version, U2 max_version);
-	static void cp(Constant_pool *cp, U2 cp_length);
-	static void access_flags(U2 access_flags);
-	static void class_names(U2 this_class, U2 super_class, vector<Cp_info> cp_vector);
-	static void interfaces(vector<U2> interfaces, vector<Cp_info> cp_vector);
-	static void interface_by_index(U2 interfaces, vector<Cp_info> cp_vector, int index);
+	static void display_version(U2 min_version, U2 max_version);
+	static void display_cp(Constant_pool *cp, U2 cp_length);
+	static void display_access_flags(U2 access_flags);
+	static void display_class_names(U2 this_class, U2 super_class, vector<Cp_info> cp_vector);
+	static void display_interfaces(vector<U2> interfaces, vector<Cp_info> cp_vector);
+	static void display_interface_by_index(U2 interfaces, vector<Cp_info> cp_vector, int index);
+	static void display_fields(vector <Field_info>, vector<Cp_info>, int);
+	static void display_field_by_index(Field_info, vector<Cp_info>, int);
 
 	static string dereference_index(vector<Cp_info> cp_vector, U2 index);
-
-	static void display_field(Field_info, vector<Cp_info>, int);
-
-	static void display_fields(vector <Field_info>, vector<Cp_info>, int);
 
 	static void display_attribute (Attribute_info, vector<Cp_info>);
 

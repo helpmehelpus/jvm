@@ -4,30 +4,28 @@
 #include "Displayer.hpp"
 #include <vector>
 
-Method_info Method_info::read_method(FILE* fp, vector<Cp_info> cp_vector) {
-	Method_info aux;
-
-	Reader reader;
-
-	aux.access_flags = reader.read_U2(fp) & 0xFFF;
-	aux.name_index = reader.read_U2(fp);
-	aux.descriptor_index = reader.read_U2(fp);
-	aux.attributes_count = reader.read_U2(fp);
-	// aux.attributes = Attribute_info::read_attributes(fp,cp_vector, aux.attributes_count);
-	for(int i = 0; i < aux.attributes_count; i++)
-		aux.attributes.push_back(Attribute_info::read_attribute(fp,cp_vector));
-
-	return aux;
-}
-
 vector<Method_info> Method_info::read_methods(FILE* fp,  vector<Cp_info> cp_vector, int length) {
 	vector<Method_info> ret;
 
 	for (int i = 0; i < length; i++) {
 		ret.push_back(read_method(fp,cp_vector));
 	}
-
 	return ret;
+}
+
+Method_info Method_info::read_method(FILE* fp, vector<Cp_info> cp_vector) {
+	Method_info method;
+	Reader reader;
+
+	method.access_flags = reader.read_U2(fp) & 0xFFF;
+	method.name_index = reader.read_U2(fp);
+	method.descriptor_index = reader.read_U2(fp);
+	method.attributes_count = reader.read_U2(fp);
+	// method.attributes = Attribute_info::read_attributes(fp,cp_vector, method.attributes_count);
+	for(int i = 0; i < method.attributes_count; i++)
+		method.attributes.push_back(Attribute_info::read_attribute(fp,cp_vector));
+
+	return method;
 }
 
 string Method_info::get_method_flags(unsigned short flags) {

@@ -2,6 +2,25 @@
 #include "Reader.hpp"
 #include "Displayer.hpp"
 
+vector<Attribute_info> Attribute_info::read_attributes(FILE* fp, vector<Cp_info> cp_vector, int length) {
+  vector<Attribute_info> attributes;
+
+  for(int i = 0; i < length; i++ ) {
+    attributes.push_back(read_attribute(fp,cp_vector));
+  }
+  return attributes;
+}
+
+Attribute_info Attribute_info::read_attribute(FILE* fp, vector<Cp_info> cp_vector) {
+  Attribute_info attr;
+
+  attr.name_index = Reader::read_U2(fp);
+  attr.length = Reader::read_U4(fp);
+  // attr.info = read_attribute_info(fp, cp_vector, attr.name_index, attr.length);
+
+  return attr;
+}
+
 T_exception_table Attribute_info::read_exception_handler(FILE* fp) {
   
   T_exception_table  exception_table_entry;
@@ -16,33 +35,33 @@ T_exception_table Attribute_info::read_exception_handler(FILE* fp) {
 
 // T_info Attribute_info::read_attribute_info(FILE* fp, vector<Cp_info> cp_vector, unsigned short index, unsigned short length) {
 
-//   T_info info;
+  // T_info info;
   
-//   string attribute_name = Displayer::dereference_index(cp_vector, index);
+  // string attribute_name = Displayer::dereference_index(cp_vector, index);
 
-//   if(attribute_name == "ConstantValue") {
-//     info.constant_value.constant_value_index = Reader::read_U2(fp);
-//   }
+  // if(attribute_name == "ConstantValue") {
+  //   info.constant_value.constant_value_index = Reader::read_U2(fp);
+  // }
 
-//   else if(attribute_name == "Code") {
-//     info.code.max_stack = Reader::read_U2(fp);
-//     info.code.max_locals = Reader::read_U2(fp);
-//     info.code.code_length = Reader::read_U4(fp);
+  // else if(attribute_name == "Code") {
+  //   info.code.max_stack = Reader::read_U2(fp);
+  //   info.code.max_locals = Reader::read_U2(fp);
+  //   info.code.code_length = Reader::read_U4(fp);
 
-//     U2* code_list = (U2*) malloc(sizeof(T_exception_table) * info.code.code_length);
-//     for(int i = 0; i < info.code.code_length; i++ ) {
-//       code_list[i] = Reader::read_U1(fp);
-//     }
-//     info.code.code = code_list;    
+  //   vector<U2> code_list;
+  //   for(int i = 0; i < info.code.code_length; i++ ) {
+  //     code_list[i] = Reader::read_U1(fp);
+  //   }
+  //   info.code.code = code_list;    
 
-//     info.code.exception_table_length = Reader::read_U2(fp);
+  //   info.code.exception_table_length = Reader::read_U2(fp);
 
-//     //T_exception_table** e_table = (T_exception_table**) malloc(sizeof(T_exception_table) * info.code.exception_table_length);
-//     for(int i = 0; i < info.code.exception_table_length; i++ ) {
-//       //e_table[i] = read_exception_handler(fp);
-//       info.code.exception_table.push_back(read_exception_handler(fp));
-//     }
-//     //info.code.exception_table = e_table;
+  //   vector <T_exception_table> e_table;
+  //   for(int i = 0; i < info.code.exception_table_length; i++ ) {
+  //     //e_table[i] = read_exception_handler(fp);
+  //     info.code.exception_table.push_back(read_exception_handler(fp));
+  //   }
+    //info.code.exception_table = e_table;
 
 //     info.code.attribute_count = Reader::read_U2(fp);
 
@@ -73,28 +92,8 @@ T_exception_table Attribute_info::read_exception_handler(FILE* fp) {
 //   return info;
 // }
 
-Attribute_info Attribute_info::read_attribute (FILE* fp, vector<Cp_info> cp_vector) {
-  
-  Attribute_info attr;
 
-  attr.name_index = Reader::read_U2(fp);
-  attr.length = Reader::read_U4(fp);
 
-  // attr.info = read_attribute_info(fp, cp_vector, attr.name_index, attr.length);
-
-  return attr;
-}
-
-vector<Attribute_info> Attribute_info::read_attributes(FILE* fp, vector<Cp_info> cp_vector, int length)
-{
-  vector<Attribute_info> attributes;
-
-  for(int i = 0; i < length; i++ ) {
-    attributes.push_back(read_attribute(fp,cp_vector));
-  }
-
-  return attributes;
-}
 
 // void Attribute_info::display_attributes(Attribute_info* attributes, vector<Cp_info>  cp_vector, int length)
 // {
@@ -153,7 +152,7 @@ vector<Attribute_info> Attribute_info::read_attributes(FILE* fp, vector<Cp_info>
 //   }
 // }
 
-string Attribute_info::getMnemonic(int opcode) {
+string Attribute_info::get_mnemonic(int opcode) {
   switch(opcode) {
     case(0x00): return  "nop";
     case(0x01): return  "aconst_null";
@@ -364,22 +363,18 @@ string Attribute_info::getMnemonic(int opcode) {
   }
 }
 
-U4 Attribute_info::getNBytesValue(U1 n, U2* code, int* index)
-{
+U4 Attribute_info::get_n_bytes_value(U1 n, vector<U2> code, int* index) {
   U4 value = code[(*index)++];
 
-  for(int i = 1; i < n; i++)
-  {
+  for(int i = 1; i < n; i++) {
     value = (value << 8) | code[(*index)++]; 
   }
-
   return value;
 }
 
-void Attribute_info::getOpcodeParams(U2* code, int* index)
+void Attribute_info::get_opcode_params(vector<U2> code, int* index)
 {
-  switch(code[(*index)++])
-  {
+  switch(code[(*index)++]) {
       case(0x10): //"bipush";
       case(0x15): //"iload";
       case(0x16): //"lload";
@@ -393,7 +388,7 @@ void Attribute_info::getOpcodeParams(U2* code, int* index)
       case(0x3a): //"astore";
       case(0xbc): //"newarray";
       case(0xa9): //"ret";
-        printf(" %d", getNBytesValue(1,code,index));
+        printf(" %d", get_n_bytes_value(1,code,index));
         break;
 
       case(0x11): //"sipush";
@@ -417,11 +412,11 @@ void Attribute_info::getOpcodeParams(U2* code, int* index)
       case(0xc0): //"checkcast";
       case(0xc6): //"ifnull";
       case(0xc7): //"ifnonnull";
-        printf(" %d", getNBytesValue(2,code,index));
+        printf(" %d", get_n_bytes_value(2,code,index));
       break;
 
       case(0x12): //"ldc";
-        printf(" #%d", getNBytesValue(1,code,index));
+        printf(" #%d", get_n_bytes_value(1,code,index));
         break;
 
       case(0x13): //"ldc_w";
@@ -435,35 +430,34 @@ void Attribute_info::getOpcodeParams(U2* code, int* index)
       case(0xb7): //"invokespecial";
       case(0xb8): //"invokestatic";
       case(0xc1): //"instanceof";
-        printf(" # %d", getNBytesValue(2,code,index));
+        printf(" # %d", get_n_bytes_value(2,code,index));
         break;
 
       case(0x84): //"iinc";
-        printf("# %d", getNBytesValue(1,code,index));
-        printf(" %d", getNBytesValue(1,code,index));
+        printf("# %d", get_n_bytes_value(1,code,index));
+        printf(" %d", get_n_bytes_value(1,code,index));
         break;
 
       case(0xc5): //"multianewarray";
-        printf("# %d", getNBytesValue(2,code,index));
-        printf("  %d", getNBytesValue(1,code,index));
+        printf("# %d", get_n_bytes_value(2,code,index));
+        printf("  %d", get_n_bytes_value(1,code,index));
         break;
 
       case(0xc8): //"goto_w";
       case(0xc9): //"jsr_w";
-        printf("  %d", getNBytesValue(4,code,index));
+        printf("  %d", get_n_bytes_value(4,code,index));
         break;
 
       case(0xb9): //"invokeinterface";
       case(0xba): //"invokedynamic";
-        printf("# %d", getNBytesValue(2,code,index));
-        printf("  %d", getNBytesValue(1,code,index));
-        printf("  %d", getNBytesValue(1,code,index));
+        printf("# %d", get_n_bytes_value(2,code,index));
+        printf("  %d", get_n_bytes_value(1,code,index));
+        printf("  %d", get_n_bytes_value(1,code,index));
         break;      
 
       case(0xc4): //"wide";
 
-        switch(code[(*index)++])
-        {
+        switch(code[(*index)++]) {
           case(0x15): //"iload"; 
           case(0x16): //"lload"; 
           case(0x17): //"fload"; 
@@ -475,54 +469,50 @@ void Attribute_info::getOpcodeParams(U2* code, int* index)
           case(0x39): //"dstore"; 
           case(0x3a): //"astore"; 
           case(0xa9): //"ret"; 
-            printf("#  %d", getNBytesValue(2,code,index));
+            printf("#  %d", get_n_bytes_value(2,code,index));
             break;
 
           case(0x84): //"iinc";
-            printf("# %d", getNBytesValue(2,code,index));
-            printf("  %d", getNBytesValue(2,code,index));
+            printf("# %d", get_n_bytes_value(2,code,index));
+            printf("  %d", get_n_bytes_value(2,code,index));
             break;
         }
         break;
 
       case(0xaa): //"tableswitch";
         {
-          if((*index) % 4 != 0)
-          {
+          if((*index) % 4 != 0) {
             (*index) = *index + (4 - (*index % 4));
           }
 
-          U4 defaultvalue = getNBytesValue(4,code,index);
+          U4 defaultvalue = get_n_bytes_value(4,code,index);
           printf("  %d", defaultvalue);
 
-          U4 low = getNBytesValue(4,code,index);
+          U4 low = get_n_bytes_value(4,code,index);
           printf("  %d", low);
 
-          U4 high = getNBytesValue(4,code,index);
+          U4 high = get_n_bytes_value(4,code,index);
           printf("  %d", high);
 
-          for(int i = 0; i < high - low + 1; i++)
-          {
-            printf("  %d", getNBytesValue(4,code,index)); 
+          for(int i = 0; i < high - low + 1; i++) {
+            printf("  %d", get_n_bytes_value(4,code,index)); 
           }
         }
         break;
         
-      case(0xab): //"lookupswitch";
-        {
+      case(0xab): {//"lookupswitch";
+        
           if((*index) % 4 != 0)
             *index = *index + (4 - (*index % 4));
           
-          printf("  %d", getNBytesValue(4,code,index));
+          printf("  %d", get_n_bytes_value(4,code,index));
 
-          U4 npairs = getNBytesValue(4,code,index);
+          U4 npairs = get_n_bytes_value(4,code,index);
           printf("  %d", npairs); 
 
-          for(int i = 0; i < npairs; i++)
-          {
-            printf("  %d", getNBytesValue(4,code,index));
-              
-            printf("  %d", getNBytesValue(4,code,index)); 
+          for(int i = 0; i < npairs; i++) {
+            printf("  %d", get_n_bytes_value(4,code,index));
+            printf("  %d", get_n_bytes_value(4,code,index)); 
           }
         }
         break;

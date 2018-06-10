@@ -2,14 +2,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include "Reader.hpp"
-#include "Constant_pool.hpp"
 #include "Displayer.hpp"
+#include "Constant_pool.hpp"
 #include "Field_info.hpp"
 #include "Method_info.hpp"
 // #include "flags.h"
 // #include "interfaces.h"
 // #include "methods.h"
 // #include "attributes.h"
+using namespace std;
 
 int Reader::run(char* file_name){
   printf("Running reader...\n");
@@ -28,34 +29,31 @@ int Reader::read(char* file_name){
 
   min_version = read_U2(fp);
   max_version = read_U2(fp);
-
-  Displayer::version(min_version, max_version);
+  Displayer::display_version(min_version, max_version);
   
-  cp_length = read_U2(fp);
-	
+  cp_length = read_U2(fp);	
   cp = new Constant_pool(cp_length,fp);
-
-  Displayer::cp(cp,cp_length);
+  Displayer::display_cp(cp,cp_length);
 
   access_flags = read_U2(fp);
-  Displayer::access_flags(access_flags);
+  Displayer::display_access_flags(access_flags);
   
   this_class = read_U2(fp);
   super_class = read_U2(fp);
-  Displayer::class_names(this_class,super_class, cp->cp_vector);
+  Displayer::display_class_names(this_class,super_class, cp->cp_vector);
   printf("__________________________________________________________________________________________________________\n\n");
 	
   interfaces_count = read_U2(fp);
-  interfaces = Interface::read(fp,interfaces_count);
-  Displayer::interfaces(interfaces, cp->cp_vector);
+  interfaces = Interface::read_interfaces(fp,interfaces_count);
+  Displayer::display_interfaces(interfaces, cp->cp_vector);
 
 	fields_count = read_U2(fp);
-  vector <Field_info> fields = Field_info::read_fields(fp, cp->cp_vector, fields_count);
+  fields = Field_info::read_fields(fp, cp->cp_vector, fields_count);
   Displayer::display_fields(fields, cp->cp_vector, fields_count);
 
   methods_count = read_U2(fp);  
-	vector <Method_info> methods = Method_info::read_methods(fp, cp->cp_vector, methods_count);
-  Displayer::display_methods(methods, cp->cp_vector, methods_count);
+	// methods = Method_info::read_methods(fp, cp->cp_vector, methods_count);
+  // Displayer::display_methods(methods, cp->cp_vector, methods_count);
 
 	// attributes_count = read_U2(fp);
 
@@ -103,7 +101,7 @@ U4 Reader::read_U4(FILE* fp){
   
   return res;
 }
-std::vector<U1> Reader::read_UTF8(FILE* fp, int size) {
+vector<U1> Reader::read_UTF8(FILE* fp, int size) {
 
   std::vector<U1> res(size);
   for(int i = 0; i < size; i++){

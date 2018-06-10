@@ -3,11 +3,11 @@
 
 #include "Base_types.hpp"
 
-class T_exception_table {
-public:
-    U2 start_pc;
-    U2 end_pc;
-    U2 handler_pc;
-    U2 catch_type;
-};
+// class T_exception_table {
+// public:
+//     U2 start_pc;
+//     U2 end_pc;
+//     U2 handler_pc;
+//     U2 catch_type;
+// };
 #endif

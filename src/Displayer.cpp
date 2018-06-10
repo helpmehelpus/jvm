@@ -6,7 +6,7 @@
 
 using namespace std;
 
-void Displayer::version(U2 min_version, U2 max_version) {
+void Displayer::display_version(U2 min_version, U2 max_version) {
 	cout << "\nCLASS VERSION: (" << max_version << "."<<  min_version << ")\t" << endl << endl; 	
 }
 
@@ -76,7 +76,6 @@ string display_UTF8(vector <U1> v, U2 size) {
 }
 
 string Displayer::dereference_index (vector <Cp_info> cp_vector, U2 index) {
-	
 	switch (cp_vector[index].tag) {
 		case UTF8: 
 			return display_UTF8(cp_vector[index].info[0].array, cp_vector[index].info[0].u2);
@@ -93,10 +92,10 @@ string Displayer::dereference_index (vector <Cp_info> cp_vector, U2 index) {
 	return "";
 }
 
-void Displayer::cp(Constant_pool *constant_pool, U2 cp_length) {
+void Displayer::display_cp(Constant_pool *constant_pool, U2 cp_length) {
 	vector<Cp_info> cp = constant_pool->cp_vector;
+	int index;
 
-	int index;   
     printf("______________________________________________Constant__Pool______________________________________________\n\n");
     printf(" Id \t Type \t\t\t Value \t\t\t\tExtra Info\n");
     printf("__________________________________________________________________________________________________________\n\n");
@@ -149,12 +148,7 @@ void Displayer::cp(Constant_pool *constant_pool, U2 cp_length) {
     printf("__________________________________________________________________________________________________________\n\n");
 }
 
-void Displayer::class_names(U2 this_class, U2 super_class, vector<Cp_info> cp_vector){
-	cout << "This class: " << dereference_index(cp_vector, this_class) << endl;
-	cout << "Super class: " << dereference_index(cp_vector,super_class) << endl;
-}
-
-void Displayer::access_flags(U2 access_flags){
+void Displayer::display_access_flags(U2 access_flags) {
 	printf("flags: ");
 	if (access_flags & 0x01) 
 		cout << " " << flag_names[0];
@@ -170,16 +164,41 @@ void Displayer::access_flags(U2 access_flags){
 	printf(" 0x%x\n", access_flags);
 }
 
-void Displayer::interfaces(vector<U2> interfaces, vector<Cp_info> cp_vector) {
+void Displayer::display_class_names(U2 this_class, U2 super_class, vector<Cp_info> cp_vector){
+	cout << "This class: " << dereference_index(cp_vector, this_class) << endl;
+	cout << "Super class: " << dereference_index(cp_vector,super_class) << endl;
+}
+
+void Displayer::display_interfaces(vector<U2> interfaces, vector<Cp_info> cp_vector) {
 	int i;
 	cout << "Interfaces count: " <<  interfaces.size() << endl;
 	for (i = 0; i < interfaces.size(); i++) {
-		interface_by_index(interfaces[i], cp_vector, i);		
+		display_interface_by_index(interfaces[i], cp_vector, i);
 	}
 }
 
-void Displayer::interface_by_index(U2 interface, vector<Cp_info> cp_vector, int index) {
+void Displayer::display_interface_by_index(U2 interface, vector<Cp_info> cp_vector, int index) {
 	cout << "\tInterface " << index << " : " << dereference_index(cp_vector, interface) << endl;
+}
+
+void Displayer::display_fields(vector <Field_info> f, vector <Cp_info> cp_vector, int length){
+	cout << "Fields count: " << length << endl;
+	for(int i = 0; i < length; i++){
+		Displayer::display_field_by_index(f[i],cp_vector,i);
+	}
+}
+
+void Displayer::display_field_by_index(Field_info f, vector <Cp_info> cp_vector, int index) {
+	printf("\tField %d : \n", index);	
+	printf("\t\tFlags: %s \n", Field_info::get_field_flags(f.access_flags).c_str());
+	printf("\t\tName: %s\n" , Displayer::dereference_index(cp_vector, f.name_index).c_str() ) ;	
+	printf("\t\tDescription: %s \n" , Displayer::dereference_index(cp_vector, f.descriptor_index).c_str()) ;
+	printf("\t\tAttributes count: %d \n",(int) f.attributes_count) ;
+
+	for (int i = 0; i < f.attributes_count; i++) {
+		printf("Attribute %d: ", i);
+		Displayer::display_attribute(f.attributes[i], cp_vector);
+	}
 }
 
 void Displayer::display_attribute(Attribute_info attr, vector<Cp_info> cp) {
@@ -206,8 +225,8 @@ void Displayer::display_attribute(Attribute_info attr, vector<Cp_info> cp) {
 		int i = 0;
 		
 		while(i < attr.info->code.code_length) {
-			cout << "\t\tCode #" << i << ":" << attr.getMnemonic(attr.info->code.code[i]);
-			attr.getOpcodeParams(attr.info->code.code, &i);
+			cout << "\t\tCode #" << i << ":" << attr.get_mnemonic(attr.info->code.code[i]);
+			attr.get_opcode_params(attr.info->code.code, &i);
 			cout << endl;
 		}
 
@@ -234,26 +253,6 @@ void Displayer::display_attribute(Attribute_info attr, vector<Cp_info> cp) {
 
 		for(int i = 0; i < attr.info->exception.number_of_exceptions; i++ )
 			cout << "\t\tException Index: " << attr.info->exception.exception_index_table[i] << endl;
-	}
-}
-
-void Displayer::display_field(Field_info f, vector <Cp_info> cp_vector, int index) {
-	printf("\tField %d : \n", index);	
-	printf("\t\tFlags: %s \n", Field_info::get_field_flags(f.access_flags).c_str());
-	printf("\t\tName: %s\n" , Displayer::dereference_index(cp_vector, f.name_index).c_str() ) ;	
-	printf("\t\tDescription: %s \n" , Displayer::dereference_index(cp_vector, f.descriptor_index).c_str()) ;
-	printf("\t\tAttributes count: %d \n",(int) f.attributes_count) ;
-
-	for (int i = 0; i < f.attributes_count; i++) {
-		printf("Attribute %d: ", i);
-		Displayer::display_attribute(f.attributes[i], cp_vector);
-	}
-}
-
-void Displayer::display_fields(vector <Field_info> f, vector <Cp_info> cp_vector, int length){
-	cout << "Fields count: " << length << endl;
-	for(int i = 0; i < length; i++){
-		Displayer::display_field(f[i],cp_vector,i);
 	}
 }
 

@@ -17,14 +17,9 @@ class Field_info {
         unsigned char attributes_count;
         vector <Attribute_info> attributes;
 
-        static string get_field_flags(unsigned short flags);
-        static Field_info read_field(FILE*, vector<Cp_info>);        
         static vector <Field_info> read_fields(FILE*, vector<Cp_info>, int);
-
-        // void display_field(Field_info f, vector<Cp_info> cp, int index);
-        // void display_fields(Field_info *f, vector<Cp_info> cp, int length);
-
+        static Field_info read_field(FILE*, vector<Cp_info>);
+        static string get_field_flags(unsigned short flags);
 };
-
 
 #endif
