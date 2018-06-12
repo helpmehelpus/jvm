@@ -55,10 +55,10 @@ int Reader::read(char* file_name){
 	methods = Method_info::read_methods(fp, cp->cp_vector, methods_count);
   Displayer::display_methods(methods, cp->cp_vector, methods_count);
 
-	// attributes_count = read_U2(fp);
-
-	// attributes = read_attributes(fp, cp, attributes_count);
-  // display_attributes(attributes, cp, attributes_count);
+  // verificar sequela
+	attributes_count = read_U2(fp);
+	attributes = Attribute_info::read_attributes(fp, cp->cp_vector, attributes_count);
+  Displayer::display_attributes(attributes, cp->cp_vector, attributes_count);
   
 	fclose(fp);
 	fp = NULL;

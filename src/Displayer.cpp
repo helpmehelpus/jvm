@@ -201,6 +201,11 @@ void Displayer::display_field_by_index(Field_info f, vector <Cp_info> cp_vector,
 	}
 }
 
+void Displayer::display_attributes(vector<Attribute_info> attr, vector<Cp_info> cp_vector, int length){
+	for(int i = 0; i < length; i++)
+		display_attribute(attr[i], cp_vector);
+}
+
 void Displayer::display_attribute(Attribute_info attr, vector<Cp_info> cp) {
 
 	string attribute_name = Displayer::dereference_index(cp, attr.name_index);

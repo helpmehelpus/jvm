@@ -16,10 +16,11 @@ using namespace std;
 class Reader{
   public:
     Constant_pool* cp;
+  
     vector<U2> interfaces;
     vector<Field_info> fields;
     vector<Method_info> methods;
-
+    vector<Attribute_info> attributes;
     FILE *fp;
 
     U2 min_version;

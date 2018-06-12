@@ -22,15 +22,17 @@ public:
 	static void display_access_flags(U2 access_flags);
 	static void display_class_names(U2 this_class, U2 super_class, vector<Cp_info> cp_vector);
 	static void display_interfaces(vector<U2> interfaces, vector<Cp_info> cp_vector);
-	static void display_interface_by_index(U2 interfaces, vector<Cp_info> cp_vector, int index);
+	static void display_interface_by_index(U2 interfaces, vector<Cp_info> cp_vector, int);
 	static void display_fields(vector <Field_info>, vector<Cp_info>, int);
 	static void display_field_by_index(Field_info, vector<Cp_info>, int);
-	static void display_methods(vector <Method_info>, vector<Cp_info> , int );
+	static void display_methods(vector <Method_info>, vector<Cp_info> , int);
 	static void display_method_by_index(Method_info , vector<Cp_info>, int);
+	static void display_attribute(Attribute_info, vector<Cp_info>);
+	static void display_attributes(vector<Attribute_info>, vector<Cp_info>, int);
 
 	static string dereference_index(vector<Cp_info> cp_vector, U2 index);
+	
 
-	static void display_attribute (Attribute_info, vector<Cp_info>);
 
 	// static void display_method_index(Method_info , vector<Cp_info> , int);
 };
