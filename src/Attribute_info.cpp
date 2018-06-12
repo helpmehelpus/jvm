@@ -1,7 +1,7 @@
 #include "Attribute_info.hpp"
 #include "Reader.hpp"
 #include "Displayer.hpp"
-
+#include "T_line_number_table.hpp"
 vector<Attribute_info> Attribute_info::read_attributes(FILE* fp, vector<Cp_info> cp_vector, int length) {
   vector<Attribute_info> attributes;
 
@@ -79,6 +79,17 @@ T_info Attribute_info::read_attribute_info(FILE* fp, vector<Cp_info> cp_vector, 
     }
 
   }
+  else if(attribute_name == "LineNumberTable") {
+    info.line_number_table.length = Reader::read_U2(fp);
+
+    for(int i = 0; i < info.line_number_table.length; i++ ) {
+      info.line_number_table.line_number_table_vector.push_back(T_line_number_table());
+      info.line_number_table.line_number_table_vector[i].start_pc = Reader::read_U2(fp);
+      info.line_number_table.line_number_table_vector[i].line_number = Reader::read_U2(fp);
+
+    }
+
+  }
 
 
   
@@ -86,7 +97,6 @@ T_info Attribute_info::read_attribute_info(FILE* fp, vector<Cp_info> cp_vector, 
   else {
     for(int i = 0; i < length; i++ ) {
       Reader::read_U1(fp);
-      
     }
   }
 

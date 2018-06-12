@@ -251,6 +251,14 @@ void Displayer::display_attribute(Attribute_info attr, vector<Cp_info> cp) {
 		for(int i = 0; i < attr.info.exception.number_of_exceptions; i++ )
 			cout << "\t\tException Index: " << attr.info.exception.exception_index_table[i] << endl;
 	}
+	else if(attribute_name == "LineNumberTable") {
+		cout << "\t\tLineNumberTable Length: " << attr.info.line_number_table.length << endl;
+		for(int i = 0; i < attr.info.line_number_table.length; i++ ){
+			cout << "\t\tStart_PC: " <<  attr.info.line_number_table.line_number_table_vector[i].start_pc;
+			cout << "\t\tLine_number: " <<  attr.info.line_number_table.line_number_table_vector[i].line_number << endl;
+
+		}
+	}
 }
 
 void Displayer::display_methods(vector <Method_info> f,  vector<Cp_info> cp_vector, int length) {
