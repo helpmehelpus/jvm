@@ -10,7 +10,7 @@
 #include "Attribute_info.hpp"
 #include "Field_info.hpp"
 #include "Method_info.hpp"
-
+#include <stdbool.h>
 using namespace std;
 
 class Reader{
@@ -21,6 +21,9 @@ class Reader{
     vector<Field_info> fields;
     vector<Method_info> methods;
     vector<Attribute_info> attributes;
+    int main_index;
+    int clinit_index;
+
     FILE *fp;
 
     U2 min_version;
@@ -49,5 +52,9 @@ class Reader{
     static vector<U1> read_UTF8(FILE *fp, int size);
     // TODO: mandar para utils
     int check_magic_number(U4 number);
+
+    bool has_main();
+    bool has_clinit();
+
 };
 #endif

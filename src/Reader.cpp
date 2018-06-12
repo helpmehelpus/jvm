@@ -56,10 +56,23 @@ int Reader::read(char* file_name){
   Displayer::display_methods(methods, cp->cp_vector, methods_count);
 
   // verificar sequela
-	attributes_count = read_U2(fp);
-	attributes = Attribute_info::read_attributes(fp, cp->cp_vector, attributes_count);
-  Displayer::display_attributes(attributes, cp->cp_vector, attributes_count);
+	// attributes_count = read_U2(fp);
+	// attributes = Attribute_info::read_attributes(fp, cp->cp_vector, attributes_count);
+  // Displayer::display_attributes(attributes, cp->cp_vector, attributes_count);
   
+  if(has_main()){
+    cout << "Main found" << endl;
+  }
+  else{
+    cout << "Main not found" << endl;
+  }
+  if(has_clinit()){
+    cout << "Clinit found" << endl;
+  }
+  else{
+    cout << "Clinit not found" << endl;
+  }
+
 	fclose(fp);
 	fp = NULL;
 
@@ -115,4 +128,38 @@ int Reader::check_magic_number(U4 val){
   return val == 0xcafebabe;
 }
 
+bool Reader::has_main(){
+  bool found = false;
+  for(int i = 0; i < this->methods_count; i++){
+    string name = Displayer::dereference_index(cp->cp_vector, methods[i].name_index);
+    if(name!="main") continue;
 
+    string desc = Displayer::dereference_index(cp->cp_vector, methods[i].descriptor_index);
+    if(name!="([Ljava/lang/String;)V") continue;
+    
+    unsigned char flags =  methods[i].access_flags;
+    if( (flags & 0x09) != 0x09) continue;
+
+
+    this->main_index = i;
+    found = true;
+    break;
+
+  }
+
+  return found;
+}
+
+bool Reader::has_clinit(){
+  bool found = false;
+  for(int i = 0; i < this->methods_count; i++){
+    string name = Displayer::dereference_index(cp->cp_vector, methods[i].name_index);
+    if(name!="<clinit>>") continue;
+    this->clinit_index = i;
+    found = true;
+    break;
+
+  }
+
+  return found;
+}

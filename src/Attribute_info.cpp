@@ -86,66 +86,6 @@ T_info Attribute_info::read_attribute_info(FILE* fp, vector<Cp_info> cp_vector, 
   return info;
 }
 
-
-
-
-// void Attribute_info::display_attributes(Attribute_info* attributes, vector<Cp_info>  cp_vector, int length)
-// {
-//   for(int i = 0; i < length; i++ ) {
-//     printf("\tAttribute: %d  \n",i);
-//     display_attribute(attributes[i], cp_vector);
-//   }
-// }
-
-// void Attribute_info::display_attribute (Attribute_info a, vector<Cp_info> cp_vector) {
-//   string attribute_name = Displayer::dereference_index(cp_vector, a.name_index);
-//   cout << "\t\tName: " << attribute_name << endl;
-
-//   cout << "\t\tSize: " << a.length << endl;
-
-//   if(attribute_name == "ConstantValue") {
-//     printf("\t\tConstant Value: %d \n", a.info.constant_value.constant_value_index);
-//   }
-
-//   else if(attribute_name == "Code") {
-//     printf("\t\tMax Stack: %d \n", a.info.code.max_stack);
-//     printf("\t\tMax Locals: %d \n", a.info.code.max_locals);
-//     printf("\t\tCode Length: %d \n", a.info.code.code_length);
-
-//     int i = 0;
-//     while(i < a.info.code.code_length) {
-//       printf("\t\tCode  %d: %s ", i, getMnemonic(a.info.code.code[i]));
-//       getOpcodeParams(a.info.code.code, &i);
-//       printf("\n");
-//     }
-
-//     printf("\t\tException Table Length: %d\n", a.info.code.exception_table_length);
-
-//     for(int i = 0; i < a.info.code.exception_table_length; i++ ) {
-//       printf("\t\tStart   PC: %d \n", a.info.code.exception_table[i].start_pc);
-//       printf("\t\tEnd     PC: %d \n", a.info.code.exception_table[i].end_pc);
-//       printf("\t\tHandler PC: %d \n", a.info.code.exception_table[i].handler_pc);
-//       printf("\t\tCatch Type: %d \n", a.info.code.exception_table[i].catch_type);
-//     }
-
-//     printf("\t\tAttribute Count: %d \n", a.info.code.attribute_count);
-
-//     for(int i = 0; i < a.info.code.attribute_count; i++ ) {
-//       display_attribute(a.info.code.attributes[i],cp_vector);
-//     }
-//   }
-
-//   else if(attribute_name == "Exceptions") {
-    
-//     printf("\t\tNumber of Exceptions: %d\n", a.info.exception.number_of_exceptions);
-
-//     for(int i = 0; i < a.info.exception.number_of_exceptions; i++ ) {
-      
-//       printf("\t\tException Index: %d \n", a.info.exception.exception_index_table[i]); 
-//     }
-//   }
-// }
-
 string Attribute_info::get_mnemonic(int opcode) {
   switch(opcode) {
     case(0x00): return  "nop";
