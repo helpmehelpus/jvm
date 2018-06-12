@@ -16,7 +16,7 @@ Attribute_info Attribute_info::read_attribute(FILE* fp, vector<Cp_info> cp_vecto
 
   attr.name_index = Reader::read_U2(fp);
   attr.length = Reader::read_U4(fp);
-  // attr.info = read_attribute_info(fp, cp_vector, attr.name_index, attr.length);
+  attr.info = read_attribute_info(fp, cp_vector, attr.name_index, attr.length);
 
   return attr;
 }
@@ -33,64 +33,59 @@ T_exception_table Attribute_info::read_exception_handler(FILE* fp) {
   return exception_table_entry;
 }
 
-// T_info Attribute_info::read_attribute_info(FILE* fp, vector<Cp_info> cp_vector, unsigned short index, unsigned short length) {
+T_info Attribute_info::read_attribute_info(FILE* fp, vector<Cp_info> cp_vector, unsigned short index, unsigned short length) {
 
-  // T_info info;
+  T_info info;
   
-  // string attribute_name = Displayer::dereference_index(cp_vector, index);
+  string attribute_name = Displayer::dereference_index(cp_vector, index);
 
-  // if(attribute_name == "ConstantValue") {
-  //   info.constant_value.constant_value_index = Reader::read_U2(fp);
-  // }
+  if(attribute_name == "ConstantValue") {
+    info.constant_value.constant_value_index = Reader::read_U2(fp);
+  }
 
-  // else if(attribute_name == "Code") {
-  //   info.code.max_stack = Reader::read_U2(fp);
-  //   info.code.max_locals = Reader::read_U2(fp);
-  //   info.code.code_length = Reader::read_U4(fp);
+  else if(attribute_name == "Code") {
+    info.code.max_stack = Reader::read_U2(fp);
+    info.code.max_locals = Reader::read_U2(fp);
+    info.code.code_length = Reader::read_U4(fp);
 
-  //   vector<U2> code_list;
-  //   for(int i = 0; i < info.code.code_length; i++ ) {
-  //     code_list[i] = Reader::read_U1(fp);
-  //   }
-  //   info.code.code = code_list;    
+    vector<U2> code_list;
+    for(int i = 0; i < info.code.code_length; i++ ) {
+      code_list[i] = Reader::read_U1(fp);
+    }
+    info.code.code = code_list;    
 
-  //   info.code.exception_table_length = Reader::read_U2(fp);
+    info.code.exception_table_length = Reader::read_U2(fp);
 
-  //   vector <T_exception_table> e_table;
-  //   for(int i = 0; i < info.code.exception_table_length; i++ ) {
-  //     //e_table[i] = read_exception_handler(fp);
-  //     info.code.exception_table.push_back(read_exception_handler(fp));
-  //   }
-    //info.code.exception_table = e_table;
+    vector <T_exception_table> e_table;
+    for(int i = 0; i < info.code.exception_table_length; i++ ) {
+      info.code.exception_table.push_back(read_exception_handler(fp));
+    }
+    info.code.exception_table = e_table;
+    info.code.attribute_count = Reader::read_U2(fp);
 
-//     info.code.attribute_count = Reader::read_U2(fp);
+    for(int i = 0; i < info.code.attribute_count; i++ ) {
+      info.code.attributes.push_back(read_attribute(fp,cp_vector));
+    }
 
-//     //Attribute_info* attributes = (Attribute_info*) malloc(sizeof(Attribute_info) * info.code.attribute_count);
-//     for(int i = 0; i < info.code.attribute_count; i++ ) {
-//       //attributes[i] = read_attribute(fp, cp_vector);
-//       info.code.attributes.push_back(read_attribute(fp,cp_vector));
-//     }
-//     //info.code.attributes = attributes;
-//   }
+  }
 
-//   else if(attribute_name == "Exceptions") {
-//     info.exception.number_of_exceptions = Reader::read_U2(fp);
+  else if(attribute_name == "Exceptions") {
+    info.exception.number_of_exceptions = Reader::read_U2(fp);
 
-//     unsigned short* exceptions = (unsigned short*) malloc(sizeof(unsigned short) * info.exception.number_of_exceptions);
-//     for(int i = 0; i < info.exception.number_of_exceptions; i++ ) {
-//       exceptions[i] = Reader::read_U2(fp);
-//     }
-//     info.exception.exception_index_table = exceptions;
-//   }
+    for(int i = 0; i < info.exception.number_of_exceptions; i++ ) {
+      info.exception.exception_index_table.push_back(Reader::read_U2(fp));
+    }
 
-//   else {
-//     for(int i = 0; i < length; i++ ) {
-//       Reader::read_U1(fp);
-//     }
-//   }
+  }
 
-//   return info;
-// }
+  else {
+    for(int i = 0; i < length; i++ ) {
+      Reader::read_U1(fp);
+    }
+  }
+
+  return info;
+}
 
 
 

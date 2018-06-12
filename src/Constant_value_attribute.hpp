@@ -3,9 +3,9 @@
 
 #include "Base_types.hpp"
 
-class Constant_value_attribute {
-public:
+typedef struct {
     U2 constant_value_index;
-};
+} Constant_value_attribute;
+
 
 #endif

@@ -209,50 +209,50 @@ void Displayer::display_attribute(Attribute_info attr, vector<Cp_info> cp) {
 
 	if(attribute_name == "ConstantValue") {
 		//Caso ignorar em silêncio implique em não mostrar nem nome nem tamanho
-		// string attribute_name = dereferenceIndex(cp, a.name_index);
-		// cout << "Nome: " << attribute_name << endl;
-		// cout << "Tamanho: " << a.length << endl;
-		cout << "\t\tConstant Value: " << attr.info->constant_value.constant_value_index << endl;
+		string attribute_name = dereference_index(cp, attr.name_index);
+		cout << "Nome: " << attribute_name << endl;
+		cout << "Tamanho: " << attr.length << endl;
+		cout << "\t\tConstant Value: " << attr.info.constant_value.constant_value_index << endl;
 	}
 	else if(attribute_name == "Code") {
-		// string attribute_name = dereferenceIndex(cp, a.name_index);
-		// cout << "Nome: " << attribute_name << endl;
-		// cout << "Tamanho: " << a.length << endl;
-		cout << "\t\tMax Stack: " << attr.info->code.max_stack << endl;
-		cout << "\t\tMax Locals: " << attr.info->code.max_locals << endl;
-		cout << "\t\tCode Length: " << attr.info->code.code_length << endl;
+		string attribute_name = dereference_index(cp, attr.name_index);
+		cout << "Nome: " << attribute_name << endl;
+		cout << "Tamanho: " << attr.length << endl;
+		cout << "\t\tMax Stack: " << attr.info.code.max_stack << endl;
+		cout << "\t\tMax Locals: " << attr.info.code.max_locals << endl;
+		cout << "\t\tCode Length: " << attr.info.code.code_length << endl;
 
 		int i = 0;
 		
-		while(i < attr.info->code.code_length) {
-			cout << "\t\tCode #" << i << ":" << attr.get_mnemonic(attr.info->code.code[i]);
-			attr.get_opcode_params(attr.info->code.code, &i);
+		while(i < attr.info.code.code_length) {
+			cout << "\t\tCode #" << i << ":" << attr.get_mnemonic(attr.info.code.code[i]);
+			attr.get_opcode_params(attr.info.code.code, &i);
 			cout << endl;
 		}
 
-		cout << "\t\tException Table Length: " << attr.info->code.exception_table_length << endl;
+		cout << "\t\tException Table Length: " << attr.info.code.exception_table_length << endl;
 
-		for(int i = 0; i < attr.info->code.exception_table_length; i++ ) {
-			cout << "\t\tStart PC: " << attr.info->code.exception_table[i].start_pc << endl;
-			cout << "\t\tEnd PC: " << attr.info->code.exception_table[i].end_pc << endl;
-			cout << "\t\tHandler PC: " << attr.info->code.exception_table[i].handler_pc << endl;
-			cout << "\t\tCatch Type: " << attr.info->code.exception_table[i].catch_type << endl;
+		for(int i = 0; i < attr.info.code.exception_table_length; i++ ) {
+			cout << "\t\tStart PC: " << attr.info.code.exception_table[i].start_pc << endl;
+			cout << "\t\tEnd PC: " << attr.info.code.exception_table[i].end_pc << endl;
+			cout << "\t\tHandler PC: " << attr.info.code.exception_table[i].handler_pc << endl;
+			cout << "\t\tCatch Type: " << attr.info.code.exception_table[i].catch_type << endl;
 		}
 
-		cout << "\t\tAttribute Count: " << attr.info->code.attribute_count << endl;
+		cout << "\t\tAttribute Count: " << attr.info.code.attribute_count << endl;
 
-		for(int i = 0; i < attr.info->code.attribute_count; i++ ) 
-			display_attribute(attr.info->code.attributes[i],cp);
+		for(int i = 0; i < attr.info.code.attribute_count; i++ ) 
+			display_attribute(attr.info.code.attributes[i],cp);
 	}
 
 	else if(attribute_name == "Exceptions") {
 		// string attribute_name = dereferenceIndex(cp, a.name_index);
 		// cout << "Nome: " << attribute_name << endl;
 		// cout << "Tamanho: " << a.length << endl;
-		cout << "\t\tNumber of Exceptions: " << attr.info->exception.number_of_exceptions << endl;
+		cout << "\t\tNumber of Exceptions: " << attr.info.exception.number_of_exceptions << endl;
 
-		for(int i = 0; i < attr.info->exception.number_of_exceptions; i++ )
-			cout << "\t\tException Index: " << attr.info->exception.exception_index_table[i] << endl;
+		for(int i = 0; i < attr.info.exception.number_of_exceptions; i++ )
+			cout << "\t\tException Index: " << attr.info.exception.exception_index_table[i] << endl;
 	}
 }
 
