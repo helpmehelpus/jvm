@@ -1,8 +1,6 @@
 #ifndef CLASSE_CLASSE
 #define CLASSE_CLASSE
 
-class Static_class;
-
 #include "Reader.hpp"
 #include "Typed_element.hpp"
 // #include "Heap.hpp"

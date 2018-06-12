@@ -19,8 +19,8 @@ int Reader::run(char* file_name){
 }
 
 int Reader::read(char* file_name){
+  this->file_name = file_name;
   
-  int found_main, found_clinit;
   fp = fopen(file_name, "rb");
   magic_number = read_U4(fp);
   if(!check_magic_number(magic_number)){
@@ -76,7 +76,7 @@ int Reader::read(char* file_name){
 	fclose(fp);
 	fp = NULL;
 
-
+  this->has_been_loaded = true;
   return 0;
 }
 
@@ -132,14 +132,13 @@ bool Reader::has_main(){
   bool found = false;
   for(int i = 0; i < this->methods_count; i++){
     string name = Displayer::dereference_index(cp->cp_vector, methods[i].name_index);
-    if(name!="main") continue;
+    if (name != "main") continue;
 
     string desc = Displayer::dereference_index(cp->cp_vector, methods[i].descriptor_index);
-    if(name!="([Ljava/lang/String;)V") continue;
+    if (desc != "([Ljava/lang/String;)V") continue;
     
     unsigned char flags =  methods[i].access_flags;
-    if( (flags & 0x09) != 0x09) continue;
-
+    if ((flags & 0x09) != 0x09) continue;
 
     this->main_index = i;
     found = true;
@@ -154,12 +153,19 @@ bool Reader::has_clinit(){
   bool found = false;
   for(int i = 0; i < this->methods_count; i++){
     string name = Displayer::dereference_index(cp->cp_vector, methods[i].name_index);
-    if(name!="<clinit>>") continue;
+    if(name!="<init>") continue;
     this->clinit_index = i;
     found = true;
     break;
-
   }
 
   return found;
+}
+
+string Reader::get_path() {
+	string path= "", auxFilename(this->file_name);
+	string result;
+	
+  //TODO: Tratar caminho do arquivo
+  return "Jogador.class";
 }

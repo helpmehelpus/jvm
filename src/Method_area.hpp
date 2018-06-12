@@ -23,8 +23,8 @@ private:
 public:
 	static string path;
 	static Static_class *getClass(string);
-    static bool addClass(string);
-    static bool addClass(Reader*);
+    static bool add_class(string);
+    static bool add_class(Reader*);
     static void setFrameStack(Frame_stack*);
 };
 

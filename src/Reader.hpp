@@ -16,13 +16,17 @@ using namespace std;
 class Reader{
   public:
     Constant_pool* cp;
-  
+
+    string file_name;
+
     vector<U2> interfaces;
     vector<Field_info> fields;
     vector<Method_info> methods;
     vector<Attribute_info> attributes;
     int main_index;
     int clinit_index;
+
+    bool has_been_loaded = false;
 
     FILE *fp;
 
@@ -55,6 +59,8 @@ class Reader{
 
     bool has_main();
     bool has_clinit();
+
+    string get_path();
 
 };
 #endif

@@ -22,3 +22,6 @@ eclipse: all
 	bin/main E exp/vetor2-Eclipses.class
 negativo: all
 	bin/main E exp/Negativo.class
+
+sample: all
+	bin/main E exp/Sample.class
