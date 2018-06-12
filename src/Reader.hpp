@@ -8,13 +8,17 @@
 #include "Constant_pool.hpp"
 #include "Interface.hpp"
 #include "Attribute_info.hpp"
-//#include "Field_info.hpp"
+#include "Field_info.hpp"
+#include "Method_info.hpp"
+
+using namespace std;
 
 class Reader{
   public:
     Constant_pool* cp;
     vector<U2> interfaces;
-    //vector<Field_info> fields;
+    vector<Field_info> fields;
+    vector<Method_info> methods;
 
     FILE *fp;
 
@@ -28,13 +32,9 @@ class Reader{
     U2 fields_count;
     U2 methods_count;
     U2 attributes_count;
-
-
     U4 magic_number;
 
-
     // Method_info *methods;
-
     // Attribute_info *attributes;
 
     int run(char *file_name);
@@ -45,8 +45,7 @@ class Reader{
     static U2 read_U2(FILE *fp);
     static U4 read_U4(FILE *fp);
 
-    static std::vector<U1> read_UTF8(FILE *fp, int size);
-
+    static vector<U1> read_UTF8(FILE *fp, int size);
     // TODO: mandar para utils
     int check_magic_number(U4 number);
 };

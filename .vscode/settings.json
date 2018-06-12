@@ -1,6 +1,11 @@
 {
     "files.associations": {
         "vector": "cpp",
+<<<<<<< HEAD
+=======
+        "exception": "cpp",
+        "system_error": "cpp",
+>>>>>>> 81d201f60f5b165ff6328a0701a7cda449c3e167
         "ostream": "cpp"
     }
 }

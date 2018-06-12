@@ -2,22 +2,25 @@
 #define METHOD_INFO
 
 #include "Attribute_info.hpp"
+#include "Cp_info.hpp"
+#include "Constant_pool.hpp"
+#include <vector>
+#include <string>
+#include <stdio.h>
+
+using namespace std;
 
 class Method_info {
 public:
-    uint16_t access_flags;
-    uint16_t name_index;
-    uint16_t descriptor_index;
-    uint16_t attributes_count;
-    vector<Attribute_info> attributes;
+    unsigned char access_flags;
+    unsigned char name_index;
+    unsigned char descriptor_index;
+    unsigned char attributes_count;
+    vector <Attribute_info> attributes;
 
-    char* get_method_flag(uint16_t flags);
-    Method_info read_method(FILE* fp, vector<Cp_info> cp_vector);
-    Method_info* read_methods(FILE* fp, int length, vector<Cp_info> cp_vector);
-
-    void display_method(Method_info f, vector<Cp_info> cp_vector);
-    void display_method_index(Method_info f, vector<Cp_info> cp_vector, int index);
-    void display_methods(Method_info* f, vector<Cp_info> cp_vector, int methods_length);
+    static vector <Method_info> read_methods(FILE*, vector<Cp_info>, int);
+    static Method_info read_method(FILE*, vector<Cp_info>);
+    static string get_method_flags(unsigned short flags);
 };
 
 #endif

@@ -2,34 +2,31 @@
 #include "Reader.hpp"
 #include <vector>
 
+vector<Field_info> Field_info::read_fields(FILE* fp, vector<Cp_info> cp_vector, int length) {
+	vector<Field_info> resp;
 
-// void display_fields (Field_info *f, Cp_info *cp, int length) {
-// 	printf("Amount of fields : %d\n\n", length);
-
-// 	for (int i = 0; i < length; i++) {
-// 		display_field(f[i], cp, i);
-// 	}
-// }
-
-Field_info Field_info::read_field(FILE* fp, vector<Cp_info> cp_vector){
-
-	Field_info aux;
-	
-	Reader reader;
-
-	aux.accessFlags = reader.read_U2(fp) & 0X0df;
-	aux.name_index = reader.read_U2(fp);
-	aux.descriptor_index = reader.read_U2(fp);
-	aux.attributes_count = reader.read_U2(fp);
-
-	for(int i = 0; i < aux.attributes_count; i++)
-		aux.attributes.push_back(Attribute_info::read_attribute(fp,cp_vector));
-
-	return aux;
+	for (int i = 0; i < length; i++) {
+		resp.push_back(read_field(fp,cp_vector));	
+	}
+	return resp;
 }
 
-string Field_info::get_field_flags (unsigned short flags) {
-	
+Field_info Field_info::read_field(FILE* fp, vector<Cp_info> cp_vector){
+	Field_info field;
+	Reader reader;
+
+	field.access_flags = reader.read_U2(fp) & 0X0df;
+	field.name_index = reader.read_U2(fp);
+	field.descriptor_index = reader.read_U2(fp);
+	field.attributes_count = reader.read_U2(fp);
+
+	for(int i = 0; i < field.attributes_count; i++)
+		field.attributes.push_back(Attribute_info::read_attribute(fp,cp_vector));
+
+	return field;
+}
+
+string Field_info::get_field_flags(unsigned short flags) {
 	string fi = "";
 
 	if (flags & 0x01) 
@@ -50,13 +47,3 @@ string Field_info::get_field_flags (unsigned short flags) {
 	return fi;
 }
 
-vector<Field_info> Field_info::read_fields (FILE* fp, vector<Cp_info> cp_vector, int length) {
-
-	vector<Field_info> resp;
-
-	for (int i = 0; i < length; i++) {
-		resp.push_back(read_field(fp,cp_vector));	
-	}
-
-	return resp;
-}
