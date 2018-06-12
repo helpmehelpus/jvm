@@ -15,10 +15,10 @@ Field_info Field_info::read_field(FILE* fp, vector<Cp_info> cp_vector){
 	Field_info field;
 	Reader reader;
 
-	field.access_flags = reader.read_U2(fp) & 0X0df;
-	field.name_index = reader.read_U2(fp);
-	field.descriptor_index = reader.read_U2(fp);
-	field.attributes_count = reader.read_U2(fp);
+	field.access_flags = Reader::read_U2(fp) & 0X0df;
+	field.name_index = Reader::read_U2(fp);
+	field.descriptor_index = Reader::read_U2(fp);
+	field.attributes_count = Reader::read_U2(fp);
 
 	for(int i = 0; i < field.attributes_count; i++)
 		field.attributes.push_back(Attribute_info::read_attribute(fp,cp_vector));

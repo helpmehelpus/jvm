@@ -11,7 +11,7 @@
 
 using namespace std;
 
-const string name_types[] = {"-", "UTF-8", "-", "Integer", "Float", "Long", "Double", "Class", "String", "Field", "Method", "Interface", "Name and Type"};
+const string name_types[] = {"-", "UTF-8", "-", "Integer", "Float", "Long", "Double", "Class", "String", "Field", "Method", "Interface", "Name/Type"};
 
 const string flag_names[] = {"ACC_PUBLIC", "ACC_FINAL", "ACC_SUPER", "ACC_INTERFACE", "ACC_ABSTRACT"};
 class Displayer
@@ -25,14 +25,14 @@ public:
 	static void display_interface_by_index(U2 interfaces, vector<Cp_info> cp_vector, int index);
 	static void display_fields(vector <Field_info>, vector<Cp_info>, int);
 	static void display_field_by_index(Field_info, vector<Cp_info>, int);
+	static void display_methods(vector <Method_info>, vector<Cp_info> , int );
+	static void display_method_by_index(Method_info , vector<Cp_info>, int);
 
 	static string dereference_index(vector<Cp_info> cp_vector, U2 index);
 
 	static void display_attribute (Attribute_info, vector<Cp_info>);
 
 	// static void display_method_index(Method_info , vector<Cp_info> , int);
-	static void display_method(Method_info , vector<Cp_info>, int);
-	static void display_methods(vector <Method_info>, vector<Cp_info> , int );
 };
 
 // char flag_names[5][20];

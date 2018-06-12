@@ -44,15 +44,14 @@ T_info Attribute_info::read_attribute_info(FILE* fp, vector<Cp_info> cp_vector, 
   }
 
   else if(attribute_name == "Code") {
+    
     info.code.max_stack = Reader::read_U2(fp);
     info.code.max_locals = Reader::read_U2(fp);
     info.code.code_length = Reader::read_U4(fp);
 
-    vector<U2> code_list;
     for(int i = 0; i < info.code.code_length; i++ ) {
-      code_list[i] = Reader::read_U1(fp);
+      info.code.code.push_back(Reader::read_U1(fp));
     }
-    info.code.code = code_list;    
 
     info.code.exception_table_length = Reader::read_U2(fp);
 

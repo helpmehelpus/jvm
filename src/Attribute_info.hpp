@@ -27,10 +27,6 @@ public:
 
     static T_exception_table read_exception_handler(FILE* fp);
 
-    // void display_attribute(Attribute_info a, vector<Cp_info> cp_vector);
-
-    // void display_attributes(Attribute_info* attributes, vector<Cp_info> cp_vector, int length);
-
     static string get_mnemonic(int opcode);
 
     U4 get_n_bytes_value(uint8_t n, vector<U2> code, int* index);

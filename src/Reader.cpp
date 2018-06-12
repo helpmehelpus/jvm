@@ -52,8 +52,8 @@ int Reader::read(char* file_name){
   Displayer::display_fields(fields, cp->cp_vector, fields_count);
 
   methods_count = read_U2(fp);  
-	// methods = Method_info::read_methods(fp, cp->cp_vector, methods_count);
-  // Displayer::display_methods(methods, cp->cp_vector, methods_count);
+	methods = Method_info::read_methods(fp, cp->cp_vector, methods_count);
+  Displayer::display_methods(methods, cp->cp_vector, methods_count);
 
 	// attributes_count = read_U2(fp);
 
