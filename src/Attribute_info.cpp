@@ -60,11 +60,14 @@ T_info Attribute_info::read_attribute_info(FILE* fp, vector<Cp_info> cp_vector, 
       info.code.exception_table.push_back(read_exception_handler(fp));
     }
     info.code.exception_table = e_table;
-    info.code.attribute_count = Reader::read_U2(fp);
 
+
+    info.code.attribute_count = Reader::read_U2(fp);
     for(int i = 0; i < info.code.attribute_count; i++ ) {
       info.code.attributes.push_back(read_attribute(fp,cp_vector));
     }
+    
+
 
   }
 
@@ -77,9 +80,13 @@ T_info Attribute_info::read_attribute_info(FILE* fp, vector<Cp_info> cp_vector, 
 
   }
 
+
+  
+
   else {
     for(int i = 0; i < length; i++ ) {
       Reader::read_U1(fp);
+      
     }
   }
 

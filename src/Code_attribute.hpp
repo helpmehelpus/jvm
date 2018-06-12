@@ -4,6 +4,8 @@
 #include "Attribute_info.hpp"
 #include "Base_types.hpp"
 #include "T_exception_table.hpp"
+#include "Line_number_table.hpp"
+
 #include <vector>
 
 using namespace std;
@@ -17,6 +19,10 @@ typedef struct {
     vector<U2> code;
     U2 exception_table_length;
     vector <T_exception_table> exception_table;
+
+    U2 line_number_table_length;
+    vector <Line_number_table> line_number_table;
+
     U2 attribute_count;
     vector <Attribute_info> attributes;
 } Code_attribute;
