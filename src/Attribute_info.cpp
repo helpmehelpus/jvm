@@ -66,8 +66,6 @@ T_info Attribute_info::read_attribute_info(FILE* fp, vector<Cp_info> cp_vector, 
     for(int i = 0; i < info.code.attribute_count; i++ ) {
       info.code.attributes.push_back(read_attribute(fp,cp_vector));
     }
-    
-
 
   }
 
@@ -88,10 +86,21 @@ T_info Attribute_info::read_attribute_info(FILE* fp, vector<Cp_info> cp_vector, 
       info.line_number_table.line_number_table_vector[i].line_number = Reader::read_U2(fp);
 
     }
-
   }
+  else if(attribute_name == "LocalVariableTable") {
+    int32_t i;
 
+    info.local_variable_table.length = Reader::read_U2(fp);
 
+    for(i = 0; i < info.local_variable_table.length; i++) {
+      info.local_variable_table.local_variable_vector.push_back(T_local_variables_table());
+      info.local_variable_table.local_variable_vector[i].start_PC = Reader::read_U2(fp);
+      info.local_variable_table.local_variable_vector[i].length = Reader::read_U2(fp);
+      info.local_variable_table.local_variable_vector[i].name_index = Reader::read_U2(fp);
+      info.local_variable_table.local_variable_vector[i].descriptor_index = Reader::read_U2(fp);
+      info.local_variable_table.local_variable_vector[i].index = Reader::read_U2(fp);
+    }
+  }
   
 
   else {
