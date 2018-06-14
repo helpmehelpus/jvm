@@ -1,11 +1,10 @@
 #include "Frame_stack.hpp"
-#include "Operations.hpp"
 #include "Method_area.hpp"
+#include "Operations.hpp"
 
 using namespace std;
 
 Frame_stack::Frame_stack(Reader *reader) {
-	
     Frame frame;
 	
 	frame.method_info = reader->get_main();
@@ -47,9 +46,8 @@ void Frame_stack::set_start_PC(Frame frame) {
 // TODO: check whether this works
 bool Frame_stack::next_instruction() {
 	//checa se a pilha esta vazia
-	if (threads.empty()) {
+	if (threads.empty())
 		return false;
-	}
 	//checa se nao esgotamos as operacoes do metodo corrente
 	if (current_PC < threads.top().method_info.attributes[0].info.code.code.size()) {
 		//pega o proximo opcode a ser executado
@@ -65,9 +63,8 @@ bool Frame_stack::next_instruction() {
 	this->pop();
 
 	//checa se apos o pop ainda restam elementos
-	if (threads.empty()) {
+	if (threads.empty())
 		return false;
-	}
 
 	return true;
 }

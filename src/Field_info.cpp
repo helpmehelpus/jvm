@@ -5,9 +5,9 @@
 vector<Field_info> Field_info::read_fields(FILE* fp, vector<Cp_info> cp_vector, int length) {
 	vector<Field_info> resp;
 
-	for (int i = 0; i < length; i++) {
+	for (int i = 0; i < length; i++)
 		resp.push_back(read_field(fp,cp_vector));	
-	}
+
 	return resp;
 }
 
@@ -46,4 +46,3 @@ string Field_info::get_field_flags(unsigned short flags) {
 
 	return fi;
 }
-

@@ -1,12 +1,13 @@
 #ifndef METHOD_INFO
 #define METHOD_INFO
 
-#include "Attribute_info.hpp"
-#include "Cp_info.hpp"
-#include "Constant_pool.hpp"
 #include <vector>
 #include <string>
 #include <stdio.h>
+
+#include "Attribute_info.hpp"
+#include "Constant_pool.hpp"
+#include "Cp_info.hpp"
 
 using namespace std;
 

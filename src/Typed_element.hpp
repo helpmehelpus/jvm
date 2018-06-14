@@ -2,6 +2,7 @@
 #define TYPED_ELEMENT
 
 #include <stdint.h>
+
 #include "Element.hpp"
 
 typedef struct {

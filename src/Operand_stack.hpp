@@ -1,15 +1,15 @@
 #ifndef OPERAND_STACK
 #define OPERAND_STACK
 
-#include <stack>
 #include <cstdint>
-#include <string>
-#include <sstream>
+#include <stack>
 #include <stdbool.h>
-#include "Base_types.hpp"
-#include "Typed_element.hpp"
-#include "Element.hpp"
+#include <sstream>
+#include <string>
 
+#include "Base_types.hpp"
+#include "Element.hpp"
+#include "Typed_element.hpp"
 
 #define INVALID 99
 #define TYPE_NOT_SET 0
@@ -25,6 +25,7 @@ using namespace std;
 class Operand_stack {
 public:
 	Operand_stack(int);
+	
 	stack<uint32_t> elements;
 	stack<uint8_t> types;
 	stack<uint8_t> real_types;

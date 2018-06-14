@@ -1,10 +1,11 @@
 #ifndef LOCAL_VARIABLE
 #define LOCAL_VARIABLE
 
+#include <vector>
+
 #include "Base_types.hpp"
 #include "Element.hpp"
 #include "Typed_element.hpp"
-#include <vector>
 
 using namespace std;
 

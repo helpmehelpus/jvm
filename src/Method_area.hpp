@@ -3,17 +3,15 @@
 
 class Method_area;
 
+#include <algorithm>
+#include <map>
+#include <string>
 
-#include "Reader.hpp"
 #include "Base_types.hpp"
 #include "Constant_pool.hpp"
-#include "Static_class.hpp"
 #include "Frame_stack.hpp"
-// #include "frame.h"
-// #include "classe.h"
-#include <map>
-#include <algorithm>
-#include <string>
+#include "Reader.hpp"
+#include "Static_class.hpp"
 
 using namespace std;
 

@@ -1,13 +1,14 @@
 #include "Attribute_info.hpp"
-#include "Reader.hpp"
 #include "Displayer.hpp"
+#include "Reader.hpp"
 #include "T_line_number_table.hpp"
+
 vector<Attribute_info> Attribute_info::read_attributes(FILE* fp, vector<Cp_info> cp_vector, int length) {
   vector<Attribute_info> attributes;
 
-  for(int i = 0; i < length; i++ ) {
+  for(int i = 0; i < length; i++)
     attributes.push_back(read_attribute(fp,cp_vector));
-  }
+
   return attributes;
 }
 
@@ -22,7 +23,6 @@ Attribute_info Attribute_info::read_attribute(FILE* fp, vector<Cp_info> cp_vecto
 }
 
 T_exception_table Attribute_info::read_exception_handler(FILE* fp) {
-  
   T_exception_table  exception_table_entry;
 
   exception_table_entry.start_pc = Reader::read_U2(fp);
@@ -34,14 +34,11 @@ T_exception_table Attribute_info::read_exception_handler(FILE* fp) {
 }
 
 T_info Attribute_info::read_attribute_info(FILE* fp, vector<Cp_info> cp_vector, unsigned short index, unsigned short length) {
-
   T_info info;
-  
   string attribute_name = Displayer::dereference_index(cp_vector, index);
 
-  if(attribute_name == "ConstantValue") {
+  if(attribute_name == "ConstantValue")
     info.constant_value.constant_value_index = Reader::read_U2(fp);
-  }
 
   else if(attribute_name == "Code") {
     
@@ -49,50 +46,40 @@ T_info Attribute_info::read_attribute_info(FILE* fp, vector<Cp_info> cp_vector, 
     info.code.max_locals = Reader::read_U2(fp);
     info.code.code_length = Reader::read_U4(fp);
 
-    for(int i = 0; i < info.code.code_length; i++ ) {
+    for(int i = 0; i < info.code.code_length; i++)
       info.code.code.push_back(Reader::read_U1(fp));
-    }
 
     info.code.exception_table_length = Reader::read_U2(fp);
 
-    vector <T_exception_table> e_table;
-    for(int i = 0; i < info.code.exception_table_length; i++ ) {
+    for(int i = 0; i < info.code.exception_table_length; i++)
       info.code.exception_table.push_back(read_exception_handler(fp));
-    }
-    info.code.exception_table = e_table;
-
 
     info.code.attribute_count = Reader::read_U2(fp);
-    for(int i = 0; i < info.code.attribute_count; i++ ) {
+
+    for(int i = 0; i < info.code.attribute_count; i++)
       info.code.attributes.push_back(read_attribute(fp,cp_vector));
-    }
 
   }
-
   else if(attribute_name == "Exceptions") {
     info.exception.number_of_exceptions = Reader::read_U2(fp);
 
-    for(int i = 0; i < info.exception.number_of_exceptions; i++ ) {
+    for(int i = 0; i < info.exception.number_of_exceptions; i++)
       info.exception.exception_index_table.push_back(Reader::read_U2(fp));
-    }
 
   }
   else if(attribute_name == "LineNumberTable") {
     info.line_number_table.length = Reader::read_U2(fp);
 
-    for(int i = 0; i < info.line_number_table.length; i++ ) {
+    for(int i = 0; i < info.line_number_table.length; i++) {
       info.line_number_table.line_number_table_vector.push_back(T_line_number_table());
       info.line_number_table.line_number_table_vector[i].start_pc = Reader::read_U2(fp);
       info.line_number_table.line_number_table_vector[i].line_number = Reader::read_U2(fp);
-
     }
   }
   else if(attribute_name == "LocalVariableTable") {
-    int32_t i;
-
     info.local_variable_table.length = Reader::read_U2(fp);
 
-    for(i = 0; i < info.local_variable_table.length; i++) {
+    for(int i = 0; i < info.local_variable_table.length; i++) {
       info.local_variable_table.local_variable_vector.push_back(T_local_variables_table());
       info.local_variable_table.local_variable_vector[i].start_PC = Reader::read_U2(fp);
       info.local_variable_table.local_variable_vector[i].length = Reader::read_U2(fp);
@@ -101,12 +88,10 @@ T_info Attribute_info::read_attribute_info(FILE* fp, vector<Cp_info> cp_vector, 
       info.local_variable_table.local_variable_vector[i].index = Reader::read_U2(fp);
     }
   }
-  
 
   else {
-    for(int i = 0; i < length; i++ ) {
+    for(int i = 0; i < length; i++ )
       Reader::read_U1(fp);
-    }
   }
 
   return info;
@@ -326,14 +311,13 @@ string Attribute_info::get_mnemonic(int opcode) {
 U4 Attribute_info::get_n_bytes_value(U1 n, vector<U2> code, int* index) {
   U4 value = code[(*index)++];
 
-  for(int i = 1; i < n; i++) {
+  for(int i = 1; i < n; i++)
     value = (value << 8) | code[(*index)++]; 
-  }
+  
   return value;
 }
 
-void Attribute_info::get_opcode_params(vector<U2> code, int* index)
-{
+void Attribute_info::get_opcode_params(vector<U2> code, int* index) {
   switch(code[(*index)++]) {
       case(0x10): //"bipush";
       case(0x15): //"iload";
@@ -439,24 +423,21 @@ void Attribute_info::get_opcode_params(vector<U2> code, int* index)
         }
         break;
 
-      case(0xaa): //"tableswitch";
-        {
-          if((*index) % 4 != 0) {
+      case(0xaa): { //"tableswitch";
+          if((*index) % 4 != 0)
             (*index) = *index + (4 - (*index % 4));
-          }
 
-          U4 defaultvalue = get_n_bytes_value(4,code,index);
+          U4 defaultvalue = get_n_bytes_value(4, code, index);
           printf("  %d", defaultvalue);
 
-          U4 low = get_n_bytes_value(4,code,index);
+          U4 low = get_n_bytes_value(4, code, index);
           printf("  %d", low);
 
-          U4 high = get_n_bytes_value(4,code,index);
+          U4 high = get_n_bytes_value(4, code, index);
           printf("  %d", high);
 
-          for(int i = 0; i < high - low + 1; i++) {
+          for(int i = 0; i < high - low + 1; i++) 
             printf("  %d", get_n_bytes_value(4,code,index)); 
-          }
         }
         break;
         

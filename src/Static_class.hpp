@@ -1,11 +1,12 @@
 #ifndef CLASSE_CLASSE
 #define CLASSE_CLASSE
 
+#include <map>
+
+#include "Instance_class.hpp"
 #include "Reader.hpp"
 #include "Typed_element.hpp"
 // #include "Heap.hpp"
-#include "Instance_class.hpp"
-#include <map>
 
 using namespace std;
 
@@ -21,7 +22,5 @@ public:
 	Instance_class *getInstance();
 	Reader *get_def();
 };
-
-
 
 #endif

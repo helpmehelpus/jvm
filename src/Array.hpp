@@ -1,8 +1,9 @@
 #ifndef ARRAY
 #define ARRAY
 
-class Array {
+struct Array {
   int* dimensions;
   int* array;
 };
+
 #endif

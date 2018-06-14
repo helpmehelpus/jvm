@@ -7,5 +7,4 @@ typedef struct {
     U2 constant_value_index;
 } Constant_value_attribute;
 
-
 #endif

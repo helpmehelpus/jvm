@@ -1,8 +1,9 @@
 #ifndef CONSTANTPOOL
 #define CONSTANTPOOL
 
-#include <vector>
 #include <stdio.h>
+#include <vector>
+
 #include "Cp_info.hpp"
 
 #define CLASS 7
@@ -19,13 +20,12 @@
 #define INVALID 99
 
 using namespace std;
+
 class Constant_pool{
 	public:
-		vector<Cp_info> cp_vector;
 		Constant_pool(int cp_length, FILE* fp);
-		
-	
-};
 
+		vector<Cp_info> cp_vector;
+};
 
 #endif

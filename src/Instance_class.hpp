@@ -1,10 +1,11 @@
 #ifndef INSTANCE_CLASS
 #define INSTANCE_CLASS
 
-#include "Heap.hpp"
-#include "Typed_element.hpp"
-#include "Static_class.hpp"
 #include <map>
+
+#include "Heap.hpp"
+#include "Static_class.hpp"
+#include "Typed_element.hpp"
 
 using namespace std;
 

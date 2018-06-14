@@ -2,15 +2,17 @@
 #define READER
 
 #include <iostream>
-#include "Base_types.hpp"
-#include "Cp_info.hpp"
 #include <vector>
-#include "Constant_pool.hpp"
-#include "Interface.hpp"
-#include "Attribute_info.hpp"
-#include "Field_info.hpp"
-#include "Method_info.hpp"
 #include <stdbool.h>
+
+#include "Attribute_info.hpp"
+#include "Base_types.hpp"
+#include "Constant_pool.hpp"
+#include "Cp_info.hpp"
+#include "Field_info.hpp"
+#include "Interface.hpp"
+#include "Method_info.hpp"
+
 using namespace std;
 
 class Reader{
@@ -44,23 +46,18 @@ class Reader{
 
     int run(char *file_name);
     int read(char *file_name);
-    int show();
-
-    static U1 read_U1(FILE *fp);
-    static U2 read_U2(FILE *fp);
     static U4 read_U4(FILE *fp);
-
+    int check_magic_number(U4 number);
+    static U2 read_U2(FILE *fp);
+    static U1 read_U1(FILE *fp);
     static vector<U1> read_UTF8(FILE *fp, int size);
 
-    int check_magic_number(U4 number);
+    int show();
 
     bool has_main();
     bool has_clinit();
-
     string get_path();
-
     Method_info get_main();
     Method_info get_clinit();
-
 };
 #endif

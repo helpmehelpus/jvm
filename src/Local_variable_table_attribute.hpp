@@ -2,6 +2,7 @@
 #define LOCAL_VARIABLE_TABLE_ATTRIBUTE
 
 #include<vector>
+
 #include "Base_types.hpp"
 #include "T_local_variable_table.hpp"
 

@@ -2,9 +2,9 @@
 #define FRAME
 
 #include "Cp_info.hpp"
-#include "Operand_stack.hpp"
 #include "Local_variable.hpp"
 #include "Method_info.hpp"
+#include "Operand_stack.hpp"
 
 typedef struct  {
 	vector<U2> pc;
@@ -13,6 +13,5 @@ typedef struct  {
 	Local_variable *local_variables;
 	Method_info method_info;
 } Frame;
-
 
 #endif

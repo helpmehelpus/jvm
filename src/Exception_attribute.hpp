@@ -1,10 +1,9 @@
-
 #ifndef EXECEPTION_ATTRIBUTE
 #define EXECEPTION_ATTRIBUTE
 
-#include "Base_types.hpp"
 #include <vector>
 
+#include "Base_types.hpp"
 
 using namespace std;
 typedef struct {
