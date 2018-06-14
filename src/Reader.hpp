@@ -26,7 +26,7 @@ class Reader{
     int main_index;
     int clinit_index;
 
-    bool has_been_loaded = false;
+    bool has_been_loaded;
 
     FILE *fp;
 
