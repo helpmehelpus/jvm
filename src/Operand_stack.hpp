@@ -20,22 +20,22 @@
 #define TYPE_BOOL 5
 #define TYPE_REFERENCE 6
 
+using namespace std;
 
 class Operand_stack {
-private:
-	std::stack<uint32_t> elements;
-	std::stack<uint8_t> types;
-	std::stack<uint8_t> real_types;
-	bool type_pushed;
-	static const bool bits64 = (sizeof(int*) == 8);
-	const int realMax;
 public:
 	Operand_stack(int);
+	stack<uint32_t> elements;
+	stack<uint8_t> types;
+	stack<uint8_t> real_types;
+	bool typed_element_pushed;
+	static const bool bits64 = (sizeof(int*) == 8);
+	const int real_max_size;
 	uint8_t top_type();
 	Element top_value();
 	Element pop();
-	Typed_element popTyped();
-    std::string getString();
+	Typed_element pop_typed_element();
+    string get_string();
 	void push(int);
     void push(long);
     void push(float);
@@ -45,10 +45,10 @@ public:
 	void push(Typed_element);
 	void push(Element, uint8_t);
 	int size();
-	int getMaxSize();
+	
 	bool empty();
 	void printALL();
-	const int max;
+	const int max_size;
 };
 
 #endif

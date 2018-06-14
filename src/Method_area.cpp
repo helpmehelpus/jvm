@@ -13,9 +13,8 @@ bool Method_area::add_class(Reader *reader) {
     Static_class *add = new Static_class(reader);
     classes.insert(pair<string, Static_class*>(Displayer::dereference_index(reader->cp->cp_vector, reader->this_class), add));
     if (reader->has_clinit()) {
-        frame_stack->add_frame(reader->clinit_index, reader->cp->cp_vector);
+        frame_stack->add_frame(reader->get_clinit(), reader->cp->cp_vector);
     }
-
     return true;
 }
 

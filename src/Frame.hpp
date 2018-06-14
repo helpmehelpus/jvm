@@ -7,8 +7,8 @@
 #include "Method_info.hpp"
 
 typedef struct  {
-	unsigned char *pc;
-	Cp_info *cp;	
+	vector<U2> pc;
+	vector<Cp_info> cp_vector;	
 	Operand_stack* operand_stack;
 	Local_variable *local_variables;
 	Method_info method_info;

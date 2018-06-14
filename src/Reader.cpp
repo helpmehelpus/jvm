@@ -169,3 +169,11 @@ string Reader::get_path() {
   //TODO: Tratar caminho do arquivo
   return "Jogador.class";
 }
+
+Method_info Reader::get_main() {
+  return methods[main_index];
+}
+
+Method_info Reader::get_clinit() {
+  return methods[clinit_index];
+}

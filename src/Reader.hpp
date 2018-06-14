@@ -42,9 +42,6 @@ class Reader{
     U2 attributes_count;
     U4 magic_number;
 
-    // Method_info *methods;
-    // Attribute_info *attributes;
-
     int run(char *file_name);
     int read(char *file_name);
     int show();
@@ -54,13 +51,16 @@ class Reader{
     static U4 read_U4(FILE *fp);
 
     static vector<U1> read_UTF8(FILE *fp, int size);
-    // TODO: mandar para utils
+
     int check_magic_number(U4 number);
 
     bool has_main();
     bool has_clinit();
 
     string get_path();
+
+    Method_info get_main();
+    Method_info get_clinit();
 
 };
 #endif
