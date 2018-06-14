@@ -15,10 +15,10 @@ class Local_variable {
         const U2 max;
         const U2 real_max;
         const bool two_slots;
-
-    Local_variable(U2);
-    Local_variable(U2, bool);
-    ~Local_variable();
+    // Local_variable();
+    // Local_variable(U2);
+    // Local_variable(U2, bool);
+    // ~Local_variable();
     void display_all() const;
     void insert_typed_element(Typed_element, int);
 };

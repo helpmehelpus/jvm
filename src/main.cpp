@@ -1,7 +1,8 @@
 #include<iostream>
 #include<string>
 #include "Reader.hpp"
-//#include "Method_area.hpp"
+// #include "Method_area.hpp"
+// #include "Frame_stack.hpp"
 
 using namespace std;
 
@@ -19,7 +20,7 @@ int main(int argc, char* argv[]){
 		// frame_stack.execute();
 	}
 	else 
-		printf("Didnt run annyting\n");
+		printf("Did not run anyting\n");
   
   return 0;
 }

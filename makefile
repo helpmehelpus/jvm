@@ -14,7 +14,6 @@
 
 all: src/main.cpp src/Constant_pool.cpp src/Interface.cpp src/Field_info.cpp src/Attribute_info.cpp src/Method_info.cpp
 	g++ -o bin/main src/main.cpp src/Reader.cpp src/Constant_pool.cpp src/Displayer.cpp src/Interface.cpp src/Field_info.cpp src/Attribute_info.cpp src/Method_info.cpp
-
 run: all
 	bin/main E exp/Jogador.class
 

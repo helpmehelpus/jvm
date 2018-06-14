@@ -2,6 +2,8 @@
 #include "Operations.hpp"
 #include "Method_area.hpp"
 
+using namespace std;
+
 Frame_stack::Frame_stack(Reader *reader) {
 	
     Frame frame;
@@ -72,55 +74,44 @@ bool Frame_stack::next_instruction() {
 
 void Frame_stack::pop() {
 	if (!threads.empty()) {
-		delete threads.top()->operandos;
-		delete threads.top()->locals;
+		delete threads.top().operand_stack;
+		delete threads.top().local_variables;
 		threads.pop();
 	}
 	if (threads.empty()) {
-		Operations::setFrame(nullptr);
-		Operations::setThreads(nullptr);
 		exit(0);
 	}
-	Operations::setFrame(threads.top());
-	Operations::setThreads(&threads);
+	Operations::set_frame(threads.top());
+	Operations::set_threads(threads);
 }
 
-void Frame_stack::startPC(frame *f) {
-	//colocar o PC na posicao inicial do metodo no topo
-	f->pc = f->m.attributes->info->code.code;
-}
+void Frame_stack::add_frame(Method_info method_info, vector<Cp_info> cp_vector) {
+	Frame frame;
 
-void Frame_stack::addFrame(method_info m, cp_info *cp) {
-	frame *aux = (frame*) malloc(sizeof(frame));
-
-	aux->m = m;
-	aux->cp = cp;
-	aux->operandos = new PilhaOperandos(aux->m.attributes->info->code.max_stack);
-	aux->locals = new LocalVariables(aux->m.attributes->info->code.max_locals);
-	startPC(aux);
+	frame.method_info = method_info;
+	frame.cp_vector = cp_vector;
+	frame.operand_stack = new Operand_stack(frame.method_info.attributes[0].info.code.max_stack);
+	frame.local_variables = new Local_variable(frame.method_info.attributes[0].info.code.max_locals);
+	set_start_PC(frame);
 	
 	//atualiza os ponteiros da pilha de operandos e vetor de variaveis
 	//locais utilizados nas operacoes para o metodo corrente
-	Operations::setFrame(aux);
-	Operations::setThreads(&threads);
-	Operations::setFrameStack(this);
+	Operations::set_frame(frame);
+	Operations::set_threads(threads);
+	Operations::set_frame_stack(this);
 
 	//inclui uma referencia para a pilha de frames na area de metodos
 	//para ser possivel a inclusao do <clinit> quando necessario
-	MethodArea::setFrameStack(this);
-	threads.push(aux);
+	Method_area::set_frame_stack(this);
+	threads.push(frame);
 }
 
-void Frame_stack::addFrame(method_info *m, cp_info *cp) {
-	this->addFrame(*m, cp);
-}
-
-void Frame_stack::setArguments(std::vector<typedElement> param) {
+void Frame_stack::set_arguments(vector<Typed_element> param) {
 	for (int i = 0, j=0; i < param.size(); i++, j++) {
-		threads.top()->locals->set(j, param[i]);
+		threads.top().local_variables.insert_typed_element(param[i], j);
 		
 		//testa se o i-esimo argumento ocupou dois slots
-		if (threads.top()->locals->get(j).type == TYPE_LONG || threads.top()->locals->get(j).type == TYPE_DOUBLE || (threads.top()->locals->get(j).type == TYPE_REFERENCE && BITS)) {
+		if (threads.top().local_variables.elements[j].type == TYPE_LONG || threads.top()->locals->get(j).type == TYPE_DOUBLE || (threads.top()->locals->get(j).type == TYPE_REFERENCE && BITS)) {
 			j++;
 		}
 	}
