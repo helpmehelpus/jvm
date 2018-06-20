@@ -9,9 +9,11 @@
 
 using namespace std;
 
+class Static_class; // solve cross referencing
+
 class Instance_class {
 private:
-	map<string, Typed_element*> localFields;
+	map<string, Typed_element*> local_fields;
 	Static_class *classe;
 public:
 	Instance_class(Static_class*);

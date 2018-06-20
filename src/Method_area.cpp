@@ -1,6 +1,7 @@
-#include "Displayer.hpp"
 #include "Method_area.hpp"
 
+using namespace std;
+string Method_area::path = "";
 Static_class *Method_area::get_class(string s) {
     
     for (map<string, Static_class*>::const_iterator i = classes.begin(); i != classes.end(); i++) {

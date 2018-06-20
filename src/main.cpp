@@ -2,7 +2,7 @@
 #include<string>
 
 #include "Reader.hpp"
-// #include "Method_area.hpp"
+#include "Method_area.hpp"
 // #include "Frame_stack.hpp"
 
 using namespace std;
@@ -14,7 +14,7 @@ int main(int argc, char* argv[]){
 	}
 	else if (argv[2][0] == 'i' || argv[2][0] == 'I') {
 		cout << "Running Interpreter" << endl;
-		// reader->run(argv[2]);
+		reader->run(argv[2]);
 		// Method_area::path = "Sample.class";
 		// Method_area::add_class(reader);
 		// Frame_stack frame_stack(reader);
