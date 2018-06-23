@@ -18,12 +18,12 @@ public:
 	// Operations(Frame*);
 	// static bool is_wide;
 	static Frame* frame;
-	// static stack<Frame*>* threads;
-	// static Frame_stack* frame_stack;
+	static stack<Frame*>* threads;
+	static Frame_stack* frame_stack;
 
 	static void set_frame(Frame*);
-	// static void set_threads(stack<Frame*>);
-	// static void set_frame_stack(Frame_stack*);
+	static void set_threads(stack<Frame*>*);
+	static void set_frame_stack(Frame_stack*);
 	// static U4 get_n_bytes_value(U1 n, vector<U2> pc);
 
 	// static Static_class* get_static_class_with_field(Static_class* base, string field_name);

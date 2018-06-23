@@ -16,7 +16,7 @@ public:
 
 	int opcode;
 	int current_PC;
-	stack<Frame*> threads;
+	stack<Frame*>* threads;
 	
 	void execute();
 	void set_start_PC(Frame*);

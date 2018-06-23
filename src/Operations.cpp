@@ -2,9 +2,9 @@
 
 using namespace std;
 
-Frame* Operations::frame = nullptr;
-// stack<Frame*>* Operations::threads = nullptr;
-// Frame_stack* Operations::frame_stack = nullptr;
+Frame* Operations::frame = new Frame();
+stack<Frame*>* Operations::threads = nullptr;
+Frame_stack* Operations::frame_stack = nullptr;
 // bool Operations::is_wide = false;
 
 
@@ -67,13 +67,13 @@ void Operations::set_frame(Frame* new_frame) {
 	frame = new_frame;
 }
 
-// void Operations::set_threads(stack<Frame*> t) {
-// 	threads = t;
-// }
+void Operations::set_threads(stack<Frame*>* t) {
+	threads = t;
+}
 
-// void Operations::set_frame_stack(Frame_stack* new_frame_stack) {
-// 	frame_stack = new_frame_stack;
-// }
+void Operations::set_frame_stack(Frame_stack* new_frame_stack) {
+	frame_stack = new_frame_stack;
+}
 
 // void Operations::run(int opcode) {
 // 	functions[opcode] ();

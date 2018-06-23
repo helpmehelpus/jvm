@@ -93,13 +93,11 @@ void Frame_stack::add_frame(Method_info method_info, vector<Cp_info> cp_vector) 
 	set_start_PC(frame);
 	
 	Operations::set_frame(frame);
-	// Operations::set_threads(threads);
-	// Operations::set_frame_stack(this);
+	Operations::set_threads(threads);
+	Operations::set_frame_stack(this);
 
-	// inclui uma referencia para a pilha de frames na area de metodos
-	// para ser possivel a inclusao do <clinit> quando necessario
-	// Method_area::set_frame_stack(this);
-	// threads.push(frame);
+	Method_area::set_frame_stack(this);
+	threads->push(frame);
 }
 
 // void Frame_stack::set_arguments(vector<Typed_element> param) {
