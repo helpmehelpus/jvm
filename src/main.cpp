@@ -12,14 +12,14 @@ int main(int argc, char* argv[]){
 	if (argv[1][0] == 'e' || argv[1][0] == 'E') {
 		reader->run(argv[2]);
 	}
-	else if (argv[2][0] == 'i' || argv[2][0] == 'I') {
+	else if (argv[1][0] == 'i' || argv[1][0] == 'I') {
 		cout << "Running Interpreter" << endl;
 		reader->run(argv[2]);
 		//TOOD: implementar metodo para pegar nome da classe do arv2 separado
-		Method_area::path = "Sample.class";
+		Method_area::path = "lookupswitch.class";
 		Method_area::add_class(reader);
-		Frame_stack* frame_stack = new Frame_stack(reader);
-		frame_stack->execute();
+		// Frame_stack* frame_stack = new Frame_stack(reader);
+		//frame_stack->execute();
 	}
 	else 
 		printf("Did not run anyting\n");

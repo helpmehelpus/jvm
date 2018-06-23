@@ -28,5 +28,5 @@ negativo: working
 
 sample: working
 	bin/main E exp/Sample.class
-sample-i: all
-	bin/main I exp/Sample.class
+lookup-i: all
+	bin/main i exp/lookupswitch.class

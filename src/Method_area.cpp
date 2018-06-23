@@ -17,6 +17,7 @@ Static_class *Method_area::get_class(string s) {
 }
 
 bool Method_area::add_class(Reader *reader) {
+    frame_stack = new Frame_stack(reader);
     Static_class *add = new Static_class(reader);
     classes.insert(pair<string, Static_class*>(Displayer::dereference_index(reader->cp->cp_vector, reader->this_class), add));
     if (reader->has_clinit())

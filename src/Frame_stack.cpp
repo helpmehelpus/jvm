@@ -6,12 +6,14 @@ using namespace std;
 
 Frame_stack::Frame_stack(Reader *reader) {
     Frame* frame = new Frame();
+
 	
 	frame->method_info = reader->get_main();
 	frame->cp_vector = reader->cp->cp_vector;
 	frame->operand_stack = new Operand_stack(frame->method_info.attributes[0].info.code.max_stack);
 	frame->local_variables = new Local_variable();
 	set_start_PC(frame);
+	threads = new stack<Frame*>;
 	threads->push(frame);
 	
 	Operations::set_frame(threads->top());
@@ -34,7 +36,7 @@ void Frame_stack::execute() {
 }
 
 void Frame_stack::set_start_PC(Frame* frame) {
-    frame->pc = frame->method_info.attributes[0].info.code.code;
+    // frame->pc = frame->method_info.attributes[0].info.code.code;
     current_PC = 0;
 }
 
