@@ -7,6 +7,8 @@
 #include "Frame.hpp"
 #include "Reader.hpp"
 #include "Typed_element.hpp"
+#include "Attribute_info.hpp"
+
 
 using namespace std;
 

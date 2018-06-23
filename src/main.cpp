@@ -15,10 +15,11 @@ int main(int argc, char* argv[]){
 	else if (argv[2][0] == 'i' || argv[2][0] == 'I') {
 		cout << "Running Interpreter" << endl;
 		reader->run(argv[2]);
-		// Method_area::path = "Sample.class";
-		// Method_area::add_class(reader);
-		// Frame_stack frame_stack(reader);
-		// frame_stack.execute();
+		//TOOD: implementar metodo para pegar nome da classe do arv2 separado
+		Method_area::path = "Sample.class";
+		Method_area::add_class(reader);
+		Frame_stack* frame_stack = new Frame_stack(reader);
+		frame_stack->execute();
 	}
 	else 
 		printf("Did not run anyting\n");
