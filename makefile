@@ -12,15 +12,21 @@
 # long: all
 # 	bin/main exp/vetor2-Eclipses.class
 
-all: src/main.cpp src/Constant_pool.cpp src/Interface.cpp src/Field_info.cpp src/Attribute_info.cpp src/Method_info.cpp
-	g++ -o bin/main src/main.cpp src/Reader.cpp src/Constant_pool.cpp src/Displayer.cpp src/Interface.cpp src/Field_info.cpp src/Attribute_info.cpp src/Method_info.cpp
-run: all
+all: src/main.cpp src/Constant_pool.cpp src/Interface.cpp src/Field_info.cpp src/Attribute_info.cpp src/Method_info.cpp src/Method_area.cpp src/Frame_stack.cpp src/Operand_stack.cpp src/Heap.cpp src/Static_class.cpp src/Instance_class.cpp src/Operations.cpp
+	g++ src/main.cpp src/Reader.cpp src/Constant_pool.cpp src/Displayer.cpp src/Interface.cpp src/Field_info.cpp src/Attribute_info.cpp src/Method_info.cpp src/Method_area.cpp src/Frame_stack.cpp src/Operand_stack.cpp src/Heap.cpp src/Static_class.cpp src/Instance_class.cpp src/Operations.cpp -o bin/main 
+
+working: src/main.cpp src/Constant_pool.cpp src/Interface.cpp src/Field_info.cpp src/Attribute_info.cpp src/Method_info.cpp
+	g++ src/main.cpp src/Reader.cpp src/Constant_pool.cpp src/Displayer.cpp src/Interface.cpp src/Field_info.cpp src/Attribute_info.cpp src/Method_info.cpp -o bin/main 
+
+run: working
 	bin/main E exp/Jogador.class
 
-eclipse: all
+eclipse: working
 	bin/main E exp/vetor2-Eclipses.class
-negativo: all
+negativo: working
 	bin/main E exp/Negativo.class
 
-sample: all
+sample: working
 	bin/main E exp/Sample.class
+sample-i: all
+	bin/main I exp/Sample.class
