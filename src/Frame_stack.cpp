@@ -39,20 +39,22 @@ void Frame_stack::set_start_PC(Frame* frame) {
 }
 
 // // TODO: check whether this works
-// bool Frame_stack::next_instruction() {
-// 	//checa se a pilha esta vazia
-// 	if (threads.empty())
-// 		return false;
-// 	//checa se nao esgotamos as Operations do metodo corrente
-// 	if (current_PC < threads.top()->method_info.attributes[0].info.code.code.size()) {
-// 		//pega o proximo opcode a ser executado
-// 		opcode = threads.top()->pc[current_PC];
-// 		//anda com pc em uma instrucao
-// 		//caso existam argumentos, a funcao chamada os utilizara
-// 		//e anda com pc as posicoes correspondentes
-// 		current_PC++;
-// 		return true;
-// 	}
+bool Frame_stack::next_instruction() {
+	// checa se a pilha esta vazia
+	if (threads->empty())
+		return false;
+	//checa se nao esgotamos as Operations do metodo corrente
+	if (current_PC < threads->top()->method_info.attributes[0].info.code.code.size()) {
+		//pega o proximo opcode a ser executado
+		opcode = threads->top()->pc[current_PC];
+		//anda com pc em uma instrucao
+		//caso existam argumentos, a funcao chamada os utilizara
+		//e anda com pc as posicoes correspondentes
+		current_PC++;
+		return true;
+	}
+	return false;
+}
 
 // 	//retira do topo caso nao tenham mais instrucoes no metodo corrente
 // 	this->pop();

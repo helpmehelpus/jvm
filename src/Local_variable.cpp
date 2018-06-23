@@ -1,8 +1,8 @@
 #include "Local_variable.hpp"
 
-Local_variable::Local_variable (U2 max_size) : max(max_size), two_slots(false), real_max(2*max_size) {
+// Local_variable::Local_variable (U2 max_size) : max(max_size), two_slots(false), real_max(2*max_size) {
 	
-}
+// }
 
 
 Typed_element Local_variable::get_typed_element(int index)  {
