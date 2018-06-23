@@ -8,7 +8,7 @@
 typedef struct {
 	Element value;
 	uint8_t type;
-	uint8_t realType;
+	uint8_t real_type;
 } Typed_element;
 
 #endif

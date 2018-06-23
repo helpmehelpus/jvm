@@ -1,7 +1,12 @@
 #include "Method_area.hpp"
 
 using namespace std;
+
+map<string, Static_class*> Method_area::classes;
 string Method_area::path = "";
+Frame_stack* Method_area::frame_stack = nullptr;
+
+
 Static_class *Method_area::get_class(string s) {
     
     for (map<string, Static_class*>::const_iterator i = classes.begin(); i != classes.end(); i++) {

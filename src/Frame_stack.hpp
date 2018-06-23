@@ -16,10 +16,10 @@ public:
 
 	int opcode;
 	int current_PC;
-	stack<Frame> threads;
+	stack<Frame*> threads;
 	
 	void execute();
-	void set_start_PC(Frame);
+	void set_start_PC(Frame*);
 	bool next_instruction();
 	void pop();
 	void add_frame(Method_info, vector<Cp_info>);

@@ -67,6 +67,30 @@ void Displayer::display_cp(Constant_pool *constant_pool, U2 cp_length) {
     printf("__________________________________________________________________________________________________________\n\n");
 }
 
+string Displayer::display_UTF8(U1* value, U2 size) {
+	int i;
+	std::vector<unsigned char> *v = (std::vector<unsigned char> *) value;
+	string ret = "";
+	size = v->size();
+
+	for(i = 0; i < size; i++) {
+		if (!(value[i] & 0x80)) { //Single byte UTF8
+			ret += (char)value[i];
+		} else {
+			unsigned short aux_current;
+			if (!(value[i+1] & 0x20)) { //Two byte UTF8
+				aux_current = ((value[i] & 0x1f) << 6) + (value[i+1] & 0x3f);
+			} else { //Three byte UTF8
+				aux_current = ((value[i] & 0xf) << 12) + ((value[i+1] & 0x3f) << 6) + (value[i+2] & 0x3f);
+				i++;
+			}
+			i++;
+			ret += (char)aux_current;
+		}
+	}
+	return ret;
+}
+
 string Displayer::display_UTF8(vector <U1> value, U2 size) {
 	int i;
 
