@@ -5,7 +5,7 @@ using namespace std;
 Frame* Operations::frame = new Frame();
 stack<Frame*>* Operations::threads = nullptr;
 Frame_stack* Operations::frame_stack = nullptr;
-// bool Operations::is_wide = false;
+bool Operations::is_wide = false;
 
 const func Operations::functions[] = { &Operations::nop, &Operations::aconst_null, &Operations::iconst_m1,
     &Operations::iconst_0, &Operations::iconst_1, &Operations::iconst_2, &Operations::iconst_3, &Operations::iconst_4,
@@ -82,77 +82,77 @@ void Operations::nop () {
 
 //empilha nos operandos uma referencia nula, neste caso representada por um 0
 void Operations::aconst_null () {
-	frame->operand_stack->push_type((int*)(nullptr));
+	frame->operand_stack->push((int*)(nullptr));
 }
 
 //empilha o int -1
 void Operations::iconst_m1 () {
-	frame->operand_stack->push_type(int(-1));
+	frame->operand_stack->push(int(-1));
 }
 
 //empilha o int 0
 void Operations::iconst_0 () {
-	frame->operand_stack->push_type(int(0));
+	frame->operand_stack->push(int(0));
 }
 
 //empilha o int 1
 void Operations::iconst_1 () {
-	frame->operand_stack->push_type(int(1));
+	frame->operand_stack->push(int(1));
 }
 
 //empilha o int 2
 void Operations::iconst_2 () {
-	frame->operand_stack->push_type(int(2));
+	frame->operand_stack->push(int(2));
 }
 
 //empilha o int 3
 void Operations::iconst_3 () {
-	frame->operand_stack->push_type(int(3));
+	frame->operand_stack->push(int(3));
 }
 
 //empilha o int 4
 void Operations::iconst_4 () {
-	frame->operand_stack->push_type(int(4));
+	frame->operand_stack->push(int(4));
 }
 
 //empilha o int 5
 void Operations::iconst_5 () {
-	frame->operand_stack->push_type(int(5));
+	frame->operand_stack->push(int(5));
 }
 
 //empilha o long 0
 void Operations::lconst_0 () {
-	frame->operand_stack->push_type(long(0));
+	frame->operand_stack->push(long(0));
 }
 
 //empilha o long 1
 void Operations::lconst_1 () {
-	frame->operand_stack->push_type(long(1));
+	frame->operand_stack->push(long(1));
 }
 
 //empilha o float 0.0
 void Operations::fconst_0 () {
-	frame->operand_stack->push_type(float(0.0));
+	frame->operand_stack->push(float(0.0));
 }
 
 //empilha o float 1.0
 void Operations::fconst_1 () {
-	frame->operand_stack->push_type(float(1.0));
+	frame->operand_stack->push(float(1.0));
 }
 
 //empilha o float 2.0
 void Operations::fconst_2 () {
-	frame->operand_stack->push_type(float(2.0));
+	frame->operand_stack->push(float(2.0));
 }
 
 //empilha o double 0.0
 void Operations::dconst_0 () {
-	frame->operand_stack->push_type(double(0.0));
+	frame->operand_stack->push(double(0.0));
 }
 
 //empilha o double 1.0
 void Operations::dconst_1 () {
-	frame->operand_stack->push_type(double(1.0));
+	frame->operand_stack->push(double(1.0));
 }
 
 // //Fim linha 0
@@ -163,7 +163,7 @@ void Operations::bipush () {
 	int32_t aux;
 	int8_t byte = get_n_bytes_value(1, frame->pc);
 	aux = (int32_t) (int8_t) byte; // extendendo o sinal
-	frame->operand_stack->push_type(int(aux));
+	frame->operand_stack->push(int(aux));
 }
 
 // funcao que insere dois bytes na pilha de operandos
@@ -172,7 +172,7 @@ void Operations::sipush () {
 	int32_t valPushShort;
 	valShort = get_n_bytes_value(2, frame->pc);
 	valPushShort = (int32_t) (int16_t) valShort;  // extendendo o sinal
-	frame->operand_stack->push_type(int(valPushShort));
+	frame->operand_stack->push(int(valPushShort));
 }
 
 //empilha um valor do constant Pool
@@ -180,14 +180,14 @@ void Operations::ldc () {
 	uint8_t index = get_n_bytes_value(1, frame->pc);
 	Cp_info cp_vector= frame->cp_vector[index];
 	if (cp_vector.tag == STRING){						// se o Elemento for string
-		frame->operand_stack->push_type((int*)(frame->cp_vector[cp_vector.info[0].u2].info[1].array));
+		frame->operand_stack->push((int*)(frame->cp_vector[cp_vector.info[0].u2].info[1].array));
 	} else {									   // se o Elemento for int ou float
 		Element aux;
 		aux.i = cp_vector.info[0].u4;
 		if (cp_vector.tag == INTEGER){
-			frame->operand_stack->push_type(aux, TYPE_INT);
+			frame->operand_stack->push(aux, TYPE_INT);
 		} else {
-			frame->operand_stack->push_type(aux, TYPE_FLOAT);
+			frame->operand_stack->push(aux, TYPE_FLOAT);
 		}
 	}
 }
@@ -197,9 +197,9 @@ void Operations::ldc_w () {
 	uint16_t index = get_n_bytes_value(2, frame->pc);
 	Cp_info cp_vector= frame->cp_vector[index];
 	if (cp_vector.tag == STRING){					// se o Elemento for string
-		frame->operand_stack->push_type((int*)(frame->cp_vector[cp_vector.info[0].u2].info[1].array));
+		frame->operand_stack->push((int*)(frame->cp_vector[cp_vector.info[0].u2].info[1].array));
 	} else									// se o Elemento for int ou float
-		frame->operand_stack->push_type(int(cp_vector.info[0].u4));
+		frame->operand_stack->push(int(cp_vector.info[0].u4));
 }
 
 //empilha valores long e double do Constant Pool
@@ -209,10 +209,10 @@ void Operations::ldc2_w () {
 	// double valPushDouble;
 	// if (frame->cp_vector[index].tag == LONG){
 	// 	valPushLong = u4_to_long(frame->cp_vector[index].info[0], frame->cp_vector[index+1].info[0]);
-	// 	frame->operand_stack->push_type(long(valPushLong));
+	// 	frame->operand_stack->push(long(valPushLong));
 	// } else {
 	// 	valPushDouble = u4_to_double(frame->cp_vector[index].info[0], frame->cp_vector[index+1].info[0]);
-	// 	frame->operand_stack->push_type(double(valPushDouble));
+	// 	frame->operand_stack->push(double(valPushDouble));
 	// }
 }
 
@@ -229,7 +229,7 @@ void Operations::iload () {
 	// }
 
 	// Typed_element aux = frame->local_variables->get_typed_element(int(index));
-	// frame->operand_stack->push_type(int(aux.value.i));
+	// frame->operand_stack->push(int(aux.value.i));
 }
 
 //le um long do vetor de variaveis locais e empilha
@@ -243,7 +243,7 @@ void Operations::lload () {
 	// 	index = get_n_bytes_value(1, frame->pc);
 
 	// Typed_element aux = frame->local_variables->get_typed_element(int(index));
-	// frame->operand_stack->push_type(long(aux.value.l));
+	// frame->operand_stack->push(long(aux.value.l));
 }
 
 //le um float do vetor de variaveis locais e empilha
@@ -258,7 +258,7 @@ void Operations::fload () {
 	// 	index = get_n_bytes_value(1, frame->pc);
 
 	// Typed_element aux = frame->local_variables->get_typed_element(int(index));
-	// frame->operand_stack->push_type(float(aux.value.f));
+	// frame->operand_stack->push(float(aux.value.f));
 }
 
 //le um double do vetor de variaveis locais e empilha
@@ -272,46 +272,46 @@ void Operations::dload () {
 	// 	index = get_n_bytes_value(1, frame->pc);
 
 	// Typed_element aux = frame->local_variables->get_typed_element(int(index));
-	// frame->operand_stack->push_type(double(aux.value.d));
+	// frame->operand_stack->push(double(aux.value.d));
 }
 
 //le uma referencia do vetor de variaveis locais e empilha
 //pode ser utilizada em conjunto com wide
 void Operations::aload () {
-	// uint16_t index = 0;
+	uint16_t index = 0;
 
-	// if (is_wide) {
-	// 	index = get_n_bytes_value(2, frame->pc);
-	// 	is_wide = false;
-	// }else
-	// 	index = get_n_bytes_value(1, frame->pc);
+	if (is_wide) {
+		index = get_n_bytes_value(2, frame->pc);
+		is_wide = false;
+	}else
+		index = get_n_bytes_value(1, frame->pc);
 
-	// Typed_element aux = frame->local_variables->get_typed_element(int(index));
-	// frame->operand_stack->push_type((int*)(aux.value.pi));
+	Typed_element aux = frame->local_variables->get_typed_element(int(index));
+	frame->operand_stack->push((int*)(aux.value.pi));
 }
 
 // le um inteiro do vetor de variaveis locais, posicao 0, e empilha
 void Operations::iload_0 () {
 	Typed_element aux = frame->local_variables->get_typed_element(0);
-	frame->operand_stack->push_type(int(aux.value.i));
+	frame->operand_stack->push(int(aux.value.i));
 }
 
 //le um inteiro do vetor de variaveis locais, posicao 1, e empilha
 void Operations::iload_1 () {
 	Typed_element aux = frame->local_variables->get_typed_element(1);
-	frame->operand_stack->push_type(int(aux.value.i));
+	frame->operand_stack->push(int(aux.value.i));
 }
 
 //le um inteiro do vetor de variaveis locais, posicao 2, e empilha
 void Operations::iload_2 () {
 	Typed_element aux = frame->local_variables->get_typed_element(2);
-	frame->operand_stack->push_type(int(aux.value.i));
+	frame->operand_stack->push(int(aux.value.i));
 }
 
 //le um inteiro do vetor de variaveis locais, posicao 3, e empilha
 void Operations::iload_3 () {
 	Typed_element aux = frame->local_variables->get_typed_element(3);
-	frame->operand_stack->push_type(int(aux.value.i));
+	frame->operand_stack->push(int(aux.value.i));
 }
 
 //le um long do vetor de variaveis locais, posicao 0, e empilha
@@ -331,7 +331,7 @@ void Operations::lload_1 () {
 void Operations::lload_n(short index)
 {
 	Typed_element aux = frame->local_variables->get_typed_element(index);
-	frame->operand_stack->push_type(long(aux.value.l));
+	frame->operand_stack->push(long(aux.value.l));
 }
 
 void Operations::lload_2(){
@@ -346,7 +346,7 @@ void Operations::lload_3(){
 void Operations::fload_n(short index)
 {
 	Typed_element aux = frame->local_variables->get_typed_element(index);
-	frame->operand_stack->push_type(aux.value.f);
+	frame->operand_stack->push(aux.value.f);
 }
 
 void Operations::fload_0(){
@@ -369,7 +369,7 @@ void Operations::fload_3(){
 void Operations::dload_n(short index)
 {
 	Typed_element aux = frame->local_variables->get_typed_element(index);
-	frame->operand_stack->push_type(aux.value.d);
+	frame->operand_stack->push(aux.value.d);
 }
 
 void Operations::dload_0(){
@@ -392,7 +392,7 @@ void Operations::dload_3(){
 void Operations::aload_n(short index)
 {
 	Typed_element aux = frame->local_variables->get_typed_element(index);
-	frame->operand_stack->push_type(aux.value.pi);
+	frame->operand_stack->push(aux.value.pi);
 }
 
 void Operations::aload_0(){
@@ -420,13 +420,13 @@ void Operations::iaload(){
 
   	if (ref == nullptr)
     	throw runtime_error("Null pointer");
-	frame->operand_stack->push_type(ref[value1.i]);
+	frame->operand_stack->push(ref[value1.i]);
 
 }
 
 void Operations::laload(){
 	// Element value1, value2;
-	// struct Typed_element_s result;
+	// Typed_element result;
 
 	// value1 = frame->operand_stack->pop();
   	// value2 = frame->operand_stack->pop();
@@ -434,7 +434,7 @@ void Operations::laload(){
   	// if (ref == nullptr)
     // 	throw runtime_error("Null pointer");
 
-	// frame->operand_stack->push_type(reframe->get(value1.i));
+	// frame->operand_stack->push(reframe->get(value1.i));
 }
 
 //Fim linha 2
@@ -580,21 +580,21 @@ void Operations::faload() {
 	// Local_variable *arrayref = (Local_variable *) frame->operand_stack->pop().pi;
 	// if(arrayref == NULL){
 	// }
-	// frame->operand_stack->push_type(arrayreframe->get(index));
+	// frame->operand_stack->push(arrayreframe->get(index));
 }
 
 //Pega um valor do tipo double de um array e empilha na pilha de operandos
 void Operations::daload() {
 	// int index = frame->operand_stack->pop().i;
 	// Local_variable *arrayref = (Local_variable *) frame->operand_stack->pop().pi;
-	// frame->operand_stack->push_type(arrayreframe->get(index));
+	// frame->operand_stack->push(arrayreframe->get(index));
 }
 
 //Pega uma referência de um array e empilha na pilha de operandos
 void Operations::aaload() {
 	// int index = frame->operand_stack->pop().i;
 	// Local_variable *arrayref = (Local_variable *) frame->operand_stack->pop().pi;
-	// frame->operand_stack->push_type(arrayreframe->get(index));
+	// frame->operand_stack->push(arrayreframe->get(index));
 }
 
 //Pega um boolean ou byte de um array e empilha na pilha de operandos
@@ -602,20 +602,20 @@ void Operations::aaload() {
 void Operations::baload() {
 	// int index = frame->operand_stack->pop().i;
 	// Local_variable *arrayref = (Local_variable *) frame->operand_stack->pop().pi;
-	// frame->operand_stack->push_type(arrayreframe->get(index));
+	// frame->operand_stack->push(arrayreframe->get(index));
 }
 
 //Pega um char de um array e empilha na pilha de operandos
 void Operations::caload() {
 	// int index = frame->operand_stack->pop().i;
 	// std::vector<char> *arrayref = (std::vector<char> *) frame->operand_stack->pop().pi;
-	// frame->operand_stack->push_type(arrayreframe->at(index));
+	// frame->operand_stack->push(arrayreframe->at(index));
 }
 
 void Operations::saload() {
 	// int index = frame->operand_stack->pop().i;
 	// Local_variable *arrayref = (Local_variable *) frame->operand_stack->pop().pi;
-	// frame->operand_stack->push_type(arrayreframe->get(index));
+	// frame->operand_stack->push(arrayreframe->get(index));
 }
 
 //Fim linha 3
@@ -786,7 +786,7 @@ void Operations::lastore() {
 		aux.value.l = valor.l;
 		aux.type = TYPE_LONG;
 		aux.real_type = RT_LONG;
-		vetor->insert_typed_element(indice.i, aux);	}
+		vetor->insert_typed_element(aux, indice.i);	}
 
 //Armazena um float na pilha de operandos como um componente de array
 void Operations::fastore() {
@@ -799,7 +799,7 @@ void Operations::fastore() {
 		aux.value.f = valor.f;
 		aux.type = TYPE_FLOAT;
 		aux.real_type = RT_FLOAT;
-		vetor->insert_typed_element(indice.i, aux);	}
+		vetor->insert_typed_element(aux, indice.i);	}
 
 //Armazena um double na pilha de operandos como um componente de array
 void Operations::dastore() {
@@ -812,7 +812,7 @@ void Operations::dastore() {
 		aux.value.d = valor.d;
 		aux.type = TYPE_DOUBLE;
 		aux.real_type = RT_DOUBLE;
-		vetor->insert_typed_element(indice.i, aux);	}
+		vetor->insert_typed_element(aux, indice.i);	}
 
 //Armazena uma referência na pilha de operandos como um componente de um array
 void Operations::aastore() {
@@ -825,7 +825,7 @@ void Operations::aastore() {
 		aux.value.pi = valor.pi;
 		aux.type = TYPE_REFERENCE;
 		aux.real_type = RT_REFERENCE;
-		vetor->insert_typed_element(indice.i, aux);	}
+		vetor->insert_typed_element(aux, indice.i);	}
 
 //Armazena um byte na pilha de operandos como um componente de array
 void Operations::bastore() {
@@ -838,7 +838,7 @@ void Operations::bastore() {
 		aux.value.i = valor.i;
 		aux.type = TYPE_INT;
 		aux.real_type = RT_BOOL;
-		vetor->insert_typed_element(indice.i, aux);	}
+		vetor->insert_typed_element(aux, indice.i);	}
 
 //Armazena um caracter na pilha de operandos como um componente de array
 void Operations::castore() {
@@ -861,7 +861,7 @@ void Operations::sastore() {
 		aux.value.i = valor.i;
 		aux.type = TYPE_INT;
 		aux.real_type = RT_SHORT;
-		vetor->insert_typed_element(indice.i, aux);
+		vetor->insert_typed_element(aux, indice.i);
 }
 
 //Fim linha 5
@@ -870,7 +870,7 @@ void Operations::sastore() {
 void Operations::iadd()
 {
 	Element value1, value2;
-	struct Typed_element_s result;
+	Typed_element result;
 
     if (frame->operand_stack->top_type() == TYPE_INT) {
     	value2 = frame->operand_stack->pop();
@@ -887,13 +887,13 @@ void Operations::iadd()
 	result.type = TYPE_INT;
 	result.real_type = RT_INT;
 	result.value.i = value1.i + value2.i;
-	frame->operand_stack->push_type(result);
+	frame->operand_stack->push(result);
 }
 
 void Operations::ladd()
 {
 	Element value1, value2;
-	struct Typed_element_s result;
+	Typed_element result;
 
     if (frame->operand_stack->top_type() == TYPE_LONG) {
     	value2 = frame->operand_stack->pop();
@@ -910,13 +910,13 @@ void Operations::ladd()
 	result.type = TYPE_LONG;
 	result.real_type = RT_LONG;
 	result.value.l = value1.l + value2.l;
-	frame->operand_stack->push_type(result);
+	frame->operand_stack->push(result);
 }
 
 void Operations::fadd()
 {
 	Element value1, value2;
-	struct Typed_element_s result;
+	Typed_element result;
 
     if (frame->operand_stack->top_type() == TYPE_FLOAT) {
     	value2 = frame->operand_stack->pop();
@@ -933,13 +933,13 @@ void Operations::fadd()
 	result.type = TYPE_FLOAT;
 	result.real_type = RT_FLOAT;
 	result.value.f = value1.f + value2.f;
-	frame->operand_stack->push_type(result);
+	frame->operand_stack->push(result);
 }
 
 void Operations::dadd()
 {
 	Element value1, value2;
-	struct Typed_element_s result;
+	Typed_element result;
 
     if (frame->operand_stack->top_type() == TYPE_DOUBLE) {
     	value2 = frame->operand_stack->pop();
@@ -956,13 +956,13 @@ void Operations::dadd()
 	result.type = TYPE_DOUBLE;
 	result.real_type = RT_DOUBLE;
 	result.value.d = value1.d + value2.d;
-	frame->operand_stack->push_type(result);
+	frame->operand_stack->push(result);
 }
 
 void Operations::isub()
 {
 	Element value1, value2;
-	struct Typed_element_s result;
+	Typed_element result;
 
     if (frame->operand_stack->top_type() == TYPE_INT) {
     	value2 = frame->operand_stack->pop();
@@ -979,13 +979,13 @@ void Operations::isub()
 	result.type = TYPE_INT;
 	result.real_type = RT_INT;
 	result.value.i = value1.i - value2.i;
-	frame->operand_stack->push_type(result);
+	frame->operand_stack->push(result);
 }
 
 void Operations::lsub()
 {
 	Element value1, value2;
-	struct Typed_element_s result;
+	Typed_element result;
 
     if (frame->operand_stack->top_type() == TYPE_LONG) {
     	value2 = frame->operand_stack->pop();
@@ -1002,13 +1002,13 @@ void Operations::lsub()
 	result.type = TYPE_LONG;
 	result.real_type = RT_LONG;
 	result.value.l = value1.l - value2.l;
-	frame->operand_stack->push_type(result);
+	frame->operand_stack->push(result);
 }
 
 void Operations::fsub()
 {
 	Element value1, value2;
-	struct Typed_element_s result;
+	Typed_element result;
 
     if (frame->operand_stack->top_type() == TYPE_FLOAT) {
     	value2 = frame->operand_stack->pop();
@@ -1025,13 +1025,13 @@ void Operations::fsub()
 	result.type = TYPE_FLOAT;
 	result.real_type = RT_FLOAT;
 	result.value.f = value1.f - value2.f;
-	frame->operand_stack->push_type(result);
+	frame->operand_stack->push(result);
 }
 
 void Operations::dsub()
 {
 	Element value1, value2;
-	struct Typed_element_s result;
+	Typed_element result;
 
     if (frame->operand_stack->top_type() == TYPE_DOUBLE) {
     	value2 = frame->operand_stack->pop();
@@ -1048,13 +1048,13 @@ void Operations::dsub()
 	result.type = TYPE_DOUBLE;
 	result.real_type = RT_DOUBLE;
 	result.value.d = value1.d - value2.d;
-	frame->operand_stack->push_type(result);
+	frame->operand_stack->push(result);
 }
 
 void Operations::imul()
 {
 	Element value1, value2;
-	struct Typed_element_s result;
+	Typed_element result;
 
     if (frame->operand_stack->top_type() == TYPE_INT) {
     	value2 = frame->operand_stack->pop();
@@ -1071,13 +1071,13 @@ void Operations::imul()
 	result.type = TYPE_INT;
 	result.real_type = RT_INT;
 	result.value.i = value1.i * value2.i;
-	frame->operand_stack->push_type(result);
+	frame->operand_stack->push(result);
 }
 
 void Operations::lmul()
 {
 	Element value1, value2;
-	struct Typed_element_s result;
+	Typed_element result;
 
     if (frame->operand_stack->top_type() == TYPE_LONG) {
     	value2 = frame->operand_stack->pop();
@@ -1094,13 +1094,13 @@ void Operations::lmul()
 	result.type = TYPE_LONG;
 	result.real_type = RT_LONG;
 	result.value.l = value1.l * value2.l;
-	frame->operand_stack->push_type(result);
+	frame->operand_stack->push(result);
 }
 
 void Operations::fmul()
 {
 	Element value1, value2;
-	struct Typed_element_s result;
+	Typed_element result;
 
     if (frame->operand_stack->top_type() == TYPE_FLOAT) {
     	value2 = frame->operand_stack->pop();
@@ -1117,13 +1117,13 @@ void Operations::fmul()
 	result.type = TYPE_FLOAT;
 	result.real_type = RT_FLOAT;
 	result.value.f = value1.f * value2.f;
-	frame->operand_stack->push_type(result);
+	frame->operand_stack->push(result);
 }
 
 void Operations::dmul()
 {
 	Element value1, value2;
-	struct Typed_element_s result;
+	Typed_element result;
 
     if (frame->operand_stack->top_type() == TYPE_DOUBLE) {
     	value2 = frame->operand_stack->pop();
@@ -1140,13 +1140,13 @@ void Operations::dmul()
 	result.type = TYPE_DOUBLE;
 	result.real_type = RT_DOUBLE;
 	result.value.d = value1.d * value2.d;
-	frame->operand_stack->push_type(result);
+	frame->operand_stack->push(result);
 }
 
 void Operations::idiv()
 {
 	Element value1, value2;
-	struct Typed_element_s result;
+	Typed_element result;
 
     if (frame->operand_stack->top_type() == TYPE_INT) {
     	value2 = frame->operand_stack->pop();
@@ -1163,13 +1163,13 @@ void Operations::idiv()
 	result.type = TYPE_INT;
 	result.real_type = RT_INT;
 	result.value.i = value1.i / value2.i;
-	frame->operand_stack->push_type(result);
+	frame->operand_stack->push(result);
 }
 
 void Operations::ldiv()
 {
 	Element value1, value2;
-	struct Typed_element_s result;
+	Typed_element result;
 
     if (frame->operand_stack->top_type() == TYPE_LONG) {
     	value2 = frame->operand_stack->pop();
@@ -1186,13 +1186,13 @@ void Operations::ldiv()
 	result.type = TYPE_LONG;
 	result.real_type = RT_LONG;
 	result.value.l = value1.l / value2.l;
-	frame->operand_stack->push_type(result);
+	frame->operand_stack->push(result);
 }
 
 void Operations::fdiv()
 {
 	Element value1, value2;
-	struct Typed_element_s result;
+	Typed_element result;
 
     if (frame->operand_stack->top_type() == TYPE_FLOAT) {
     	value2 = frame->operand_stack->pop();
@@ -1209,13 +1209,13 @@ void Operations::fdiv()
 	result.type = TYPE_FLOAT;
 	result.real_type = RT_FLOAT;
 	result.value.f = value1.f / value2.f;
-	frame->operand_stack->push_type(result);
+	frame->operand_stack->push(result);
 }
 
 void Operations::ddiv()
 {
 	Element value1, value2;
-	struct Typed_element_s result;
+	Typed_element result;
 
     if (frame->operand_stack->top_type() == TYPE_DOUBLE) {
     	value2 = frame->operand_stack->pop();
@@ -1232,7 +1232,7 @@ void Operations::ddiv()
 	result.type = TYPE_DOUBLE;
 	result.real_type = RT_DOUBLE;
 	result.value.d = value1.d / value2.d;
-	frame->operand_stack->push_type(result);
+	frame->operand_stack->push(result);
 }
 
 //Fim linha 6
@@ -1240,7 +1240,7 @@ void Operations::ddiv()
 
 void Operations::irem () {
     Element value1, value2;
-    struct Typed_element_s result;
+    Typed_element result;
 
     value2 = frame->operand_stack->pop();
     if (value2.i == 0) {
@@ -1252,12 +1252,12 @@ void Operations::irem () {
     result.type = TYPE_INT;
     result.real_type = RT_INT;
     result.value.i = value1.i - int(value1.i/value2.i) * value2.i;
-    frame->operand_stack->push_type(result);
+    frame->operand_stack->push(result);
 }
 
 void Operations::lrem () {
     Element value1, value2;
-    struct Typed_element_s result;
+    Typed_element result;
 
     value2 = frame->operand_stack->pop();
     if (value2.l == 0) {
@@ -1269,17 +1269,17 @@ void Operations::lrem () {
     result.type = TYPE_LONG;
     result.real_type = RT_LONG;
     result.value.l = value1.l - int(value1.l/value2.l) * value2.l;
-    frame->operand_stack->push_type(result);
+    frame->operand_stack->push(result);
 }
 
 void Operations::frem () {
     Element value1, value2;
-    struct Typed_element_s result;
+    Typed_element result;
 
     value2 = frame->operand_stack->pop();
     value1 = frame->operand_stack->pop();
 
-    if (checkFloat(value1.f) == 3 || checkFloat(value2.f) == 3) {
+    if (checkFloat(value1.f) == 3 |Float_NaN| checkFloat(value2.f) == 3) {
         result.value.i = Float_NaN;
     } else if (checkFloat(value1.f) == 1 || checkFloat(value1.f) == 2 || value2.f == 0.0) {
         result.value.i = Float_NaN;
@@ -1293,12 +1293,12 @@ void Operations::frem () {
 
     result.type = TYPE_FLOAT;
     result.real_type = RT_FLOAT;
-    frame->operand_stack->push_type(result);
+    frame->operand_stack->push(result);
 }
 
 void Operations::drem () {
     Element value1, value2;
-    struct Typed_element_s result;
+    Typed_element result;
 
     value2 = frame->operand_stack->pop();
     value1 = frame->operand_stack->pop();
@@ -1317,36 +1317,36 @@ void Operations::drem () {
 
     result.type = TYPE_DOUBLE;
     result.real_type = RT_DOUBLE;
-    frame->operand_stack->push_type(result);
+    frame->operand_stack->push(result);
 }
 
 void Operations::ineg () {
     Element value;
-    struct Typed_element_s result;
+    Typed_element result;
 
     value = frame->operand_stack->pop();
 
     result.type = TYPE_INT;
     result.real_type = RT_INT;
     result.value.is = 0 - value.is;
-    frame->operand_stack->push_type(result);
+    frame->operand_stack->push(result);
 }
 
 void Operations::lneg () {
     Element value;
-    struct Typed_element_s result;
+    Typed_element result;
 
     value = frame->operand_stack->pop();
 
     result.type = TYPE_LONG;
     result.real_type = RT_LONG;
     result.value.ls = 0 - value.ls;
-    frame->operand_stack->push_type(result);
+    frame->operand_stack->push(result);
 }
 
 void Operations::fneg () {
     Element value;
-    struct Typed_element_s result;
+    Typed_element result;
 
     value = frame->operand_stack->pop();
 
@@ -1354,12 +1354,12 @@ void Operations::fneg () {
     result.real_type = RT_FLOAT;
     //inverte o bit 31
     result.value.i = value.i + 0x80000000;
-    frame->operand_stack->push_type(result);
+    frame->operand_stack->push(result);
 }
 
 void Operations::dneg () {
     Element value;
-    struct Typed_element_s result;
+    Typed_element result;
 
     value = frame->operand_stack->pop();
 
@@ -1367,12 +1367,12 @@ void Operations::dneg () {
     result.real_type = RT_DOUBLE;
     //inverte o bit 63
     result.value.l = value.l + 0x8000000000000000;
-    frame->operand_stack->push_type(result);
+    frame->operand_stack->push(result);
 }
 
 void Operations::ishl() {
     Element value1, value2;
-    struct Typed_element_s result;
+    Typed_element result;
 
     value2 = frame->operand_stack->pop();
     value1 = frame->operand_stack->pop();
@@ -1380,12 +1380,12 @@ void Operations::ishl() {
     result.type = TYPE_INT;
     result.real_type = RT_INT;
     result.value.i = value1.i << (value2.i & 0b011111);
-    frame->operand_stack->push_type(result);
+    frame->operand_stack->push(result);
 }
 
 void Operations::lshl() {
     Element value1, value2;
-    struct Typed_element_s result;
+    Typed_element result;
 
     value2 = frame->operand_stack->pop();
     value1 = frame->operand_stack->pop();
@@ -1393,12 +1393,12 @@ void Operations::lshl() {
     result.type = TYPE_LONG;
     result.real_type = RT_LONG;
     result.value.l = value1.l << (value2.i & 0b0111111);
-    frame->operand_stack->push_type(result);
+    frame->operand_stack->push(result);
 }
 
 void Operations::ishr () {
     Element value1, value2;
-    struct Typed_element_s result;
+    Typed_element result;
 
     value2 = frame->operand_stack->pop();
     value1 = frame->operand_stack->pop();
@@ -1406,12 +1406,12 @@ void Operations::ishr () {
     result.type = TYPE_INT;
     result.real_type = RT_INT;
     result.value.is = value1.is >> (value2.i & 0b011111);
-    frame->operand_stack->push_type(result);
+    frame->operand_stack->push(result);
 }
 
 void Operations::lshr () {
     Element value1, value2;
-    struct Typed_element_s result;
+    Typed_element result;
 
     value2 = frame->operand_stack->pop();
     value1 = frame->operand_stack->pop();
@@ -1419,12 +1419,12 @@ void Operations::lshr () {
     result.type = TYPE_LONG;
     result.real_type = RT_LONG;
     result.value.ls = value1.ls >> (value2.i & 0b0111111);
-    frame->operand_stack->push_type(result);
+    frame->operand_stack->push(result);
 }
 
 void Operations::iushr () {
     Element value1, value2;
-    struct Typed_element_s result;
+    Typed_element result;
 
     value2 = frame->operand_stack->pop();
     value1 = frame->operand_stack->pop();
@@ -1432,12 +1432,12 @@ void Operations::iushr () {
     result.type = TYPE_INT;
     result.real_type = RT_INT;
     result.value.i = value1.i >> (value2.i & 0b011111);
-    frame->operand_stack->push_type(result);
+    frame->operand_stack->push(result);
 }
 
 void Operations::lushr () {
     Element value1, value2;
-    struct Typed_element_s result;
+    Typed_element result;
 
     value2 = frame->operand_stack->pop();
     value1 = frame->operand_stack->pop();
@@ -1445,12 +1445,12 @@ void Operations::lushr () {
     result.type = TYPE_LONG;
     result.real_type = RT_LONG;
     result.value.l = value1.l >> (value2.i & 0b0111111);
-    frame->operand_stack->push_type(result);
+    frame->operand_stack->push(result);
 }
 
 void Operations::iand() {
     Element value1, value2;
-    struct Typed_element_s result;
+    Typed_element result;
 
     value2 = frame->operand_stack->pop();
     value1 = frame->operand_stack->pop();
@@ -1458,12 +1458,12 @@ void Operations::iand() {
     result.type = TYPE_INT;
     result.real_type = RT_INT;
     result.value.i = value1.i & value2.i;
-    frame->operand_stack->push_type(result);
+    frame->operand_stack->push(result);
 }
 
 void Operations::land() {
     Element value1, value2;
-    struct Typed_element_s result;
+    Typed_element result;
 
     value2 = frame->operand_stack->pop();
     value1 = frame->operand_stack->pop();
@@ -1471,7 +1471,7 @@ void Operations::land() {
     result.type = TYPE_LONG;
     result.real_type = RT_LONG;
     result.value.l = value1.l & value2.l;
-    frame->operand_stack->push_type(result);
+    frame->operand_stack->push(result);
 }
 
 //Fim linha 7
@@ -1481,28 +1481,28 @@ void Operations::ior(){
 	Element aux1 = frame->operand_stack->pop();
 	Element aux2 = frame->operand_stack->pop();
 	aux1.i |= aux2.i;
-	frame->operand_stack->push_type(aux1, TYPE_INT);
+	frame->operand_stack->push(aux1, TYPE_INT);
 }
 
 void Operations::lor(){
 	Element aux1 = frame->operand_stack->pop();
 	Element aux2 = frame->operand_stack->pop();
 	aux1.l |= aux2.l;
-	frame->operand_stack->push_type(aux1, TYPE_LONG);
+	frame->operand_stack->push(aux1, TYPE_LONG);
 }
 
 void Operations::ixor(){
 	Element aux1 = frame->operand_stack->pop();
 	Element aux2 = frame->operand_stack->pop();
 	aux1.i ^= aux2.i;
-	frame->operand_stack->push_type(aux1, TYPE_INT);
+	frame->operand_stack->push(aux1, TYPE_INT);
 }
 
 void Operations::lxor(){
 	Element aux1 = frame->operand_stack->pop();
 	Element aux2 = frame->operand_stack->pop();
 	aux1.l ^= aux2.l;
-	frame->operand_stack->push_type(aux1, TYPE_LONG);
+	frame->operand_stack->push(aux1, TYPE_LONG);
 }
 
 //pode ser utilizada em conjunto com o wide
@@ -1521,71 +1521,71 @@ void Operations::iinc(){
 	Typed_element aux = frame->local_variables->get_typed_element(var);
 	if(aux.type == TYPE_INT)
 		aux.value.i += (int32_t)n;
-	frame->local_variables->insert_typed_element(var, aux);
+	frame->local_variables->insert_typed_element(aux, var);
 }
 
 void Operations::i2l(){
-	frame->operand_stack->push_type(frame->operand_stack->pop(), TYPE_LONG);
+	frame->operand_stack->push(frame->operand_stack->pop(), TYPE_LONG);
 }
 
 void Operations::i2f(){
 	Element aux = frame->operand_stack->pop();
 	aux.f = (float)aux.is;
-	frame->operand_stack->push_type(aux.f);
+	frame->operand_stack->push(aux.f);
 }
 
 void Operations::i2d(){
 	Element aux = frame->operand_stack->pop();
 	aux.d = (double)aux.is;
-	frame->operand_stack->push_type(aux.d);
+	frame->operand_stack->push(aux.d);
 }
 
 void Operations::l2i(){
 	Element aux = frame->operand_stack->pop();
 	aux.i = (uint32_t)aux.l;
-	frame->operand_stack->push_type(aux, TYPE_INT);
+	frame->operand_stack->push(aux, TYPE_INT);
 }
 
 void Operations::l2f(){
 	Element aux = frame->operand_stack->pop();
 	aux.f = (float)aux.l;
-	frame->operand_stack->push_type(aux, TYPE_FLOAT);
+	frame->operand_stack->push(aux, TYPE_FLOAT);
 }
 
 void Operations::l2d(){
 	Element aux = frame->operand_stack->pop();
 	aux.d = (double)aux.l;
-	frame->operand_stack->push_type(aux.d);
+	frame->operand_stack->push(aux.d);
 }
 
 void Operations::f2i(){
 	Element aux = frame->operand_stack->pop();
 	aux.is = (int32_t)aux.f;
-	frame->operand_stack->push_type(aux.is);
+	frame->operand_stack->push(aux.is);
 }
 
 void Operations::f2l(){
 	Element aux = frame->operand_stack->pop();
 	aux.l = (int64_t)aux.f;
-	frame->operand_stack->push_type(aux, TYPE_LONG);
+	frame->operand_stack->push(aux, TYPE_LONG);
 }
 
 void Operations::f2d(){
 	Element aux = frame->operand_stack->pop();
 	aux.d = (double)aux.f;
-	frame->operand_stack->push_type(aux.d);
+	frame->operand_stack->push(aux.d);
 }
 
 void Operations::d2i(){
 	Element aux = frame->operand_stack->pop();
 	aux.is = (int32_t)aux.d;
-	frame->operand_stack->push_type(aux.is);
+	frame->operand_stack->push(aux.is);
 }
 
 void Operations::d2l(){
 	Element aux = frame->operand_stack->pop();
 	aux.l = (int64_t)aux.d;
-	frame->operand_stack->push_type(aux, TYPE_LONG);
+	frame->operand_stack->push(aux, TYPE_LONG);
 }
 
 //Fim linha 8
@@ -1594,14 +1594,14 @@ void Operations::d2l(){
 void Operations::d2f () {
 	Element aux = frame->operand_stack->pop();
 	aux.f = (float)aux.d;
-	frame->operand_stack->push_type(aux.f);
+	frame->operand_stack->push(aux.f);
 }
 
 //le um int do topo da pilha (truncado para byte), extende com sinal para um int e reinsere na pilha de operandos
 void Operations::i2b() {
 	int8_t value = frame->operand_stack->pop().bs;
 
-	frame->operand_stack->push_type(int(value));
+	frame->operand_stack->push(int(value));
 }
 
 //le um int do topo da pilha (truncado para char), extende com 0 para um int  e reinsere na pilha de operandos
@@ -1610,7 +1610,7 @@ void Operations::i2c() {
 	value.type = TYPE_INT;
 	value.real_type = RT_CHAR;
 	value.value.b = frame->operand_stack->pop().b;
-	frame->operand_stack->push_type(value);
+	frame->operand_stack->push(value);
 }
 
 //le um int do topo da pilha (truncado para short), extende com sinal para um int e reinsere na pilha de operandos
@@ -1620,7 +1620,7 @@ void Operations::i2s() {
 	value.real_type = RT_SHORT;
 	value.value.ss = frame->operand_stack->pop().ss;
 
-	frame->operand_stack->push_type(value);
+	frame->operand_stack->push(value);
 }
 
 //le os dois primeiros Elementos da pilha de operandos (dois Elementos do tipo long) e os compara
@@ -1629,11 +1629,11 @@ void Operations::lcmp(){
 	int64_t value1 = frame->operand_stack->pop().ls;
 
 	if (value1 > value2)
-		frame->operand_stack->push_type(int(1));
+		frame->operand_stack->push(int(1));
 	if (value1 == value2)
-		frame->operand_stack->push_type(int(0));
+		frame->operand_stack->push(int(0));
 	if (value1 < value2)
-		frame->operand_stack->push_type(int(-1));
+		frame->operand_stack->push(int(-1));
 }
 
 //le os dois primeiros Elementos da pilha de operandos (dois Elementos do tipo float) e os compara
@@ -1646,14 +1646,14 @@ void Operations::fcmpl() {
 	res2 = checkFloat(value2);
 	//se value1 ou value2 for NaN entao adiciona -1 na pilha de operandos
 	if (res1 == 3 || res2 == 3){
-		frame->operand_stack->push_type(int(-1));
+		frame->operand_stack->push(int(-1));
 	} else {
 		if (value1 > value2)
-			frame->operand_stack->push_type(int(1));
+			frame->operand_stack->push(int(1));
 		if (value1 == value2)
-			frame->operand_stack->push_type(int(0));
+			frame->operand_stack->push(int(0));
 		if (value1 < value2)
-			frame->operand_stack->push_type(int(-1));
+			frame->operand_stack->push(int(-1));
 	}
 }
 
@@ -1667,14 +1667,14 @@ void Operations::fcmpg() {
 	res2 = checkFloat(value2);
 	//se value1 ou value2 for NaN entao adiciona 1 na pilha de operandos
 	if (res1 == 3 || res2 == 3){
-		frame->operand_stack->push_type(int(1));
+		frame->operand_stack->push(int(1));
 	} else {
 		if (value1 > value2)
-			frame->operand_stack->push_type(int(1));
+			frame->operand_stack->push(int(1));
 		if (value1 == value2)
-			frame->operand_stack->push_type(int(0));
+			frame->operand_stack->push(int(0));
 		if (value1 < value2)
-			frame->operand_stack->push_type(int(-1));
+			frame->operand_stack->push(int(-1));
 	}
 }
 
@@ -1688,14 +1688,14 @@ void Operations::dcmpl() {
 	res2 = checkDouble(value2);
 	//se value1 ou value2 for NaN entao adiciona 1 na pilha de operandos
 	if (res1 == 3 || res2 == 3){
-		frame->operand_stack->push_type(int(1));
+		frame->operand_stack->push(int(1));
 	} else {
 		if (value1 > value2)
-			frame->operand_stack->push_type(int(1));
+			frame->operand_stack->push(int(1));
 		if (value1 == value2)
-			frame->operand_stack->push_type(int(0));
+			frame->operand_stack->push(int(0));
 		if (value1 < value2)
-			frame->operand_stack->push_type(int(-1));
+			frame->operand_stack->push(int(-1));
 	}
 }
 
@@ -1709,14 +1709,14 @@ void Operations::dcmpg() {
 	res2 = checkDouble(value2);
 	//se value1 ou value2 for NaN entao adiciona 1 na pilha de operandos
 	if (res1 == 3 || res2 == 3){
-		frame->operand_stack->push_type(int(1));
+		frame->operand_stack->push(int(1));
 	} else {
 		if (value1 > value2)
-			frame->operand_stack->push_type(int(1));
+			frame->operand_stack->push(int(1));
 		if (value1 == value2)
-			frame->operand_stack->push_type(int(0));
+			frame->operand_stack->push(int(0));
 		if (value1 < value2)
-			frame->operand_stack->push_type(int(-1));
+			frame->operand_stack->push(int(-1));
 	}
 }
 
@@ -1891,7 +1891,7 @@ void Operations::jsr() {
 
 	offset = int16_t(get_n_bytes_value(2, frame->pc));
 
-	frame->operand_stack->push_type((int*)frame->pc);
+	frame->operand_stack->push((int*)frame->pc);
 
 	frame->pc += offset - 3;
 }
@@ -1909,7 +1909,7 @@ void Operations::funcret() {
 void Operations::tableswitch() {
 	//guarda o valor inicial do pc
 	unsigned char *bkpPC = (frame->pc) - 1;
-	uint8_t mod = (frame->pc - frame->m.attributes->info->code.code) % 4;
+	uint8_t mod = (frame->pc - frame->method_info.attributes->info->code.code) % 4;
 	frame->pc += mod;
 
 	int32_t defaults, low, high, offset;
@@ -1939,7 +1939,7 @@ void Operations::tableswitch() {
 
 void Operations::lookupswitch() {
 	unsigned char *aux = (frame->pc) - 1;
-	int diff = (frame->pc - frame->m.attributes->info->code.code) % 4;
+	int diff = (frame->pc - frame->method_info.attributes->info->code.code) % 4;
 
 	frame->pc += diff;
 
@@ -1971,8 +1971,8 @@ void Operations::ireturn() {
 	}
 
 	threads->pop();
-	f = threads->top();
-	frame->operand_stack->push_type(value);
+	frame = threads->top();
+	frame->operand_stack->push(value);
 }
 
 void Operations::lreturn() {
@@ -1983,8 +1983,8 @@ void Operations::lreturn() {
 	}
 
 	threads->pop();
-	f = threads->top();
-	frame->operand_stack->push_type(value);
+	frame = threads->top();
+	frame->operand_stack->push(value);
 }
 
 void Operations::freturn() {
@@ -1995,8 +1995,8 @@ void Operations::freturn() {
 	}
 
 	threads->pop();
-	f = threads->top();
-	frame->operand_stack->push_type(value);
+	frame = threads->top();
+	frame->operand_stack->push(value);
 }
 
 void Operations::dreturn() {
@@ -2007,8 +2007,8 @@ void Operations::dreturn() {
 	}
 
 	threads->pop();
-	f = threads->top();
-	frame->operand_stack->push_type(value);
+	frame = threads->top();
+	frame->operand_stack->push(value);
 }
 
 //Fim linha 10
@@ -2030,9 +2030,9 @@ void Operations::areturn()
     }
 
     threads->pop();
-    f = threads->top();
+    frame = threads->top();
 
-    frame->operand_stack->push_type(value.pi);
+    frame->operand_stack->push(value.pi);
 }
 
 void Operations::func_return()
@@ -2041,23 +2041,23 @@ void Operations::func_return()
         frame->operand_stack->pop();
     }
 
-    fs->pop();
+    frame_stack->pop();
 }
 
-Static_class* Operations::getStaticClassThatHasField(Static_class* base, string field_name)
+Static_class* Operations::get_static_class_with_field(Static_class* base, string field_name)
 {
     Typed_element ret = base->getField(field_name);
     if(ret.type != TYPE_NOT_SET) {
         return base;
     }
 
-    int cp_index = base->getDef()->getSuper_class();
+    int cp_index = base->get_def()->get_super_class();
     if( cp_index == 0 ) {
         return NULL;
     }
 
-    Static_class* child = Method_area::get_class(Displayer::dereference_index(base->getDef()->getCP(), cp_index));
-    return getStaticClassThatHasField(child, field_name);
+    Static_class* child = Method_area::get_class(Displayer::dereference_index(base->get_def()->get_cp(), cp_index));
+    return get_static_class_with_field(child, field_name);
 }
 
 void Operations::getstatic()
@@ -2067,16 +2067,16 @@ void Operations::getstatic()
     //volta pc para o inicio da instrucao, para caso ela tenha que ser executada novamente
     frame->pc -= 3;
 
-    frame *aux = f;
+    frame *aux = frame;
     Cp_info cp_Element = frame->cp_vector[indexByte];
-    if(cp_Element.tag != FIELD_REF) {
+    if(cp_Element.tag != FIELDREF) {
         throw std::runtime_error("Elemento da constant pool apontado por index, não é uma referencia para FIELD_REF!");
     }
 
     string class_name = Displayer::dereference_index(frame->cp_vector, cp_Element.info[0].u2);
 
     Cp_info name_and_type_Element = frame->cp_vector[cp_Element.info[1].u2];
-    if(name_and_type_Element.tag != NAME_AND_TYPE) {
+    if(name_and_type_Element.tag != NAMEANDTYPE) {
         throw std::runtime_error("Elemento da constant pool apontado por index, não é uma referencia para NAME_AND_TYPE!");
     }
 
@@ -2089,7 +2089,7 @@ void Operations::getstatic()
         return;
     }
 
-    Static_class* static_class = getStaticClassThatHasField( Method_area::get_class(class_name), name);
+    Static_class* static_class = get_static_class_with_field( Method_area::get_class(class_name), name);
 
     if(static_class == NULL) throw std::runtime_error("Field nao existe na classe definida!");
 
@@ -2105,7 +2105,7 @@ void Operations::getstatic()
         Element.type = TYPE_INT;
     }
 
-    frame->operand_stack->push_type(Element);
+    frame->operand_stack->push(Element);
 
     //anda com o pc para a proxima instrucao
     frame->pc += 3;
@@ -2113,18 +2113,18 @@ void Operations::getstatic()
 
 void Operations::putstatic()
 {
-    frame *aux = f;
+    frame *aux = frame;
 
     uint16_t indexByte = get_n_bytes_value(2, frame->pc);
     Cp_info cp_Element = frame->cp_vector[indexByte];
-    if(cp_Element.tag != FIELD_REF) {
+    if(cp_Element.tag != FIELDREF) {
         throw std::runtime_error("Elemento da constant pool apontado por index, não é uma referencia para FIELD_REF!");
     }
 
     string class_name = Displayer::dereference_index(frame->cp_vector, cp_Element.info[0].u2);
 
     Cp_info name_and_type_Element = frame->cp_vector[cp_Element.info[1].u2];
-    if(name_and_type_Element.tag != NAME_AND_TYPE) {
+    if(name_and_type_Element.tag != NAMEANDTYPE) {
         throw std::runtime_error("Elemento da constant pool apontado por index, não é uma referencia para NAME_AND_TYPE!");
     }
 
@@ -2136,7 +2136,7 @@ void Operations::putstatic()
         return;
     }
 
-    Static_class* static_class = getStaticClassThatHasField( Method_area::get_class(class_name), name);
+    Static_class* static_class = get_static_class_with_field( Method_area::get_class(class_name), name);
 
     if(static_class == NULL) throw std::runtime_error("Field nao existe na classe definida!");
 
@@ -2152,7 +2152,7 @@ void Operations::putstatic()
         stack_Element.type = TYPE_BOOL;
     }
 
-    static_class->setField(name,stack_Element);
+    static_class->set_field(name,stack_Element);
 }
 
 void Operations::getfield() {
@@ -2167,7 +2167,7 @@ void Operations::getfield() {
     int index = frame->cp_vector[indexbyte].info[1].u2;
     index = frame->cp_vector[index].info[0].u2;
     Typed_element ret = ci->getField(Displayer::dereference_index(frame->cp_vector, index));
-    frame->operand_stack->push_type(ret);
+    frame->operand_stack->push(ret);
 }
 
 void Operations::putfield() {
@@ -2182,10 +2182,10 @@ void Operations::putfield() {
     int index = frame->cp_vector[indexbyte].info[1].u2;
     index = frame->cp_vector[index].info[0].u2;
 
-    if (Displayer::dereference_index(frame->cp_vector, frame->m.name_index) == "<init>") {
-        ci->setFinals(Displayer::dereference_index(frame->cp_vector, index), value);
+    if (Displayer::dereference_index(frame->cp_vector, frame->method_info.name_index) == "<init>") {
+        ci->set_finals(Displayer::dereference_index(frame->cp_vector, index), value);
     } else {
-        ci->setField(Displayer::dereference_index(frame->cp_vector, index), value);
+        ci->set_field(Displayer::dereference_index(frame->cp_vector, index), value);
     }
 }
 
@@ -2197,7 +2197,7 @@ void Operations::invokevirtual()
 
     Cp_info cp_Element = frame->cp_vector[indexByte];
     if(cp_Element.tag != METHODREF) {
-        throw std::runtime_error("Elemento da constant pool apontado por index, não é uma referencia para METHOD_REF!");
+        throw std::runtime_error("Elemento da constant pool apontado por index, não é uma referencia para METHODREF!");
     }
 
     string class_name = Displayer::dereference_index(frame->cp_vector, cp_Element.info[0].u2);
@@ -2264,7 +2264,7 @@ void Operations::invokevirtual()
 
                 ret.value.i = Displayer::display_UTF8((unsigned char *)typed_element.value.pi, 0).size();
 
-                frame->operand_stack->push_type(ret);
+                frame->operand_stack->push(ret);
             }
             else
             {
@@ -2287,7 +2287,7 @@ void Operations::invokevirtual()
                     ret.value.b = 0;
                 }
 
-                frame->operand_stack->push_type(ret);
+                frame->operand_stack->push(ret);
             }
             else
             {
@@ -2343,11 +2343,11 @@ void Operations::invokevirtual()
         	return;
     	}
 
-        fs->addFrame(
-            instance->getStatic()->getDef()->getMethod(name,descriptor),
-            instance->getStatic()->getDef()->get_classThatHasSerachedMethod(name,descriptor)->getCP()
+        frame_stack->add_frame(
+            instance->getStatic()->get_def()->get_method(name,descriptor),
+            instance->getStatic()->get_def()->get_class_with_searched_method(name,descriptor)->get_cp()
         );
-        fs->setArguments(args);
+        frame_stack->set_arguments(args);
     }
 }
 
@@ -2356,14 +2356,14 @@ void Operations::invokespecial() {
     uint16_t indexByte = get_n_bytes_value(2, frame->pc);
 
     Cp_info cp_Element = frame->cp_vector[indexByte];
-    if(cp_Element.tag != METHOD_REF) {
-        throw std::runtime_error("Elemento da constant pool apontado por index, não é uma referencia para METHOD_REF!");
+    if(cp_Element.tag != METHODREF) {
+        throw std::runtime_error("Elemento da constant pool apontado por index, não é uma referencia para METHODREF!");
     }
 
     string classe = Displayer::dereference_index(frame->cp_vector, cp_Element.info[0].u2);
 
     Cp_info metodo = frame->cp_vector[cp_Element.info[1].u2];
-    if(metodo.tag != NAME_AND_TYPE) {
+    if(metodo.tag != NAMEANDTYPE) {
         throw std::runtime_error("Elemento da constant pool apontado por index, não é uma referencia para NAME_AND_TYPE!");
     }
 
@@ -2426,9 +2426,9 @@ void Operations::invokespecial() {
         //checa se houve uma mudança no método corrente, caso tenha, deixa o novo método executar
         if (threads->top() != auxFrame) {
             //empilha de volta os operandos desempilhados na ordem contrária que saíram
-            frame->operand_stack->push_type(parametros[0]);
+            frame->operand_stack->push(parametros[0]);
             while (count-- > 0) {
-                frame->operand_stack->push_type(parametros[count]);
+                frame->operand_stack->push(parametros[count]);
             }
             //volta com o pc para o opcode que vai ser executado novamente
             //ele já havia sido deslocado para o próximo opcode pela função getNBytes
@@ -2437,12 +2437,12 @@ void Operations::invokespecial() {
         }
 
         //cria o frame no topo da pilha
-        fs->addFrame(
-            instance->getStatic()->getDef()->getMethod(name,desc),
-            instance->getStatic()->getDef()->get_classThatHasSerachedMethod(name,desc)->getCP()
+        frame_stack->add_frame(
+            instance->getStatic()->get_def()->get_method(name,desc),
+            instance->getStatic()->get_def()->get_class_with_searched_method(name,desc)->get_cp()
         );
         //adiciona os parâmetros ao vetor de variáveis locais
-        fs->setArguments(parametros);
+        frame_stack->set_arguments(parametros);
     }
 }
 
@@ -2451,13 +2451,13 @@ void Operations::invokestatic() {
     uint16_t indexbyte = get_n_bytes_value(2, frame->pc);
     Cp_info cp_Element = frame->cp_vector[indexbyte];
 
-    if(cp_Element.tag != METHOD_REF)
-        throw std::runtime_error("Elemento da constant pool apontado por index, não é uma referencia para METHOD_REF!");
+    if(cp_Element.tag != METHODREF)
+        throw std::runtime_error("Elemento da constant pool apontado por index, não é uma referencia para METHODREF!");
 
     string class_name = Displayer::dereference_index(frame->cp_vector, cp_Element.info[0].u2);
     Cp_info name_and_type_Element = frame->cp_vector[cp_Element.info[1].u2];
 
-    if(name_and_type_Element.tag != NAME_AND_TYPE) {
+    if(name_and_type_Element.tag != NAMEANDTYPE) {
         throw std::runtime_error("Elemento da constant pool apontado por index, não é uma referencia para NAME_AND_TYPE!");
     }
 
@@ -2504,7 +2504,7 @@ void Operations::invokestatic() {
         if (threads->top() != auxFrame) {
             //empilha de volta os operandos desempilhados na ordem contrária que saíram
             while (nargs-- > 0) {
-                frame->operand_stack->push_type(args[nargs]);
+                frame->operand_stack->push(args[nargs]);
             }
             //volta com o pc para o opcode que vai ser executado novamente
             //ele já havia sido deslocado para o próximo opcode pela função getNBytes
@@ -2513,13 +2513,13 @@ void Operations::invokestatic() {
         }
 
         //cria o frame no topo da pilha
-        fs->addFrame(
-            ce->getDef()->getMethod(name,descriptor),
-            ce->getDef()->get_classThatHasSerachedMethod(name,descriptor)->getCP()
+        frame_stack->add_frame(
+            ce->get_def()->get_method(name,descriptor),
+            ce->get_def()->get_class_with_searched_method(name,descriptor)->get_cp()
         );
 
         //adiciona os parâmetros ao vetor de variáveis locais
-        fs->setArguments(args);
+        frame_stack->set_arguments(args);
 
     }
 
@@ -2530,13 +2530,13 @@ void Operations::invokeinterface() {
     uint16_t indexbyte = get_n_bytes_value(2, frame->pc);
     Cp_info cp_Element = frame->cp_vector[indexbyte];
 
-    if (cp_Element.tag != INTERFACE_REF){
+    if (cp_Element.tag != INTERFACEMETHODREF){
         throw std::runtime_error("Elemento da constant pool apontado por index, não é uma referencia para INTERFACE_REF!");
     }
 
     string class_name = Displayer::dereference_index(frame->cp_vector, cp_Element.info[0].u2);
     Cp_info name_and_type_Element = frame->cp_vector[cp_Element.info[1].u2];
-    if(name_and_type_Element.tag != NAME_AND_TYPE) {
+    if(name_and_type_Element.tag != NAMEANDTYPE) {
         throw std::runtime_error("Elemento da constant pool apontado por index, não é uma referencia para NAME_AND_TYPE!");
     }
 
@@ -2583,7 +2583,7 @@ void Operations::invokeinterface() {
         if (threads->top() != auxFrame) {
             //empilha de volta os operandos desempilhados na ordem contrária que saíram
             while (num_args-- > 0) {
-                frame->operand_stack->push_type(parametros[num_args]);
+                frame->operand_stack->push(parametros[num_args]);
             }
             //volta com o pc para o opcode que vai ser executado novamente
             //ele já havia sido deslocado para o próximo opcode pela função getNBytes
@@ -2591,12 +2591,12 @@ void Operations::invokeinterface() {
             return;
         }
         //cria o frame no topo da pilha
-        fs->addFrame(
-            instance->getStatic()->getDef()->getMethod(name,descriptor),
-            instance->getStatic()->getDef()->get_classThatHasSerachedMethod(name,descriptor)->getCP()
+        frame_stack->add_frame(
+            instance->getStatic()->get_def()->get_method(name,descriptor),
+            instance->getStatic()->get_def()->get_class_with_searched_method(name,descriptor)->get_cp()
         );
         //adiciona os parâmetros ao vetor de variáveis locais
-        fs->setArguments(parametros);
+        frame_stack->set_arguments(parametros);
     }
 }
 
@@ -2606,11 +2606,11 @@ void Operations::func_new(){
     Static_class *aux =  Method_area::get_class(classe);
 
     if (aux == nullptr) {
-        Method_area::addClass(classe);
+        Method_area::add_class(classe);
         aux = Method_area::get_class(classe);
     }
 
-    frame->operand_stack->push_type((int*)aux->getInstance());
+    frame->operand_stack->push((int*)aux->get_instance());
 }
 
 void Operations::newarray(){
@@ -2652,7 +2652,7 @@ void Operations::newarray(){
         break;
     }
     cout << array << endl;
-    frame->operand_stack->push_type(array);
+    frame->operand_stack->push(array);
 }
 
 void Operations::anewarray() {
@@ -2667,10 +2667,10 @@ void Operations::anewarray() {
         Typed_element aux;
         aux.type = TYPE_REFERENCE;
         aux.value.pi = nullptr;
-        array->insert_typed_element(i, aux);
+        array->insert_typed_element(aux, i);
     }
 
-    frame->operand_stack->push_type((int*)array);
+    frame->operand_stack->push((int*)array);
 }
 
 void Operations::arraylength()
@@ -2680,8 +2680,8 @@ void Operations::arraylength()
     arrayref = (Local_variable *) frame->operand_stack->pop().pi;
     if (arrayref == nullptr)
         throw runtime_error("Null pointer");
-
-    frame->operand_stack->push_type(arrayreframe->getMax());
+		
+    frame->operand_stack->push(arrayref->getMax());
 }
 
 void Operations::athrow()
@@ -2693,7 +2693,7 @@ void Operations::athrow()
         frame->operand_stack->pop();
     }
 
-    frame->operand_stack->push_type(value, type);
+    frame->operand_stack->push(value, type);
 }
 
 //Fim linha 11
@@ -2783,7 +2783,7 @@ void Operations::multianewarray(){
 
 	typed_element.value.pi = p;
 
-	frame->operand_stack->push_type(Element);
+	frame->operand_stack->push(Element);
 
 }
 
@@ -2860,7 +2860,7 @@ void Operations::goto_w(){
 void Operations::jsr_w(){
 	int32_t offset = int32_t(get_n_bytes_value(4, frame->pc));
 
-	frame->operand_stack->push_type(frame->pc);
+	frame->operand_stack->push(frame->pc);
 
 	frame->pc += offset - 5;
 }
@@ -2870,8 +2870,8 @@ void Operations::jsr_w(){
 
 void Operations::dup() {
 	Typed_element value = frame->operand_stack->pop_typed_element();
-	frame->operand_stack->push_type(value);
-	frame->operand_stack->push_type(value);
+	frame->operand_stack->push(value);
+	frame->operand_stack->push(value);
 }
 
 void Operations::pop() {
@@ -2891,7 +2891,7 @@ void Operations::dup_x1() {
 		if (frame->operand_stack->top_type() != TYPE_LONG && frame->operand_stack->top_type() != TYPE_DOUBLE) {
 			frame->operand_stack->pop_typed_element();
 		} else {
-			frame->operand_stack->push_type(aux);
+			frame->operand_stack->push(aux);
 		}
 	}
 }
@@ -2900,15 +2900,15 @@ void Operations::dup_x2() {
 	Typed_element aux = frame->operand_stack->pop_typed_element();
 	if (frame->operand_stack->top_type() != TYPE_LONG && frame->operand_stack->top_type() != TYPE_DOUBLE) {
 		Typed_element aux2 = frame->operand_stack->pop_typed_element(), aux3 = frame->operand_stack->pop_typed_element();
-		frame->operand_stack->push_type(aux);
-		frame->operand_stack->push_type(aux3);
-		frame->operand_stack->push_type(aux2);
-		frame->operand_stack->push_type(aux);
+		frame->operand_stack->push(aux);
+		frame->operand_stack->push(aux3);
+		frame->operand_stack->push(aux2);
+		frame->operand_stack->push(aux);
 	} else {
 		Typed_element aux2 = frame->operand_stack->pop_typed_element();
-		frame->operand_stack->push_type(aux);
-		frame->operand_stack->push_type(aux2);
-		frame->operand_stack->push_type(aux);
+		frame->operand_stack->push(aux);
+		frame->operand_stack->push(aux2);
+		frame->operand_stack->push(aux);
 	}
 }
 
@@ -2917,13 +2917,13 @@ void Operations::dup2() {
 
 	if (frame->operand_stack->top_type() != TYPE_LONG && frame->operand_stack->top_type() != TYPE_DOUBLE) {
 		Typed_element aux2 = frame->operand_stack->pop_typed_element();
-		frame->operand_stack->push_type(aux2);
-		frame->operand_stack->push_type(aux);
-		frame->operand_stack->push_type(aux2);
-		frame->operand_stack->push_type(aux);
+		frame->operand_stack->push(aux2);
+		frame->operand_stack->push(aux);
+		frame->operand_stack->push(aux2);
+		frame->operand_stack->push(aux);
 	} else {
-		frame->operand_stack->push_type(aux);
-		frame->operand_stack->push_type(aux);
+		frame->operand_stack->push(aux);
+		frame->operand_stack->push(aux);
 	}
 }
 
@@ -2932,16 +2932,16 @@ void Operations::dup2_x1() {
 
 	if (frame->operand_stack->top_type() != TYPE_LONG && frame->operand_stack->top_type() != TYPE_DOUBLE) {
 		Typed_element aux2 = frame->operand_stack->pop_typed_element(), aux3 = frame->operand_stack->pop_typed_element();
-		frame->operand_stack->push_type(aux2);
-		frame->operand_stack->push_type(aux);
-		frame->operand_stack->push_type(aux3);
-		frame->operand_stack->push_type(aux2);
-		frame->operand_stack->push_type(aux);
+		frame->operand_stack->push(aux2);
+		frame->operand_stack->push(aux);
+		frame->operand_stack->push(aux3);
+		frame->operand_stack->push(aux2);
+		frame->operand_stack->push(aux);
 	} else {
 		Typed_element aux2 = frame->operand_stack->pop_typed_element();
-		frame->operand_stack->push_type(aux);
-		frame->operand_stack->push_type(aux2);
-		frame->operand_stack->push_type(aux);
+		frame->operand_stack->push(aux);
+		frame->operand_stack->push(aux2);
+		frame->operand_stack->push(aux);
 	}
 }
 
@@ -2951,842 +2951,70 @@ void Operations::dup2_x2() {
 	if (frame->operand_stack->top_type() != TYPE_LONG && frame->operand_stack->top_type() != TYPE_DOUBLE) {
 		Typed_element aux2 = frame->operand_stack->pop_typed_element(), aux3 = frame->operand_stack->pop_typed_element();
 		if (aux3.type == TYPE_LONG || aux3.type == TYPE_DOUBLE) {
-			frame->operand_stack->push_type(aux2);
-			frame->operand_stack->push_type(aux);
-			frame->operand_stack->push_type(aux3);
-			frame->operand_stack->push_type(aux2);
-			frame->operand_stack->push_type(aux);
+			frame->operand_stack->push(aux2);
+			frame->operand_stack->push(aux);
+			frame->operand_stack->push(aux3);
+			frame->operand_stack->push(aux2);
+			frame->operand_stack->push(aux);
 		} else {
 			Typed_element aux4 = frame->operand_stack->pop_typed_element();
-			frame->operand_stack->push_type(aux2);
-			frame->operand_stack->push_type(aux);
-			frame->operand_stack->push_type(aux4);
-			frame->operand_stack->push_type(aux3);
-			frame->operand_stack->push_type(aux2);
-			frame->operand_stack->push_type(aux);
+			frame->operand_stack->push(aux2);
+			frame->operand_stack->push(aux);
+			frame->operand_stack->push(aux4);
+			frame->operand_stack->push(aux3);
+			frame->operand_stack->push(aux2);
+			frame->operand_stack->push(aux);
 		}
 	} else {
 		Typed_element aux2 = frame->operand_stack->pop_typed_element();
 		if (aux2.type == TYPE_LONG || aux2.type == TYPE_DOUBLE) {
-			frame->operand_stack->push_type(aux);
-			frame->operand_stack->push_type(aux2);
-			frame->operand_stack->push_type(aux);
+			frame->operand_stack->push(aux);
+			frame->operand_stack->push(aux2);
+			frame->operand_stack->push(aux);
 		} else {
 			Typed_element aux3 = frame->operand_stack->pop_typed_element();
-			frame->operand_stack->push_type(aux);
-			frame->operand_stack->push_type(aux3);
-			frame->operand_stack->push_type(aux2);
-			frame->operand_stack->push_type(aux);
+			frame->operand_stack->push(aux);
+			frame->operand_stack->push(aux3);
+			frame->operand_stack->push(aux2);
+			frame->operand_stack->push(aux);
 		}
 	}
 }
 
 void Operations::swap() {
 	Typed_element aux = frame->operand_stack->pop_typed_element(), aux2 = frame->operand_stack->pop_typed_element();
-	frame->operand_stack->push_type(aux);
-	frame->operand_stack->push_type(aux2);
+	frame->operand_stack->push(aux);
+	frame->operand_stack->push(aux2);
 }
 
-// void Operations::lload_n(short index)
-// {
-// }
-
-// void Operations::fload_n(short index)
-// {
-// }
-
-// void Operations::dload_n(short index)
-// {
-// }
-
-// void Operations::aload_n(short index)
-// {
-// }
-
-// void Operations::nop()
-// {
-// }
-
-// void Operations::aconst_null()
-// {
-// }
-
-// void Operations::iconst_m1()
-// {
-// }
-
-// void Operations::iconst_0()
-// {
-// }
-
-// void Operations::iconst_1()
-// {
-// }
-
-// void Operations::iconst_2()
-// {
-// }
-
-// void Operations::iconst_3()
-// {
-// }
-
-// void Operations::iconst_4()
-// {
-// }
-
-// void Operations::iconst_5()
-// {
-// }
-
-// void Operations::lconst_0()
-// {
-// }
-
-// void Operations::lconst_1()
-// {
-// }
-
-// void Operations::fconst_0()
-// {
-// }
-
-// void Operations::fconst_1()
-// {
-// }
-
-// void Operations::fconst_2()
-// {
-// }
-
-// void Operations::dconst_0()
-// {
-// }
-
-// void Operations::dconst_1()
-// {
-// }
-
-// void Operations::bipush()
-// {
-// }
-
-// void Operations::sipush()
-// {
-// }
-
-// void Operations::ldc()
-// {
-// }
-
-// void Operations::ldc_w()
-// {
-// }
-
-// void Operations::ldc2_w()
-// {
-// }
-
-// void Operations::iload()
-// {
-// }
-
-// void Operations::lload()
-// {
-// }
-
-// void Operations::fload()
-// {
-// }
-
-// void Operations::dload()
-// {
-// }
-
-// void Operations::aload()
-// {
-// }
-
-// void Operations::iload_0()
-// {
-// }
-
-// void Operations::iload_1()
-// {
-// }
-
-// void Operations::iload_2()
-// {
-// }
-
-// void Operations::iload_3()
-// {
-// }
-
-// void Operations::lload_0()
-// {
-// }
-
-// void Operations::lload_1()
-// {
-// }
-
-// void Operations::lload_2()
-// {
-// }
-
-// void Operations::lload_3()
-// {
-// }
-
-// void Operations::fload_0()
-// {
-// }
-
-// void Operations::fload_1()
-// {
-// }
-
-// void Operations::fload_2()
-// {
-// }
-
-// void Operations::fload_3()
-// {
-// }
-
-// void Operations::dload_0()
-// {
-// }
-
-// void Operations::dload_1()
-// {
-// }
-
-// void Operations::dload_2()
-// {
-// }
-
-// void Operations::dload_3()
-// {
-// }
-
-// void Operations::aload_0()
-// {
-// }
-
-// void Operations::aload_1()
-// {
-// }
-
-// void Operations::aload_2()
-// {
-// }
-
-// void Operations::aload_3()
-// {
-// }
-
-// void Operations::iaload()
-// {
-// }
-
-// void Operations::laload()
-// {
-// }
-
-// void Operations::faload()
-// {
-// }
-
-// void Operations::daload()
-// {
-// }
-
-// void Operations::aaload()
-// {
-// }
-
-// void Operations::baload()
-// {
-// }
-
-// void Operations::caload()
-// {
-// }
-
-// void Operations::saload()
-// {
-// }
-
-// void Operations::istore()
-// {
-// }
-
-// void Operations::lstore()
-// {
-// }
-
-// void Operations::fstore()
-// {
-// }
-
-// void Operations::dstore()
-// {
-// }
-
-// void Operations::astore()
-// {
-// }
-
-// void Operations::istore_1()
-// {
-// }
-
-// void Operations::istore_2()
-// {
-// }
-
-// void Operations::istore_3()
-// {
-// }
-
-// void Operations::istore_0()
-// {
-// }
-
-// void Operations::lstore_0()
-// {
-// }
-
-// void Operations::lstore_1()
-// {
-// }
-
-// void Operations::lstore_2()
-// {
-// }
-
-// void Operations::lstore_3()
-// {
-// }
-
-// void Operations::fstore_0()
-// {
-// }
-
-// void Operations::fstore_1()
-// {
-// }
-
-// void Operations::fstore_2()
-// {
-// }
-
-// void Operations::fstore_3()
-// {
-// }
-
-// void Operations::dstore_0()
-// {
-// }
-
-// void Operations::dstore_1()
-// {
-// }
-
-// void Operations::dstore_2()
-// {
-// }
-
-// void Operations::dstore_3()
-// {
-// }
-
-// void Operations::astore_0()
-// {
-// }
-
-// void Operations::astore_1()
-// {
-// }
-
-// void Operations::astore_2()
-// {
-// }
-
-// void Operations::astore_3()
-// {
-// }
-
-// void Operations::iastore()
-// {
-// }
-
-// void Operations::lastore()
-// {
-// }
-
-// void Operations::fastore()
-// {
-// }
-
-// void Operations::dastore()
-// {
-// }
-
-// void Operations::aastore()
-// {
-// }
-
-// void Operations::bastore()
-// {
-// }
-
-// void Operations::castore()
-// {
-// }
-
-// void Operations::sastore()
-// {
-// }
-
-// void Operations::pop()
-// {
-// }
-
-// void Operations::pop2()
-// {
-// }
-
-// void Operations::dup()
-// {
-// }
-
-// void Operations::dup_x1()
-// {
-// }
-
-// void Operations::dup_x2()
-// {
-// }
-
-// void Operations::dup2()
-// {
-// }
-
-// void Operations::dup2_x1()
-// {
-// }
-
-// void Operations::dup2_x2()
-// {
-// }
-
-// void Operations::swap()
-// {
-// }
-
-// void Operations::iadd()
-// {
-// }
-
-// void Operations::ladd()
-// {
-// }
-
-// void Operations::fadd()
-// {
-// }
-
-// void Operations::dadd()
-// {
-// }
-
-// void Operations::isub()
-// {
-// }
-
-// void Operations::lsub()
-// {
-// }
-
-// void Operations::fsub()
-// {
-// }
-
-// void Operations::dsub()
-// {
-// }
-
-// void Operations::imul()
-// {
-// }
-
-// void Operations::lmul()
-// {
-// }
-
-// void Operations::fmul()
-// {
-// }
-
-// void Operations::dmul()
-// {
-// }
-
-// void Operations::idiv()
-// {
-// }
-
-// void Operations::ldiv()
-// {
-// }
-
-// void Operations::fdiv()
-// {
-// }
-
-// void Operations::ddiv()
-// {
-// }
-
-// void Operations::irem()
-// {
-// }
-
-// void Operations::lrem()
-// {
-// }
-
-// void Operations::frem()
-// {
-// }
-
-// void Operations::drem()
-// {
-// }
-
-// void Operations::ineg()
-// {
-// }
-
-// void Operations::lneg()
-// {
-// }
-
-// void Operations::fneg()
-// {
-// }
-
-// void Operations::dneg()
-// {
-// }
-
-// void Operations::ishl()
-// {
-// }
-
-// void Operations::lshl()
-// {
-// }
-
-// void Operations::ishr()
-// {
-// }
-
-// void Operations::lshr()
-// {
-// }
-
-// void Operations::iushr()
-// {
-// }
-
-// void Operations::lushr()
-// {
-// }
-
-// void Operations::iand()
-// {
-// }
-
-// void Operations::land()
-// {
-// }
-
-// void Operations::ior()
-// {
-// }
-
-// void Operations::lor()
-// {
-// }
-
-// void Operations::ixor()
-// {
-// }
-
-// void Operations::lxor()
-// {
-// }
-
-// void Operations::iinc()
-// {
-// }
-
-// void Operations::i2l()
-// {
-// }
-
-// void Operations::i2f()
-// {
-// }
-
-// void Operations::i2d()
-// {
-// }
-
-// void Operations::l2i()
-// {
-// }
-
-// void Operations::l2f()
-// {
-// }
-
-// void Operations::l2d()
-// {
-// }
-
-// void Operations::f2i()
-// {
-// }
-
-// void Operations::f2l()
-// {
-// }
-
-// void Operations::f2d()
-// {
-// }
-
-// void Operations::d2i()
-// {
-// }
-
-// void Operations::d2l()
-// {
-// }
-
-// void Operations::d2f()
-// {
-// }
-
-// void Operations::i2b()
-// {
-// }
-
-// void Operations::i2c()
-// {
-// }
-
-// void Operations::i2s()
-// {
-// }
-
-// void Operations::lcmp()
-// {
-// }
-
-// void Operations::fcmpl()
-// {
-// }
-
-// void Operations::fcmpg()
-// {
-// }
-
-// void Operations::dcmpl()
-// {
-// }
-
-// void Operations::dcmpg()
-// {
-// }
-
-// void Operations::ifeq()
-// {
-// }
-
-// void Operations::ifne()
-// {
-// }
-
-// void Operations::iflt()
-// {
-// }
-
-// void Operations::ifge()
-// {
-// }
-
-// void Operations::ifgt()
-// {
-// }
-
-// void Operations::ifle()
-// {
-// }
-
-// void Operations::if_icmpeq()
-// {
-// }
-
-// void Operations::if_icmpne()
-// {
-// }
-
-// void Operations::if_icmplt()
-// {
-// }
-
-// void Operations::if_icmpge()
-// {
-// }
-
-// void Operations::if_icmpgt()
-// {
-// }
-
-// void Operations::if_icmple()
-// {
-// }
-
-// void Operations::if_acmpeq()
-// {
-// }
-
-// void Operations::if_acmpne()
-// {
-// }
-
-// void Operations::funcgoto()
-// {
-// }
-
-// void Operations::jsr()
-// {
-// }
-
-// void Operations::funcret()
-// {
-// }
-
-// void Operations::tableswitch()
-// {
-// }
-
-// void Operations::lookupswitch()
-// {
-// }
-
-// void Operations::ireturn()
-// {
-// }
-
-// void Operations::lreturn()
-// {
-// }
-
-// void Operations::freturn()
-// {
-// }
-
-// void Operations::dreturn()
-// {
-// }
-
-// void Operations::areturn()
-// {
-// }
-
-// void Operations::func_return()
-// {
-// }
-
-// void Operations::getstatic()
-// {
-// }
-
-// void Operations::putstatic()
-// {
-// }
-
-// void Operations::getfield()
-// {
-// }
-
-// void Operations::putfield()
-// {
-// }
-
-// void Operations::invokevirtual()
-// {
-// }
-
-// void Operations::invokespecial()
-// {
-// }
-
-// void Operations::invokestatic()
-// {
-// }
-
-// void Operations::invokeinterface()
-// {
-// }
-
-// void Operations::func_new()
-// {
-// }
-
-// void Operations::newarray()
-// {
-// }
-
-// void Operations::anewarray()
-// {
-// }
-
-// void Operations::arraylength()
-// {
-// }
-
-// void Operations::athrow()
-// {
-// }
-
-// void Operations::wide()
-// {
-// }
-
-// void Operations::multianewarray()
-// {
-// }
-
-// void Operations::ifnull()
-// {
-// }
-
-// void Operations::ifnonnull()
-// {
-// }
-
-// void Operations::goto_w()
-// {
-// }
-
-// void Operations::jsr_w()
-// {
-// }
+int Operations::checkFloat (float f) {
+	int ret = 0;
+	Element aux;
+	aux.f = f;
+
+	if ((aux.i >= 0x7f800001 && aux.i <= 0x7fffffff) || (aux.i >= 0xff800001 && aux.i <= 0xffffffff)) {
+		ret = 3;
+	} else if (aux.i == 0x7f800000) {
+		ret = 1;
+	} else if (aux.i == 0xff800000) {
+		ret = 2;
+	}
+
+	return ret;
+}
+
+int Operations::checkDouble (double d) {
+	int ret = 0;
+	Element aux;
+	aux.d = d;
+
+	if ((aux.l >= 0x7ff0000000000001L && aux.l <= 0x7ffffffffffffL) || (aux.l >= 0xfff0000000000001L && aux.l <= 0xffffffffffffffffL)) {
+		ret = 3;
+	} else if (aux.l == 0x7ff0000000000000L) {
+		ret = 1;
+	} else if (aux.l == 0xfff0000000000000L) {
+		ret = 2;
+	}
+
+	return ret;
+}

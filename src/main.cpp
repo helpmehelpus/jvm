@@ -15,7 +15,7 @@ int main(int argc, char* argv[]){
 	else if (argv[1][0] == 'i' || argv[1][0] == 'I') {
 		cout << "Running Interpreter" << endl;
 		reader->run(argv[2]);
-		//TOOD: implementar metodo para pegar nome da classe do arv2 separado
+		//TODO: implementar metodo para pegar nome da classe do arv2 separado
 		Method_area::path = "lookupswitch.class";
 		Method_area::add_class(reader);
 		Frame_stack* frame_stack = new Frame_stack(reader);

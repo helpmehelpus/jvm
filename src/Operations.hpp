@@ -16,7 +16,7 @@ typedef void (*func)(void);
 class Operations {
 public:
 	// Operations(Frame*);
-	// static bool is_wide;
+	static bool is_wide;
 	static Frame* frame;
 	static stack<Frame*>* threads;
 	static Frame_stack* frame_stack;
@@ -26,7 +26,7 @@ public:
 	static void set_frame_stack(Frame_stack*);
 	static U4 get_n_bytes_value(U1 n, vector<U2> pc);
 
-	// static Static_class* get_static_class_with_field(Static_class* base, string field_name);
+	static Static_class* get_static_class_with_field(Static_class* base, string field_name);
 	// // static Array* getNewMultiArray(stack<int> count_dim);
 	// static double get_value(Array array, stack<int> access_indexes);
 
@@ -251,6 +251,11 @@ public:
 	static void goto_w();
 	static void jsr_w();
 
+	// TODO: move these functions to another class
+	
+	static int checkFloat (float);
+
+	static int checkDouble (double);
 	
 };
 

@@ -177,3 +177,66 @@ Method_info Reader::get_main() {
 Method_info Reader::get_clinit() {
   return methods[clinit_index];
 }
+
+Method_info* Reader::get_method(string name, string descriptor){
+	Method_info method;
+
+	for(int i = 0; i < this->methodsCount; i++){
+		//cout << "E1" << flush << endl;
+		method = this->methods[i];
+		//cout << "E2" << flush << endl;
+		string method_name = Displayer::dereference_index(this->constantPool, method.name_index);
+		string method_desc = Displayer::dereference_index(this->constantPool, method.descriptor_index);
+
+		if(descriptor == method_desc && name == method_name) 
+		{
+			return methods+i;
+		}
+	}
+
+	if(get_super_class() == 0) {
+		return NULL;
+	}
+	else {
+
+		Static_class* s = Method_area::get_class(Displayer::dereference_index(this->constantPool, get_super_class()));
+
+		Reader* r = s->get_def();
+		
+		return r->get_method(name, descriptor);
+	}
+}
+
+U2 Reader::get_super_class() {
+	return super_class;
+}
+
+Reader* Reader::get_class_with_searched_method(string name, string descriptor){
+	Method_info* method;
+
+	for(int i = 0; i < this->methodsCount; i++)
+	{
+		method = (this->methods)+i;
+
+		string method_name = Displayer::dereference_index(this->constantPool, method->name_index);
+		string method_desc = Displayer::dereference_index(this->constantPool, method->descriptor_index);
+
+		if(descriptor == method_desc && name == method_name) 
+		{
+			return this;
+		}
+	}
+
+	if(get_super_class() == 0) 
+	{
+		return NULL;
+	}
+	else {
+		Reader* r = Method_area::get_class(Displayer::dereference_index(this->constantPool, get_super_class()))->get_def();
+		return r->get_class_with_searched_method(name, descriptor);
+	}
+}
+
+Cp_info* Reader::get_cp () const {
+	return constantPool;
+}
