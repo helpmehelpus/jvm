@@ -11,6 +11,8 @@
 #include "Element.hpp"
 #include "Typed_element.hpp"
 
+
+
 #define BITS (sizeof(int*) == 8)
 
 #define INVALID 99
@@ -39,16 +41,19 @@ public:
 	Element pop();
 	Typed_element pop_typed_element();
     string get_string();
-	void push_type(int);
-    void push_type(long);
-    void push_type(float);
-	void push_type(double);
-	void push_type(bool);
-	void push_type(int*);
-	void push_type(Typed_element);
-	void push_type(Element, uint8_t);
+	void push(int);
+    void push(long);
+    void push(float);
+	void push(double);
+	void push(bool);
+	void push(int*);
+	void push(Typed_element);
+	void push(Element, uint8_t);
 	int size();
-	
+
+	//Check THIS
+	int getMaxSize();
+
 	bool empty();
 	void printALL();
 	const int max_size;
