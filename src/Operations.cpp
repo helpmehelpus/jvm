@@ -204,75 +204,75 @@ void Operations::ldc_w () {
 
 //empilha valores long e double do Constant Pool
 void Operations::ldc2_w () {
-	// uint8_t index = get_n_bytes_value(2, frame->pc);
-	// long valPushLong;
-	// double valPushDouble;
-	// if (frame->cp_vector[index].tag == LONG){
-	// 	valPushLong = u4_to_long(frame->cp_vector[index].info[0], frame->cp_vector[index+1].info[0]);
-	// 	frame->operand_stack->push(long(valPushLong));
-	// } else {
-	// 	valPushDouble = u4_to_double(frame->cp_vector[index].info[0], frame->cp_vector[index+1].info[0]);
-	// 	frame->operand_stack->push(double(valPushDouble));
-	// }
+	uint8_t index = get_n_bytes_value(2, frame->pc);
+	long valPushLong;
+	double valPushDouble;
+	if (frame->cp_vector[index].tag == LONG){
+		valPushLong = u4_to_long(frame->cp_vector[index].info[0], frame->cp_vector[index+1].info[0]);
+		frame->operand_stack->push(long(valPushLong));
+	} else {
+		valPushDouble = u4_to_double(frame->cp_vector[index].info[0], frame->cp_vector[index+1].info[0]);
+		frame->operand_stack->push(double(valPushDouble));
+	}
 }
 
 //le um inteiro do vetor de variaveis locais e empilha
 //pode ser utilizada em conjunto com wide
 void Operations::iload () {
-	// uint16_t index = 0;
+	uint16_t index = 0;
 
-	// if (is_wide){
-	// 	index = get_n_bytes_value(2, frame->pc);
-	// 	is_wide = false;
-	// } else {
-	// 	index = get_n_bytes_value(1, frame->pc);
-	// }
+	if (is_wide){
+		index = get_n_bytes_value(2, frame->pc);
+		is_wide = false;
+	} else {
+		index = get_n_bytes_value(1, frame->pc);
+	}
 
-	// Typed_element aux = frame->local_variables->get_typed_element(int(index));
-	// frame->operand_stack->push(int(aux.value.i));
+	Typed_element aux = frame->local_variables->get_typed_element(int(index));
+	frame->operand_stack->push(int(aux.value.i));
 }
 
 //le um long do vetor de variaveis locais e empilha
 //pode ser utilizada em conjunto com wide
 void Operations::lload () {
-	// uint16_t index = 0;
-	// if (is_wide) {
-	// 	index = get_n_bytes_value(2, frame->pc);
-	// 	is_wide = false;
-	// }else
-	// 	index = get_n_bytes_value(1, frame->pc);
+	uint16_t index = 0;
+	if (is_wide) {
+		index = get_n_bytes_value(2, frame->pc);
+		is_wide = false;
+	}else
+		index = get_n_bytes_value(1, frame->pc);
 
-	// Typed_element aux = frame->local_variables->get_typed_element(int(index));
-	// frame->operand_stack->push(long(aux.value.l));
+	Typed_element aux = frame->local_variables->get_typed_element(int(index));
+	frame->operand_stack->push(long(aux.value.l));
 }
 
 //le um float do vetor de variaveis locais e empilha
 //pode ser utilizada em conjunto com wide
 void Operations::fload () {
-	// uint16_t index = 0;
+	uint16_t index = 0;
 
-	// if (is_wide) {
-	// 	index = get_n_bytes_value(2, frame->pc);
-	// 	is_wide = false;
-	// }else
-	// 	index = get_n_bytes_value(1, frame->pc);
+	if (is_wide) {
+		index = get_n_bytes_value(2, frame->pc);
+		is_wide = false;
+	}else
+		index = get_n_bytes_value(1, frame->pc);
 
-	// Typed_element aux = frame->local_variables->get_typed_element(int(index));
-	// frame->operand_stack->push(float(aux.value.f));
+	Typed_element aux = frame->local_variables->get_typed_element(int(index));
+	frame->operand_stack->push(float(aux.value.f));
 }
 
 //le um double do vetor de variaveis locais e empilha
 void Operations::dload () {
-	// uint16_t index;
+	uint16_t index;
 
-	// if (is_wide) {
-	// 	index = get_n_bytes_value(2, frame->pc);
-	// 	is_wide = false;
-	// } else
-	// 	index = get_n_bytes_value(1, frame->pc);
+	if (is_wide) {
+		index = get_n_bytes_value(2, frame->pc);
+		is_wide = false;
+	} else
+		index = get_n_bytes_value(1, frame->pc);
 
-	// Typed_element aux = frame->local_variables->get_typed_element(int(index));
-	// frame->operand_stack->push(double(aux.value.d));
+	Typed_element aux = frame->local_variables->get_typed_element(int(index));
+	frame->operand_stack->push(double(aux.value.d));
 }
 
 //le uma referencia do vetor de variaveis locais e empilha
@@ -425,99 +425,99 @@ void Operations::iaload(){
 }
 
 void Operations::laload(){
-	// Element value1, value2;
-	// Typed_element result;
+	Element value1, value2;
+	Typed_element result;
 
-	// value1 = frame->operand_stack->pop();
-  	// value2 = frame->operand_stack->pop();
-  	// Local_variable *ref = (Local_variable *) value2.pi;
-  	// if (ref == nullptr)
-    // 	throw runtime_error("Null pointer");
+	value1 = frame->operand_stack->pop();
+  	value2 = frame->operand_stack->pop();
+  	Local_variable *ref = (Local_variable *) value2.pi;
+  	if (ref == nullptr)
+    	throw runtime_error("Null pointer");
 
-	// frame->operand_stack->push(reframe->get(value1.i));
+	frame->operand_stack->push(ref->get(value1.i));
 }
 
 //Fim linha 2
 //Inicio linha 3
 void Operations::lstore_0() {
-	// Typed_element var = frame->operand_stack->pop_typed_element();
-	// if(var.type == TYPE_LONG) {
-	// 	frame->local_variables->insert_typed_element(0, var);
-	// }
-	// else
-	// 	printf("Operando no topo != TYPE_LONG\n");
+	Typed_element var = frame->operand_stack->pop_typed_element();
+	if(var.type == TYPE_LONG) {
+		frame->local_variables->insert_typed_element( var, 0);
+	}
+	else
+		printf("Operando no topo != TYPE_LONG\n");
 }
 
 //pode ser utilizada em conjunto com wide
 void Operations::lstore() {
-//    uint16_t index = 0;
+   uint16_t index = 0;
 
-//    if (is_wide) {
-// 		index = get_n_bytes_value(2, frame->pc);
-// 		is_wide = false;
-// 	}else
-// 		index = get_n_bytes_value(1, frame->pc);
+   if (is_wide) {
+		index = get_n_bytes_value(2, frame->pc);
+		is_wide = false;
+	}else
+		index = get_n_bytes_value(1, frame->pc);
 
-// 	if(frame->operand_stack->top_type() == TYPE_LONG) {
-// 		Typed_element aux = frame->operand_stack->pop_typed_element();
-// 		frame->local_variables->insert_typed_element(aux, index);
-// 	}
-// 	else
-// 		printf("Operando no topo != TYPE_LONG\n");
+	if(frame->operand_stack->top_type() == TYPE_LONG) {
+		Typed_element aux = frame->operand_stack->pop_typed_element();
+		frame->local_variables->insert_typed_element(aux, index);
+	}
+	else
+		printf("Operando no topo != TYPE_LONG\n");
 }
 
 //pode ser utilizada em conjunto com wide
 void Operations::istore() {
-//    uint16_t index = 0;
+   uint16_t index = 0;
 
-// 	if (is_wide) {
-// 		index = get_n_bytes_value(2, frame->pc);
-// 		is_wide = false;
-// 	}else
-// 		index = get_n_bytes_value(1, frame->pc);
+	if (is_wide) {
+		index = get_n_bytes_value(2, frame->pc);
+		is_wide = false;
+	}else
+		index = get_n_bytes_value(1, frame->pc);
 
-// 	if(frame->operand_stack->top_type() == TYPE_INT) {
-// 		Typed_element aux = frame->operand_stack->pop_typed_element();
-// 		frame->local_variables->insert_typed_element(aux, index);
-// 	}
-// 	else
-// 		printf("Operando no topo != TYPE_INT\n");
+	if(frame->operand_stack->top_type() == TYPE_INT) {
+		Typed_element aux = frame->operand_stack->pop_typed_element();
+		frame->local_variables->insert_typed_element(aux, index);
+	}
+	else
+		printf("Operando no topo != TYPE_INT\n");
 }
 
 //pode ser utilizada em conjunto com wide
 void Operations::fstore() {
-	// uint16_t index = 0;
+	uint16_t index = 0;
 
-	// if (is_wide) {
-	// 	index = get_n_bytes_value(2, frame->pc);
-	// 	is_wide = false;
-	// }else
-	// 	index = get_n_bytes_value(1, frame->pc);
+	if (is_wide) {
+		index = get_n_bytes_value(2, frame->pc);
+		is_wide = false;
+	}else
+		index = get_n_bytes_value(1, frame->pc);
 
-	// if(frame->operand_stack->top_type() == TYPE_FLOAT) {
-	// 	Typed_element aux = frame->operand_stack->pop_typed_element();
-	// 	frame->local_variables->insert_typed_element(aux, index);
-	// }
-	// else
-	// 	printf("Operando no topo != TYPE_FLOAT\n");
+	if(frame->operand_stack->top_type() == TYPE_FLOAT) {
+		Typed_element aux = frame->operand_stack->pop_typed_element();
+		frame->local_variables->insert_typed_element(aux, index);
+	}
+	else
+		printf("Operando no topo != TYPE_FLOAT\n");
 }
 
 //pode ser utilizada em conjunto com wide
 void Operations::dstore() {
-//    uint16_t index = 0;
+   uint16_t index = 0;
 
-// 	if (is_wide) {
-// 		index = get_n_bytes_value(2, frame->pc);
-// 		is_wide = false;
-// 	} else
-// 		index = get_n_bytes_value(1, frame->pc);
+	if (is_wide) {
+		index = get_n_bytes_value(2, frame->pc);
+		is_wide = false;
+	} else
+		index = get_n_bytes_value(1, frame->pc);
 
-// 	if(frame->operand_stack->top_type() == TYPE_DOUBLE) {
-// 		Typed_element aux = frame->operand_stack->pop_typed_element();
-// 		frame->local_variables->insert_typed_element(aux,index);
-// 	}
-// 	else
-// 		printf("Operando no topo != TYPE_DOUBLE\n");
+	if(frame->operand_stack->top_type() == TYPE_DOUBLE) {
+		Typed_element aux = frame->operand_stack->pop_typed_element();
+		frame->local_variables->insert_typed_element(aux,index);
+	}
+	else
+		printf("Operando no topo != TYPE_DOUBLE\n");
 }
 
 //pode ser utilizada em conjunto com wide
@@ -576,57 +576,57 @@ void Operations::istore_3() {
 
 //Pega um valor do tipo float de um array e empilha na pilha de operandos
 void Operations::faload() {
-	// int index = frame->operand_stack->pop().i;
-	// Local_variable *arrayref = (Local_variable *) frame->operand_stack->pop().pi;
-	// if(arrayref == NULL){
-	// }
-	// frame->operand_stack->push(arrayreframe->get(index));
+	int index = frame->operand_stack->pop().i;
+	Local_variable *arrayref = (Local_variable *) frame->operand_stack->pop().pi;
+	if(arrayref == NULL){
+	}
+	frame->operand_stack->push(arrayref->get(index));
 }
 
 //Pega um valor do tipo double de um array e empilha na pilha de operandos
 void Operations::daload() {
-	// int index = frame->operand_stack->pop().i;
-	// Local_variable *arrayref = (Local_variable *) frame->operand_stack->pop().pi;
-	// frame->operand_stack->push(arrayreframe->get(index));
+	int index = frame->operand_stack->pop().i;
+	Local_variable *arrayref = (Local_variable *) frame->operand_stack->pop().pi;
+	frame->operand_stack->push(arrayref->get(index));
 }
 
 //Pega uma referência de um array e empilha na pilha de operandos
 void Operations::aaload() {
-	// int index = frame->operand_stack->pop().i;
-	// Local_variable *arrayref = (Local_variable *) frame->operand_stack->pop().pi;
-	// frame->operand_stack->push(arrayreframe->get(index));
+	int index = frame->operand_stack->pop().i;
+	Local_variable *arrayref = (Local_variable *) frame->operand_stack->pop().pi;
+	frame->operand_stack->push(arrayref->get(index));
 }
 
 //Pega um boolean ou byte de um array e empilha na pilha de operandos
 //Como Boolean é representado com um byte, não há necessidade de distinção
 void Operations::baload() {
-	// int index = frame->operand_stack->pop().i;
-	// Local_variable *arrayref = (Local_variable *) frame->operand_stack->pop().pi;
-	// frame->operand_stack->push(arrayreframe->get(index));
+	int index = frame->operand_stack->pop().i;
+	Local_variable *arrayref = (Local_variable *) frame->operand_stack->pop().pi;
+	frame->operand_stack->push(arrayref->get(index));
 }
 
 //Pega um char de um array e empilha na pilha de operandos
 void Operations::caload() {
-	// int index = frame->operand_stack->pop().i;
-	// std::vector<char> *arrayref = (std::vector<char> *) frame->operand_stack->pop().pi;
-	// frame->operand_stack->push(arrayreframe->at(index));
+	int index = frame->operand_stack->pop().i;
+	std::vector<char> *arrayref = (std::vector<char> *) frame->operand_stack->pop().pi;
+	frame->operand_stack->push(arrayref->at(index));
 }
 
 void Operations::saload() {
-	// int index = frame->operand_stack->pop().i;
-	// Local_variable *arrayref = (Local_variable *) frame->operand_stack->pop().pi;
-	// frame->operand_stack->push(arrayreframe->get(index));
+	int index = frame->operand_stack->pop().i;
+	Local_variable *arrayref = (Local_variable *) frame->operand_stack->pop().pi;
+	frame->operand_stack->push(arrayref->get(index));
 }
 
 //Fim linha 3
 //Inicio linha 4
 void Operations::lstore_1() {
-	// if(frame->operand_stack->top_type() == TYPE_LONG) {
-	// 	Typed_element aux = frame->operand_stack->pop_typed_element();
-	// 	frame->local_variables->insert_typed_element(1, aux);
-	// }
-	// else
-	// 	printf("Operando no topo != TYPE_LONG\n");
+	if(frame->operand_stack->top_type() == TYPE_LONG) {
+		Typed_element aux = frame->operand_stack->pop_typed_element();
+		frame->local_variables->insert_typed_element( aux , 1);
+	}
+	else
+		printf("Operando no topo != TYPE_LONG\n");
 }
 
 void Operations::lstore_2() {
@@ -693,12 +693,12 @@ void Operations::dstore_0() {
 }
 
 void Operations::dstore_1() {
-	// if(frame->operand_stack->top_type() == TYPE_DOUBLE) {
-	// 	Typed_element aux = frame->operand_stack->pop_typed_element();
-	// 	frame->local_variables->insert_typed_element(1, aux);
-	// }
-	// else
-	// 	printf("Operando no topo != TYPE_DOUBLE\n");
+	if(frame->operand_stack->top_type() == TYPE_DOUBLE) {
+		Typed_element aux = frame->operand_stack->pop_typed_element();
+		frame->local_variables->insert_typed_element( aux, 1);
+	}
+	else
+		printf("Operando no topo != TYPE_DOUBLE\n");
 }
 
 void Operations::dstore_2() {
@@ -2419,7 +2419,7 @@ void Operations::invokespecial() {
 
         parametros.insert(parametros.begin(), typed_element);
 
-        Instance_class* instance = (Instance_class *) object_typed_element.value.pi;
+        Instance_class* instance = (Instance_class *) typed_element.value.pi;
 
         Static_class *class_runtime = Method_area::get_class(classe);
 
@@ -2577,7 +2577,7 @@ void Operations::invokeinterface() {
         }
         parametros.insert(parametros.begin(), typed_element);
 
-        Instance_class *instance = (Instance_class *) object_typed_element.value.pi;
+        Instance_class *instance = (Instance_class *) typed_element.value.pi;
 
         // Caso <clinit> seja empilhado.
         if (threads->top() != auxFrame) {
@@ -2681,7 +2681,7 @@ void Operations::arraylength()
     if (arrayref == nullptr)
         throw runtime_error("Null pointer");
 		
-    frame->operand_stack->push(arrayref->getMax());
+    frame->operand_stack->push(arrayref->get_max());
 }
 
 void Operations::athrow()
@@ -2734,39 +2734,39 @@ void Operations::multianewarray(){
 	           if (multiArrayType != "java/lang/String") {
 	               Method_area::get_class(multiArrayType); // verifica se existe classe com esse nome
 	           }
-	           typed_element.real_type = RT_REFERENCE;
+	           Element.real_type = RT_REFERENCE;
 	           Element.type = TYPE_REFERENCE;
 	           break;
 	       case 'B':
-	           typed_element.real_type = RT_BYTE;
+	           Element.real_type = RT_BYTE;
 	           Element.type = TYPE_INT;
 	           break;
 	       case 'C':
-	           typed_element.real_type = RT_CHAR;
+	           Element.real_type = RT_CHAR;
 	           Element.type = TYPE_INT;
 	           break;
 	       case 'D':
-	           typed_element.real_type = RT_DOUBLE;
+	           Element.real_type = RT_DOUBLE;
 	           Element.type = TYPE_DOUBLE;
 	           break;
 	       case 'F':
-	           typed_element.real_type = RT_FLOAT;
+	           Element.real_type = RT_FLOAT;
 	           Element.type = TYPE_FLOAT;
 	           break;
 	       case 'I':
-	           typed_element.real_type = RT_INT;
+	           Element.real_type = RT_INT;
 	           Element.type = TYPE_INT;
 	           break;
 	       case 'J':
-	           typed_element.real_type = RT_LONG;
+	           Element.real_type = RT_LONG;
 	           Element.type = TYPE_LONG;
 	           break;
 	       case 'S':
-	           typed_element.real_type = RT_SHORT;
+	           Element.real_type = RT_SHORT;
 	           Element.type = TYPE_INT;
 	           break;
 	       case 'Z':
-	           typed_element.real_type = RT_BOOL;
+	           Element.real_type = RT_BOOL;
 	           Element.type = TYPE_INT;
 	           break;
 	       default:
@@ -2781,7 +2781,7 @@ void Operations::multianewarray(){
 
 	int* p = (int*)(getNewMultiArray(count_dim));
 
-	typed_element.value.pi = p;
+	Element.value.pi = p;
 
 	frame->operand_stack->push(Element);
 
@@ -2804,12 +2804,12 @@ double Operations::getValue(n_array array, stack<int> access_indexes)
 
 }
 
-n_array *Operations::getNewMultiArray(stack<int> count_dim)
+Array *Operations::get_new_multi_array(stack<int> count_dim)
 {
 	int size = 1;
 	int value;
 
-	n_array *array = (n_array*) malloc(sizeof(n_array)) ;
+	Array *array = (Array*) malloc(sizeof(Array)) ;
 
 	int* dims = (int*) malloc(sizeof(double) * count_dim.size());
 
@@ -2828,7 +2828,7 @@ n_array *Operations::getNewMultiArray(stack<int> count_dim)
 		p[i] = 0;
 	}
 
-	array->dims = dims;
+	array->dimensions = dims;
 	array->array = p;
 
 	return array;

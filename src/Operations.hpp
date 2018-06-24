@@ -27,7 +27,7 @@ public:
 	static U4 get_n_bytes_value(U1 n, vector<U2> pc);
 
 	static Static_class* get_static_class_with_field(Static_class* base, string field_name);
-	// // static Array* getNewMultiArray(stack<int> count_dim);
+	static Array* get_new_multi_array(stack<int> count_dim);
 	// static double get_value(Array array, stack<int> access_indexes);
 
 	const static func functions[];

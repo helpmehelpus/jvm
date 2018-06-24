@@ -27,3 +27,7 @@ Typed_element Local_variable::get_typed_element(int index)  {
 
 	return ret;
 }
+
+int Local_variable::get_max() const {
+	return max;
+}
