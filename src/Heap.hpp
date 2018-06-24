@@ -2,6 +2,7 @@
 #define HEAP
 
 #include "Instance_class.hpp"
+#include "vector"
 
 class Instance_class;
 

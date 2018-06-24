@@ -36,15 +36,17 @@ void Frame_stack::execute() {
 }
 
 void Frame_stack::set_start_PC(Frame* frame) {
-    // frame->pc = frame->method_info.attributes[0].info.code.code;
+    frame->pc = frame->method_info.attributes[0].info.code.code;
     current_PC = 0;
 }
 
 // // TODO: check whether this works
 bool Frame_stack::next_instruction() {
 	// checa se a pilha esta vazia
-	if (threads->empty())
+	if (threads->empty()){
 		return false;
+	}
+		
 	//checa se nao esgotamos as Operations do metodo corrente
 	if (current_PC < threads->top()->method_info.attributes[0].info.code.code.size()) {
 		//pega o proximo opcode a ser executado
@@ -55,7 +57,16 @@ bool Frame_stack::next_instruction() {
 		current_PC++;
 		return true;
 	}
-	return false;
+
+	//retira do topo caso nao tenham mais instrucoes no metodo corrente
+	threads->pop();
+
+	//checa se apos o pop ainda restam elementos
+	if (threads->empty()) {
+		return false;
+	}
+
+	return true;
 }
 
 // 	//retira do topo caso nao tenham mais instrucoes no metodo corrente
