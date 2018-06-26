@@ -181,7 +181,7 @@ Method_info Reader::get_clinit() {
 Method_info* Reader::get_method(string name, string descriptor){
 	Method_info method;
 
-	for(int i = 0; i < this->methodsCount; i++){
+	for(int i = 0; i < this->methods_count; i++){
 		//cout << "E1" << flush << endl;
 		method = this->methods[i];
 		//cout << "E2" << flush << endl;
@@ -214,7 +214,7 @@ U2 Reader::get_super_class() {
 Reader* Reader::get_class_with_searched_method(string name, string descriptor){
 	Method_info* method;
 
-	for(int i = 0; i < this->methodsCount; i++)
+	for(int i = 0; i < this->methods_count; i++)
 	{
 		method = (this->methods)+i;
 

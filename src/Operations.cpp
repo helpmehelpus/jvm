@@ -522,20 +522,20 @@ void Operations::dstore() {
 
 //pode ser utilizada em conjunto com wide
 void Operations::astore() {
-//    uint16_t index = 0;
+   uint16_t index = 0;
 
-//    	if (is_wide) {
-// 		index = get_n_bytes_value(2, frame->pc);
-// 		is_wide = false;
-// 	} else
-// 		index = get_n_bytes_value(1, frame->pc);
+   	if (is_wide) {
+		index = get_n_bytes_value(2, frame->pc);
+		is_wide = false;
+	} else
+		index = get_n_bytes_value(1, frame->pc);
 
-// 	if(frame->operand_stack->top_type() == TYPE_REFERENCE) {
-// 		Typed_element aux = frame->operand_stack->pop_typed_element();
-// 		frame->local_variables->insert_typed_element(aux, index);
-// 	}
-// 	else
-// 		printf("Operando no topo != TYPE_REFERECE\n");
+	if(frame->operand_stack->top_type() == TYPE_REFERENCE) {
+		Typed_element aux = frame->operand_stack->pop_typed_element();
+		frame->local_variables->insert_typed_element(aux, index);
+	}
+	else
+		printf("Operando no topo != TYPE_REFERECE\n");
 }
 
 void Operations::istore_0() {
@@ -657,12 +657,12 @@ void Operations::fstore_0() {
 }
 
 void Operations::fstore_1() {
-	// if(frame->operand_stack->top_type() == TYPE_FLOAT) {
-	// 	Typed_element aux = frame->operand_stack->pop_typed_element();
-	// 	frame->local_variables->insert_typed_element(1, aux);
-	// }
-	// else
-	// 	printf("Operando no topo != TYPE_FLOAT\n");
+	if(frame->operand_stack->top_type() == TYPE_FLOAT) {
+		Typed_element aux = frame->operand_stack->pop_typed_element();
+		frame->local_variables->insert_typed_element(aux, 1);
+	}
+	else
+		printf("Operando no topo != TYPE_FLOAT\n");
 }
 
 void Operations::fstore_2() {
@@ -729,12 +729,12 @@ void Operations::astore_0() {
 }
 
 void Operations::astore_1() {
-	// if(frame->operand_stack->top_type() == TYPE_REFERENCE) {
-	// 	Typed_element aux = frame->operand_stack->pop_typed_element();
-	// 	frame->local_variables->insert_typed_element(1, aux);
-	// }
-	// else
-	// 	printf("Operando no topo != TYPE_REFERENCE\n");
+	if(frame->operand_stack->top_type() == TYPE_REFERENCE) {
+		Typed_element aux = frame->operand_stack->pop_typed_element();
+		frame->local_variables->insert_typed_element( aux, 1);
+	}
+	else
+		printf("Operando no topo != TYPE_REFERENCE\n");
 }
 
 void Operations::astore_2() {
@@ -2779,7 +2779,7 @@ void Operations::multianewarray(){
         count_dim.push(frame->operand_stack->pop_typed_element().value.i);
     }
 
-	int* p = (int*)(getNewMultiArray(count_dim));
+	int* p = (int*)(get_new_multi_array(count_dim));
 
 	Element.value.pi = p;
 
@@ -2787,14 +2787,12 @@ void Operations::multianewarray(){
 
 }
 
-double Operations::getValue(n_array array, stack<int> access_indexes)
-{
+double Operations::get_value(Array array, stack<int> access_indexes){
 	int index = 1;
 	int aux = 0;
 
-	for(int i = 0 ; i < sizeof(array.dims)/sizeof(*(array.dims)); i++)
-	{
-		aux += array.dims[i] * access_indexes.top();
+	for(int i = 0 ; i < sizeof(array.dimensions)/sizeof(*(array.dimensions)); i++){
+		aux += array.dimensions[i] * access_indexes.top();
 
 		index = (aux * index) + aux;
 		access_indexes.pop();
@@ -2804,8 +2802,7 @@ double Operations::getValue(n_array array, stack<int> access_indexes)
 
 }
 
-Array *Operations::get_new_multi_array(stack<int> count_dim)
-{
+Array *Operations::get_new_multi_array(stack<int> count_dim){
 	int size = 1;
 	int value;
 

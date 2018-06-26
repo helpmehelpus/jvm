@@ -28,7 +28,7 @@ public:
 
 	static Static_class* get_static_class_with_field(Static_class* base, string field_name);
 	static Array* get_new_multi_array(stack<int> count_dim);
-	// static double get_value(Array array, stack<int> access_indexes);
+	static double get_value(Array array, stack<int> access_indexes);
 
 	const static func functions[];
 
