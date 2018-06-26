@@ -208,10 +208,10 @@ void Operations::ldc2_w () {
 	long valPushLong;
 	double valPushDouble;
 	if (frame->cp_vector[index].tag == LONG){
-		valPushLong = u4_to_long(frame->cp_vector[index].info[0], frame->cp_vector[index+1].info[0]);
+		valPushLong = Operations::u4_to_long(frame->cp_vector[index].info[0], frame->cp_vector[index+1].info[0]);
 		frame->operand_stack->push(long(valPushLong));
 	} else {
-		valPushDouble = u4_to_double(frame->cp_vector[index].info[0], frame->cp_vector[index+1].info[0]);
+		valPushDouble = Operations::u4_to_double(frame->cp_vector[index].info[0], frame->cp_vector[index+1].info[0]);
 		frame->operand_stack->push(double(valPushDouble));
 	}
 }
@@ -434,7 +434,7 @@ void Operations::laload(){
   	if (ref == nullptr)
     	throw runtime_error("Null pointer");
 
-	frame->operand_stack->push(ref->get(value1.i));
+	frame->operand_stack->push(ref->get_typed_element(value1.i));
 }
 
 //Fim linha 2
@@ -3013,5 +3013,36 @@ int Operations::checkDouble (double d) {
 		ret = 2;
 	}
 
+	return ret;
+}
+
+long u4_to_long (Class_loader_type high, Class_loader_type low) {
+	long ret;
+	
+	ret = (((long) high.u4) << 32) | low.u4;
+	
+	return ret;
+}
+
+double u4_to_double (Class_loader_type high, Class_loader_type low) {
+	double ret;
+	long checkBoundaries = u4_to_long(high, low);
+	
+	if (checkBoundaries == 0x7ff0000000000000L) {
+		//retornar infinito??
+	} else if (checkBoundaries == 0xfff0000000000000L) {
+		//retornar menos infinito??
+	} else if ((checkBoundaries >= 0x7ff0000000000001L) && (checkBoundaries <= 0x7ffffffffffffL)) {
+		//retornar NaN??
+	} else if ((checkBoundaries >= 0xfff0000000000001L) && (checkBoundaries <= 0xffffffffffffffffL)) {
+		//também retornar NaN??
+	} else {
+		int s = ((checkBoundaries >> 63) == 0) ? 1 : -1;
+		int e = ((checkBoundaries >> 52) & 0x7ffL);
+		long m = (e == 0) ? (checkBoundaries & 0xfffffffffffffL) << 1 : (checkBoundaries & 0xfffffffffffffL) | 0x10000000000000L;
+		
+		ret = s * m * pow(2, (e-1075));
+	}
+	
 	return ret;
 }

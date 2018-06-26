@@ -254,8 +254,9 @@ public:
 	// TODO: move these functions to another class
 	
 	static int checkFloat (float);
-
 	static int checkDouble (double);
+	static long u4_to_long (Class_loader_type high, Class_loader_type low);
+	static double u4_to_double (Class_loader_type high, Class_loader_type low);
 	
 };
 
