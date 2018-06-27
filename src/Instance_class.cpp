@@ -1,15 +1,15 @@
 #include "Instance_class.hpp"
 
 Instance_class::Instance_class(Static_class* c) {
-	this->classe = c;
+	this->static_class = c;
 
-	int count = classe->get_def()->fields_count;
-	vector<Field_info> fields = classe->get_def()->fields;
+	int count = static_class->reader_class->fields_count;
+	vector<Field_info> fields = static_class->reader_class->fields;
 	for (int i = 0; i < count; i++) {
 		if ((fields[i].access_flags & 0x08) == 0) {
 			Typed_element *auxValue = new Typed_element();
 			auxValue->value.l = 0;
-			string desc = Displayer::dereference_index(classe->get_def()->cp->cp_vector, fields[i].descriptor_index);
+			string desc = Displayer::dereference_index(static_class->reader_class->cp->cp_vector, fields[i].descriptor_index);
 
 			switch (desc[0]) {
 				case 'B':
@@ -43,7 +43,7 @@ Instance_class::Instance_class(Static_class* c) {
 					auxValue->type = TYPE_REFERENCE;
 					break;
 			}
-			string auxName = Displayer::dereference_index(classe->get_def()->cp->cp_vector, fields[i].name_index);
+			string auxName = Displayer::dereference_index(static_class->reader_class->cp->cp_vector, fields[i].name_index);
 			local_fields.insert(pair<string, Typed_element*>(auxName, auxValue));
 		}
 	}	
@@ -62,9 +62,7 @@ Typed_element Instance_class::getField(string s) {
 	return ret;
 }
 
-Static_class *Instance_class::getStatic() {
-	return classe;
-}
+
 
 bool Instance_class::set_field(string s, Typed_element e) {
 	for (map<string, Typed_element*>::const_iterator i = local_fields.begin(); i != local_fields.end(); i++) {

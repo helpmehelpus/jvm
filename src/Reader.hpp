@@ -11,7 +11,9 @@
 #include "Cp_info.hpp"
 #include "Field_info.hpp"
 #include "Interface.hpp"
+#include "Method_area.hpp"
 #include "Method_info.hpp"
+#include "Static_class.hpp"
 
 using namespace std;
 
@@ -59,5 +61,8 @@ class Reader{
     string get_path();
     Method_info get_main();
     Method_info get_clinit();
+
+    Method_info get_method(string name, string descriptor);
+    Reader* get_searched_method_class(string name, string descriptor);
 };
 #endif

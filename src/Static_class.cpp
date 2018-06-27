@@ -2,7 +2,7 @@
 
 using namespace std;
 Static_class::Static_class(Reader* reader) {
-	this->classe = reader;
+	this->reader_class = reader;
 	int count = reader->fields_count;
 	vector<Field_info> fields = reader->fields;
 	for (int i = 0; i < count; i++) {
@@ -97,8 +97,4 @@ Instance_class *Static_class::get_instance() {
 	Instance_class *ret = new Instance_class(this);
 	Heap::add_object(ret);
 	return ret;
-}
-
-Reader *Static_class::get_def() {
-	return classe;
 }

@@ -68,12 +68,12 @@ Static_class* Operations::get_static_class_with_field(Static_class* base, string
         return base;
     }
 
-    int cp_index = base->get_def()->super_class;
+    int cp_index = base->reader_class->super_class;
     if( cp_index == 0 ) {
         return NULL;
     }
 
-    Static_class* child = Method_area::get_class(Displayer::dereference_index(base->get_def()->cp->cp_vector, cp_index));
+    Static_class* child = Method_area::get_class(Displayer::dereference_index(base->reader_class->cp->cp_vector, cp_index));
     return get_static_class_with_field(child, field_name); 
 
 }
@@ -827,10 +827,9 @@ void Operations::func_return()
 
 
 
-void Operations::getstatic()
-{
+void Operations::getstatic(){
     uint16_t index_byte = get_n_bytes_value(2, frame->pc);
-    Frame* aux = frame;
+    Frame* aux_frame = frame;
     Cp_info cp_element = frame->cp_vector[index_byte];
     if(cp_element.tag != FIELDREF) {
         throw runtime_error("Elemento da constant pool apontado por index, não é uma referencia para FIELD_REF!");
@@ -854,7 +853,7 @@ void Operations::getstatic()
     if(static_class == NULL) throw runtime_error("Field nao existe na classe definida!");
 
     // // Caso <clinit> seja empilhado.
-    if (threads->top() != aux) {
+    if (threads->top() != aux_frame) {
         return;
     }
 
@@ -885,6 +884,162 @@ void Operations::putfield()
 
 void Operations::invokevirtual()
 {
+    Frame *aux_frame = frame;
+    uint16_t index_byte = get_n_bytes_value(2, frame->pc);
+
+    Cp_info cp_element = frame->cp_vector[index_byte];
+    if(cp_element.tag != METHODREF) {
+        throw runtime_error("Elemento da constant pool apontado por index, não é uma referencia para METHOD_REF!");
+    }
+    string class_name = Displayer::dereference_index(frame->cp_vector, cp_element.info[0].u2);
+    Cp_info name_and_type_element = frame->cp_vector[cp_element.info[1].u2];
+    if(name_and_type_element.tag != NAMEANDTYPE) {
+        throw runtime_error("Elemento da constant pool apontado por index, não é uma referencia para NAME_AND_TYPE!");
+    }
+
+    string name = Displayer::dereference_index(frame->cp_vector, name_and_type_element.info[0].u2);
+    string descriptor = Displayer::dereference_index(frame->cp_vector, name_and_type_element.info[1].u2);
+    if (class_name.find("java/") != string::npos) {
+        
+        if (class_name == "java/io/PrintStream" && (name == "print" || name == "println")) {
+            if (descriptor != "()V") {
+                Typed_element element = frame->operand_stack->pop_typed_element();
+                switch (element.real_type) {
+                    case RT_DOUBLE:
+                        printf("%f", element.value.d);
+                        break;
+                    case RT_FLOAT:
+                        printf("%f", element.value.f);
+                        break;
+                    case RT_LONG:
+                        printf("%lld", element.value.ls);
+                        break;
+                    case RT_REFERENCE:
+                        cout << Displayer::display_UTF8((unsigned char *)element.value.pi, 0);
+                        break;
+                    case RT_BOOL:
+                        printf("%s", element.value.b == 0 ? "false" : "true");
+                        break;
+                    case RT_BYTE:
+                        printf("%d", element.value.b);
+                        break;
+                    case RT_CHAR:
+                        printf("%c", element.value.bs);
+                        break;
+                    case RT_SHORT:
+                
+                        printf("%d", element.value.ss);
+                        break;
+                    case RT_INT:
+                        printf("%d", element.value.is);
+                        break;
+                    default:
+                        printf("%d", element.value.is);
+                        break;
+                }
+            }
+
+            if (name == "println") printf("\n");
+
+        } else if (class_name == "java/lang/String" && name == "length") {
+
+            Typed_element element = frame->operand_stack->pop_typed_element();
+
+            if(element.real_type == RT_REFERENCE) {
+                Typed_element ret;
+                ret.type = TYPE_INT;
+                ret.real_type = RT_INT;
+                ret.value.i = Displayer::display_UTF8((unsigned char *)element.value.pi, 0).size();
+
+                frame->operand_stack->push_type(ret);
+            }
+            else 
+            {
+            	throw runtime_error("Dado Invalido.");
+            }
+
+
+
+        } else if (class_name == "java/lang/String" && name == "equals") {
+
+            Typed_element element_1 = frame->operand_stack->pop_typed_element();
+            Typed_element element_2 = frame->operand_stack->pop_typed_element();
+
+            if(element_1.real_type == RT_REFERENCE && element_2.real_type == RT_REFERENCE) {
+                Typed_element ret;
+                ret.type = TYPE_INT;
+                ret.real_type = RT_INT;
+
+                if (Displayer::display_UTF8((unsigned char *)element_1.value.pi, 0) == Displayer::display_UTF8((unsigned char *)element_2.value.pi, 0)) {
+                    ret.value.b = 1;
+                } else {
+                    ret.value.b = 0;
+                }
+
+                frame->operand_stack->push_type(ret);
+            }
+            else 
+            {
+            	throw runtime_error("Dados Invalidos.");
+            }
+
+
+        } else {
+            throw runtime_error("Metodo Invalido.");
+        }
+    } else {
+        
+        uint16_t num_args = 0; // numero de argumentos contidos na pilha de operands_stack
+        uint16_t i = 1; // pulando o primeiro '('
+        while (descriptor[i] != ')') 
+        {
+            char baseType = descriptor[i];
+            if (baseType == 'D' || baseType == 'J') {
+                num_args += 2;
+            } else if (baseType == 'L') {
+                num_args++;
+                while (descriptor[++i] != ';');
+            } else if (baseType == '[') {
+                num_args++;
+                while (descriptor[++i] == '[');
+                if (descriptor[i] == 'L') while (descriptor[++i] != ';');
+            } else {
+                num_args++;
+            }
+            i++;
+        }
+
+        vector<Typed_element> args;
+        for (int i = 0; i < num_args; i++) 
+        {
+            Typed_element element = frame->operand_stack->pop_typed_element();
+            args.insert(args.begin(), element);
+        }
+
+        Typed_element object_element = frame->operand_stack->pop_typed_element();
+        if(object_element.type == TYPE_REFERENCE)
+        {
+            throw runtime_error("Elemento não é uma referencia para REFERENCE!");
+        }
+        args.insert(args.begin(), object_element);
+
+        Instance_class* instance = (Instance_class *) object_element.value.pi;
+
+        Static_class *classRuntime = Method_area::get_class(class_name);
+
+        // Caso <clinit> seja empilhado.
+        if (threads->top() != aux_frame) {
+        	frame->current_pc_index--;
+        	return;
+    	}
+
+        frame_stack->add_frame(
+            instance->static_class->reader_class->get_method(name,descriptor), 
+            instance->static_class->reader_class->get_searched_method_class(name,descriptor)->cp->cp_vector
+        );
+        frame_stack->set_arguments(args);
+        
+    }
 }
 
 void Operations::invokespecial()

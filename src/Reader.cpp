@@ -177,3 +177,47 @@ Method_info Reader::get_main() {
 Method_info Reader::get_clinit() {
   return methods[clinit_index];
 }
+
+Method_info Reader::get_method(string name, string descriptor){
+
+	for(int i = 0; i < methods_count; i++){
+		string method_name = Displayer::dereference_index(cp->cp_vector, methods[i].name_index);
+		string method_desc = Displayer::dereference_index(cp->cp_vector, methods[i].descriptor_index);
+
+		if(descriptor == method_desc && name == method_name) 
+		{
+			return methods[i];
+		}
+	}
+
+	if(super_class == 0) {
+		throw runtime_error("Super classe nao lida corretamente");
+	}
+	else {
+  	Static_class* static_class = Method_area::get_class(Displayer::dereference_index(cp->cp_vector, super_class));
+   	Reader* reader = static_class->reader_class;
+  	return reader->get_method(name, descriptor);
+	}
+}
+
+Reader* Reader::get_searched_method_class(string name, string descriptor){
+	for(int i = 0; i < methods_count; i++)
+	{
+		string method_name = Displayer::dereference_index(cp->cp_vector, methods[i].name_index);
+		string method_desc = Displayer::dereference_index(cp->cp_vector, methods[i].descriptor_index);
+
+  	if(descriptor == method_desc && name == method_name) 
+		{
+			return this;
+		}
+	}
+
+	if(super_class) 
+	{
+		return NULL;
+	}
+	else {
+		Reader* r = Method_area::get_class(Displayer::dereference_index(cp->cp_vector, super_class))->reader_class;
+		return r->get_searched_method_class(name, descriptor);
+	}
+}

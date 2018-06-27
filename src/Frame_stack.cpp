@@ -112,13 +112,15 @@ void Frame_stack::add_frame(Method_info method_info, vector<Cp_info> cp_vector) 
 	threads->push(frame);
 }
 
-// void Frame_stack::set_arguments(vector<Typed_element> param) {
-// 	for (int i = 0, j=0; i < param.size(); i++, j++) {
-// 		threads.top().local_variables.insert_typed_element(param[i], j);
+void Frame_stack::set_arguments(vector<Typed_element> param) {
+	for (int i = 0, j=0; i < param.size(); i++, j++) {
+		threads->top()->local_variables->insert_typed_element(param[i], j);
 		
-// 		//testa se o i-esimo argumento ocupou dois slots
-// 		if (threads.top().local_variables.elements[j].type == TYPE_LONG || threads.top()->locals->get(j).type == TYPE_DOUBLE || (threads.top()->locals->get(j).type == TYPE_REFERENCE && BITS)) {
-// 			j++;
-// 		}
-// 	}
-// }
+		//testa se o i-esimo argumento ocupou dois slots
+		if (threads->top()->local_variables->types[j] == TYPE_LONG ||
+		    threads->top()->local_variables->get_typed_element(j).type == TYPE_DOUBLE ||
+		    (threads->top()->local_variables->get_typed_element(j).type == TYPE_REFERENCE && BITS)) {
+			j++;
+		}
+	}
+}

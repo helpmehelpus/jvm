@@ -36,7 +36,7 @@ public:
 	const int real_max_size;
 	uint8_t top_type();
 	Element top_value();
-	Element pop();
+	Element pop_element();
 	Typed_element pop_typed_element();
     string get_string();
 	void push_type(int);

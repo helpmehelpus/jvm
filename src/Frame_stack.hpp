@@ -12,6 +12,8 @@
 
 using namespace std;
 
+class Reader;
+
 class Frame_stack {
 public:
 	Frame_stack(Reader*);

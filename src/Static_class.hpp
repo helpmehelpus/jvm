@@ -11,19 +11,20 @@
 #include "Heap.hpp"
 
 class Instance_class;
+class Reader;
 
 using namespace std;
 
 class Static_class {
 public:
 	map<string, Typed_element*> static_fields;
-	Reader *classe;
+	Reader *reader_class;
 	Static_class(Reader*);
 	Typed_element get_field(string);
 	bool set_field(string, Typed_element);
 	bool set_finals(string, Typed_element);
 	Instance_class *get_instance();
-	Reader *get_def();
+	
 };
 
 #endif

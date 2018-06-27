@@ -27,3 +27,20 @@ Typed_element Local_variable::get_typed_element(int index)  {
 
 	return ret;
 }
+
+void Local_variable::insert_typed_element(Typed_element typed_element, int index) {
+	if (index < 0)
+		throw std::runtime_error("Indice fora dos limites!");
+
+
+	index *= 2;
+
+	this->types[index] = typed_element.type;
+	if (this->types[index] == TYPE_LONG || this->types[index] == TYPE_DOUBLE || (this->types[index] == TYPE_REFERENCE && BITS)) {
+		this->elements[index].i = typed_element.value.i;
+		this->elements[++index].i = int(typed_element.value.l >> 32);
+		this->types[index] = INVALID;
+	} else {
+		this->elements[index].i = typed_element.value.i;
+	}
+}

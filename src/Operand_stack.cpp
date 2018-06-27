@@ -113,3 +113,59 @@ void Operand_stack::push(Element x, uint8_t tipo) {
 			break;
 	}
 }
+
+Typed_element Operand_stack::pop_typed_element() {
+	Typed_element typed_element;
+	typed_element.type = this->types.top();
+	typed_element.real_type = this->real_types.top();
+	typed_element.value = this->pop_element();
+
+	return typed_element;
+}
+
+Element Operand_stack::pop_element(){
+	Element element;
+	//caso a pilha esteja vazia, elementorna um elemento vazio
+	if (this->elements.empty()) {
+		return element;
+	}
+
+	element = this->top_value();
+
+	//faz o pop em um slot
+	this->elements.pop();
+
+	//checa se e necessario fazer o pop para mais um slot
+	if (this->types.top() == TYPE_LONG || this->types.top() == TYPE_DOUBLE ||
+	   (this->types.top() == TYPE_REFERENCE && bits64)) {
+		this->elements.pop();
+	}
+
+	//tira o tipo do elemento que foi desempilhado da pilha de types
+	this->types.pop();
+	this->real_types.pop();
+
+	return element;
+}
+
+Element Operand_stack::top_value() {
+	Element element;
+
+	//caso a pilha esteja vazia, elementorna um elemento vazio
+	if (this->elements.empty()) {
+		return element;
+	}	
+
+	//pega o primeiro slot da pilha
+	element.i = this->elements.top();
+
+	//checa se e necessario juntas o segundo slot tambem 
+	if (this->types.top() == TYPE_LONG || this->types.top() == TYPE_DOUBLE || (this->types.top() == TYPE_REFERENCE && bits64)) {
+		uint32_t aux = element.i;
+		this->elements.pop();
+		element.l = long((long(element.i)<<32) + this->elements.top());
+		this->elements.push(aux);
+	}	
+
+	return element;
+}

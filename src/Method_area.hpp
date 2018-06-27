@@ -14,6 +14,10 @@
 
 
 using namespace std;
+class Reader;
+class Static_class;
+class Frame_stack;
+
 
 class Method_area {
 public:
