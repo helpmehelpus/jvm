@@ -125,6 +125,7 @@ void Operations::iconst_m1()
 
 void Operations::iconst_0()
 {
+    frame->operand_stack->push_type(int(0));
 }
 
 void Operations::iconst_1()

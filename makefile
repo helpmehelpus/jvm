@@ -30,3 +30,5 @@ sample: working
 	bin/main E exp/Sample.class
 lookup-i: all
 	bin/main i exp/lookupswitch.class
+sample-i: all
+	bin/main i exp/sample.class
