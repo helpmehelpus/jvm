@@ -17,7 +17,6 @@ public:
 	Frame_stack(Reader*);
 
 	int opcode;
-	int current_PC;
 	stack<Frame*>* threads;
 	
 	void execute();

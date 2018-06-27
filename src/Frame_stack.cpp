@@ -37,7 +37,8 @@ void Frame_stack::execute() {
 
 void Frame_stack::set_start_PC(Frame* frame) {
     frame->pc = frame->method_info.attributes[0].info.code.code;
-    current_PC = 0;
+    frame->current_pc_index = 0;
+	
 }
 
 // // TODO: check whether this works
@@ -46,15 +47,16 @@ bool Frame_stack::next_instruction() {
 	if (threads->empty()){
 		return false;
 	}
+
 		
 	//checa se nao esgotamos as Operations do metodo corrente
-	if (current_PC < threads->top()->method_info.attributes[0].info.code.code.size()) {
+	if (threads->top()->current_pc_index < threads->top()->method_info.attributes[0].info.code.code.size()) {
 		//pega o proximo opcode a ser executado
-		opcode = threads->top()->pc[current_PC];
+		opcode = threads->top()->get_current_pc();
 		//anda com pc em uma instrucao
 		//caso existam argumentos, a funcao chamada os utilizara
 		//e anda com pc as posicoes correspondentes
-		current_PC++;
+		threads->top()->current_pc_index++;
 		return true;
 	}
 

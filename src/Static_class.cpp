@@ -49,7 +49,7 @@ Static_class::Static_class(Reader* reader) {
 	}
 }
 
-Typed_element Static_class::getField(string s) {
+Typed_element Static_class::get_field(string s) {
 	Typed_element ret;
 	ret.type = TYPE_NOT_SET;
 

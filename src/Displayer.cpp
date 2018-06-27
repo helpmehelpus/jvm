@@ -20,7 +20,7 @@ void Displayer::display_cp(Constant_pool *constant_pool, U2 cp_length) {
     printf("__________________________________________________________________________________________________________\n\n");
 
 	for (int i = 1; i < cp_length; i++) {
-        printf(" %d:%s ", i, name_types[cp[i].tag].c_str());
+        printf(" [%d]%d:%s ",cp[i].tag, i, name_types[cp[i].tag].c_str());
 
 		switch (cp[i].tag) {
 			case UTF8: 

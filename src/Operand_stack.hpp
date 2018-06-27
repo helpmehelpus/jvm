@@ -47,6 +47,7 @@ public:
 	void push_type(int*);
 	void push_type(Typed_element);
 	void push_type(Element, uint8_t);
+	void push(Element x, uint8_t tipo);
 	int size();
 	
 	bool empty();
