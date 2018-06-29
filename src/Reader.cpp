@@ -221,3 +221,14 @@ Reader* Reader::get_searched_method_class(string name, string descriptor){
 		return r->get_searched_method_class(name, descriptor);
 	}
 }
+
+string Reader::extract_file_name (string &input_path){
+    int slash_position;
+    string class_path, file_name;
+
+    slash_position = input_path.find_last_of("/\\");
+    class_path = input_path.substr(0,slash_position);
+    
+    return file_name = input_path.substr(slash_position+1);
+}
+

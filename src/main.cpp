@@ -9,6 +9,8 @@ using namespace std;
 
 int main(int argc, char* argv[]){
 	Reader* reader = new Reader();
+	string dot_class = argv[2] ;
+	
 	if (argv[1][0] == 'e' || argv[1][0] == 'E') {
 		reader->run(argv[2]);
 	}
@@ -16,7 +18,9 @@ int main(int argc, char* argv[]){
 		cout << "Running Interpreter" << endl;
 		reader->run(argv[2]);
 		//TOOD: implementar metodo para pegar nome da classe do arv2 separado
-		Method_area::path = "Sample.class";
+		// Usar Reader::extract_file_name(string&) para pegar o path
+
+		Method_area::path = Reader::extract_file_name(dot_class);
 		Method_area::add_class(reader);
 		Frame_stack* frame_stack = new Frame_stack(reader);
 		frame_stack->execute();

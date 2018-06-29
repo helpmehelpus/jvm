@@ -53,7 +53,7 @@ class Reader{
     static U2 read_U2(FILE *fp);
     static U1 read_U1(FILE *fp);
     static vector<U1> read_UTF8(FILE *fp, int size);
-
+    static string extract_file_name(string&);
     int show();
 
     bool has_main();
@@ -64,5 +64,6 @@ class Reader{
 
     Method_info get_method(string name, string descriptor);
     Reader* get_searched_method_class(string name, string descriptor);
+    
 };
 #endif
