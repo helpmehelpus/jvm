@@ -487,38 +487,70 @@ void Operations::saload()
 
 void Operations::istore()
 {
-}
+    uint16_t index = 0;
 
-void Operations::lstore()
-{
-}
+	if (is_wide) {
+		index = get_n_bytes_value(2, frame->pc);
+		is_wide = false;
+	}else
+		index = get_n_bytes_value(1, frame->pc);   
 
-void Operations::fstore()
-{
-}
-
-void Operations::dstore()
-{
-}
-
-void Operations::astore()
-{
-}
-
-void Operations::istore_1()
-{
-}
-
-void Operations::istore_2()
-{
-}
-
-void Operations::istore_3()
-{
+	if(frame->operand_stack->top_type() == TYPE_INT) {
+		Typed_element aux = frame->operand_stack->pop_typed_element();
+		frame->local_variables->insert_typed_element(aux, index);
+	}
+	else
+		printf("Operando no topo != TYPE_INT\n");
 }
 
 void Operations::istore_0()
 {
+    if(frame->operand_stack->top_type() == TYPE_INT) {
+		Typed_element aux = frame->operand_stack->pop_typed_element();
+		frame->local_variables->insert_typed_element(aux,0);
+	}
+	else
+		printf("Operando no topo != TYPE_INT\n");
+}
+
+void Operations::istore_1()
+{
+    if(frame->operand_stack->top_type() == TYPE_INT) {
+		Typed_element aux = frame->operand_stack->pop_typed_element();
+		frame->local_variables->insert_typed_element(aux,1);
+	}
+	else
+		printf("Operando no topo != TYPE_INT\n");
+}
+
+void Operations::istore_2()
+{
+    if(frame->operand_stack->top_type() == TYPE_INT) {
+		Typed_element aux = frame->operand_stack->pop_typed_element();
+		frame->local_variables->insert_typed_element(aux,2);
+	}
+	else
+		printf("Operando no topo != TYPE_INT\n");
+}
+
+void Operations::istore_3()
+{
+    if(frame->operand_stack->top_type() == TYPE_INT) {
+		Typed_element aux = frame->operand_stack->pop_typed_element();
+		frame->local_variables->insert_typed_element(aux,3);
+	}
+	else
+		printf("Operando no topo != TYPE_INT\n");
+}
+
+void Operations::lstore()
+{
+    if(frame->operand_stack->top_type() == TYPE_LONG) {
+		Typed_element aux = frame->operand_stack->pop_typed_element();
+		frame->local_variables->insert_typed_element(aux, 1);
+	}
+	else
+		printf("Operando no topo != TYPE_LONG\n");
 }
 
 void Operations::lstore_0()
@@ -537,6 +569,24 @@ void Operations::lstore_3()
 {
 }
 
+void Operations::fstore()
+{
+    uint16_t index = 0;
+
+	if (is_wide) {
+		index = get_n_bytes_value(2, frame->pc);
+		is_wide = false;
+	}else
+		index = get_n_bytes_value(1, frame->pc); 
+	
+	if(frame->operand_stack->top_type() == TYPE_FLOAT) {
+		Typed_element aux = frame->operand_stack->pop_typed_element();
+		frame->local_variables->insert_typed_element(aux, index);
+	}
+	else
+		printf("Operando no topo != TYPE_FLOAT\n");
+}
+
 void Operations::fstore_0()
 {
 }
@@ -553,6 +603,24 @@ void Operations::fstore_3()
 {
 }
 
+void Operations::dstore()
+{
+    uint16_t index = 0;
+
+	if (is_wide) {
+		index = get_n_bytes_value(2, frame->pc);
+		is_wide = false;
+	} else
+		index = get_n_bytes_value(1, frame->pc); 
+
+	if(frame->operand_stack->top_type() == TYPE_DOUBLE) {
+		Typed_element aux = frame->operand_stack->pop_typed_element();
+		frame->local_variables->insert_typed_element(aux, index);
+	}
+	else
+		printf("Operando no topo != TYPE_DOUBLE\n");
+}
+
 void Operations::dstore_0()
 {
 }
@@ -567,6 +635,24 @@ void Operations::dstore_2()
 
 void Operations::dstore_3()
 {
+}
+
+void Operations::astore()
+{
+    uint16_t index = 0;
+
+   	if (is_wide) {
+		index = get_n_bytes_value(2, frame->pc);
+		is_wide = false;
+	} else
+		index = get_n_bytes_value(1, frame->pc); 
+
+	if(frame->operand_stack->top_type() == TYPE_REFERENCE) {
+		Typed_element aux = frame->operand_stack->pop_typed_element();
+		frame->local_variables->insert_typed_element(aux, index);
+	}
+	else
+		printf("Operando no topo != TYPE_REFERECE\n");
 }
 
 void Operations::astore_0()
