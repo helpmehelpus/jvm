@@ -198,58 +198,137 @@ void Operations::dconst_1()
 
 void Operations::bipush()
 {
+    int32_t aux;
+	int8_t byte = get_n_bytes_value(1, frame->pc);
+	aux = (int32_t) (int8_t) byte; // extendendo o sinal
+	frame->operand_stack->push_type(int(aux));
 }
 
 void Operations::sipush()
 {
+    uint16_t val_short;
+	int32_t val_push_short;
+	val_short = get_n_bytes_value(2, frame->pc);
+	val_push_short = (int32_t) (int16_t) val_push_short;  // extendendo o sinal
+	frame->operand_stack->push_type(int(val_push_short));
 }
 
 void Operations::ldc()
 {
+    // Arrumar array antes de implementar essa função
 }
 
 void Operations::ldc_w()
 {
+
 }
 
 void Operations::ldc2_w()
 {
+    uint8_t index = get_n_bytes_value(2, frame->pc);
+	long val_push_long;
+	double val_push_double; 
+	if (frame->cp_vector[index].tag == LONG){
+		val_push_long = Displayer::u4_to_long(frame->cp_vector[index].info[0].u4, frame->cp_vector[index+1].info[0].u4);
+		frame->operand_stack->push_type(long(val_push_long));
+	} else {
+		val_push_double = Displayer::u4_to_double(frame->cp_vector[index].info[0].u4, frame->cp_vector[index+1].info[0].u4);
+		frame->operand_stack->push_type(double(val_push_double));
+	}
 }
 
 void Operations::iload()
 {
+    uint16_t index = 0;
+
+	if (is_wide){
+		index = get_n_bytes_value(2, frame->pc);
+		is_wide = false;
+	} else {
+		index = get_n_bytes_value(1, frame->pc);
+	}
+	
+	Typed_element aux = frame->local_variables->get_typed_element(int(index));
+	frame->operand_stack->push_type(int(aux.value.i));
 }
 
 void Operations::lload()
 {
+    uint16_t index = 0;
+	if (is_wide) {
+		index = get_n_bytes_value(2, frame->pc);
+		is_wide = false;
+	}else
+		index = get_n_bytes_value(1, frame->pc);
+	
+	Typed_element aux = frame->local_variables->get_typed_element(int(index));
+	frame->operand_stack->push_type(long(aux.value.l));
 }
 
 void Operations::fload()
 {
+    uint16_t index = 0;
+
+	if (is_wide) {
+		index = get_n_bytes_value(2, frame->pc);
+		is_wide = false;
+	}else
+		index = get_n_bytes_value(1, frame->pc);
+	
+	Typed_element aux = frame->local_variables->get_typed_element(int(index));
+	frame->operand_stack->push_type(float(aux.value.f));
 }
 
 void Operations::dload()
 {
+    uint16_t index;
+
+	if (is_wide) {
+		index = get_n_bytes_value(2, frame->pc);
+		is_wide = false;
+	} else
+		index = get_n_bytes_value(1, frame->pc);
+	
+	Typed_element aux = frame->local_variables->get_typed_element(int(index));
+	frame->operand_stack->push_type(double(aux.value.d));
 }
 
 void Operations::aload()
 {
+    uint16_t index = 0;
+
+	if (is_wide) {
+		index = get_n_bytes_value(2, frame->pc);
+		is_wide = false;
+	}else
+		index = get_n_bytes_value(1, frame->pc);
+	
+	Typed_element aux = frame->local_variables->get_typed_element(int(index));
+	frame->operand_stack->push_type((int*)(aux.value.pi));
 }
 
 void Operations::iload_0()
 {
+    Typed_element aux = frame->local_variables->get_typed_element(0);
+	frame->operand_stack->push_type(int(aux.value.i));
 }
 
 void Operations::iload_1()
 {
+    Typed_element aux = frame->local_variables->get_typed_element(1);
+	frame->operand_stack->push_type(int(aux.value.i));
 }
 
 void Operations::iload_2()
 {
+    Typed_element aux = frame->local_variables->get_typed_element(2);
+	frame->operand_stack->push_type(int(aux.value.i));
 }
 
 void Operations::iload_3()
 {
+    Typed_element aux = frame->local_variables->get_typed_element(3);
+	frame->operand_stack->push_type(int(aux.value.i));
 }
 
 void Operations::lload_0()
@@ -334,6 +413,7 @@ void Operations::aload_3()
 
 void Operations::iaload()
 {
+    
 }
 
 void Operations::laload()
