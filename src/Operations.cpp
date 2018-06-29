@@ -7,6 +7,7 @@ stack<Frame*>* Operations::threads = nullptr;
 Frame_stack* Operations::frame_stack = nullptr;
 bool Operations::is_wide = false;
 
+
 const func Operations::functions[] = { &Operations::nop, &Operations::aconst_null, &Operations::iconst_m1,
     &Operations::iconst_0, &Operations::iconst_1, &Operations::iconst_2, &Operations::iconst_3, &Operations::iconst_4,
     &Operations::iconst_5, &Operations::lconst_0, &Operations::lconst_1, &Operations::fconst_0, &Operations::fconst_1,
@@ -1028,7 +1029,7 @@ void Operations::invokevirtual()
                         printf("%f", element.value.f);
                         break;
                     case RT_LONG:
-                        printf("%ld", element.value.ls);
+                        printf("%lld", element.value.ls);
                         break;
                     case RT_REFERENCE:
                         cout << Displayer::display_UTF8((unsigned char *)element.value.pi, 0);
@@ -1247,6 +1248,79 @@ void Operations::invokespecial()
 
 void Operations::invokestatic()
 {
+    Frame *aux_frame = threads->top();
+    uint16_t index_byte = get_n_bytes_value(2, frame->pc);
+    Cp_info cp_element = frame->cp_vector[index_byte];
+
+    if(cp_element.tag != METHODREF)
+        throw std::runtime_error("Elemento da constant pool apontado por index, não é uma referencia para METHOD_REF!");
+    
+    string class_name = Displayer::dereference_index(frame->cp_vector, cp_element.info[0].u2);
+    Cp_info name_and_type_element = frame->cp_vector[cp_element.info[1].u2];
+
+    if(name_and_type_element.tag != NAMEANDTYPE) {
+        throw std::runtime_error("Elemento da constant pool apontado por index, não é uma referencia para NAME_AND_TYPE!");
+    }
+
+    
+    string name = Displayer::dereference_index(frame->cp_vector, name_and_type_element.info[0].u2);
+    string descriptor = Displayer::dereference_index(frame->cp_vector, name_and_type_element.info[1].u2);
+
+    if (class_name == "java/lang/Object" && name == "registerNatives") {
+        frame->current_pc_index++;
+        return;
+    }
+
+    if (class_name.find("java/") != string::npos) {
+        cerr << "Tentando invocar metodo estatico invalido: " << name << endl;
+    }
+    else {
+        uint16_t nargs = 0;
+        uint16_t i = 1;
+        while (descriptor[i] != ')') {
+            char baseType = descriptor[i];
+            if (baseType == 'D' || baseType == 'J') {
+                nargs += 2;
+            } else if (baseType == 'L') {
+                nargs++;
+                while (descriptor[++i] != ';');
+            } else if (baseType == '[') {
+                nargs++;
+                while (descriptor[++i] == '[');
+                if (descriptor[i] == 'L') while (descriptor[++i] != ';');
+            } else {
+                nargs++;
+            }
+            i++;
+        }
+
+        vector<Typed_element> args;
+        for (int i = 0; i < nargs; i++) {
+            Typed_element elemento = frame->operand_stack->pop_typed_element();
+            args.insert(args.begin(), elemento);
+        }
+
+        Static_class *static_class = Method_area::get_class(class_name);
+
+        if (threads->top() != aux_frame) {
+            
+            while (nargs-- > 0) {
+                frame->operand_stack->push_type(args[nargs]);
+            }
+            
+            frame->current_pc_index--;
+            return;
+        }
+        
+        frame_stack->add_frame(
+            static_class->reader_class->get_method(name,descriptor), 
+            static_class->reader_class->get_searched_method_class(name,descriptor)->cp->cp_vector
+        );
+
+        frame_stack->set_arguments(args);
+
+    }
+
 }
 
 void Operations::invokeinterface()
