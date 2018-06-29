@@ -2,6 +2,7 @@
 #define OPERAND_STACK
 
 #include <cstdint>
+#include <iostream>
 #include <stack>
 #include <stdbool.h>
 #include <sstream>

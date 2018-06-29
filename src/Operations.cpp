@@ -1262,7 +1262,6 @@ void Operations::invokestatic()
         throw runtime_error("INVOKESTATIC: Pointed constant pool element is not NAMEANDTYPE");
     }
 
-    
     string name = Displayer::dereference_index(frame->cp_vector, name_and_type_element.info[0].u2);
     string descriptor = Displayer::dereference_index(frame->cp_vector, name_and_type_element.info[1].u2);
 
@@ -1275,37 +1274,41 @@ void Operations::invokestatic()
         cerr << "INVOKESTATIC: Invalid static method invocation: " << name << endl;
     }
     else {
-        uint16_t nargs = 0;
+
+        uint16_t num_args = 0;
         uint16_t i = 1;
         while (descriptor[i] != ')') {
             char base_type = descriptor[i];
             if (base_type == 'D' || base_type == 'J') {
-                nargs += 2;
+                num_args += 2;
             } else if (base_type == 'L') {
-                nargs++;
+                num_args++;
                 while (descriptor[++i] != ';');
             } else if (base_type == '[') {
-                nargs++;
+                num_args++;
                 while (descriptor[++i] == '[');
                 if (descriptor[i] == 'L') while (descriptor[++i] != ';');
             } else {
-                nargs++;
+                num_args++;
             }
             i++;
         }
 
         vector<Typed_element> args;
-        for (int i = 0; i < nargs; i++) {
-            Typed_element elemento = frame->operand_stack->pop_typed_element();
-            args.insert(args.begin(), elemento);
+        for (int i = 0; i < num_args; i++) {
+            
+            Typed_element typed_element = frame->operand_stack->pop_typed_element();
+            args.insert(args.begin(), typed_element);
+            
+
         }
 
         Static_class *static_class = Method_area::get_class(class_name);
 
         if (threads->top() != aux_frame) {
             
-            while (nargs-- > 0) {
-                frame->operand_stack->push_type(args[nargs]);
+            while (num_args-- > 0) {
+                frame->operand_stack->push_type(args[num_args]);
             }
             
             frame->current_pc_index--;

@@ -1,5 +1,7 @@
 #include "Operand_stack.hpp"
 
+using namespace std;
+
 Operand_stack::Operand_stack(int maximum_size) : max_size(maximum_size), real_max_size(2*maximum_size) {
     typed_element_pushed = false;
 };
@@ -116,6 +118,12 @@ void Operand_stack::push(Element x, uint8_t tipo) {
 
 Typed_element Operand_stack::pop_typed_element() {
 	Typed_element typed_element;
+	if (this->types.empty()) {
+		cout << "POP_TYPED_ELEMENT: types vector is empty" << endl;
+		return typed_element;
+	}
+
+	
 	typed_element.type = this->types.top();
 	typed_element.real_type = this->real_types.top();
 	typed_element.value = this->pop_element();
@@ -127,6 +135,7 @@ Element Operand_stack::pop_element(){
 	Element element;
 	//caso a pilha esteja vazia, elementorna um elemento vazio
 	if (this->elements.empty()) {
+		cout << "POP_ELEMENT: elements vector is empty" << endl;
 		return element;
 	}
 
