@@ -1,8 +1,5 @@
 #include "Local_variable.hpp"
 
-// Local_variable::Local_variable (U2 max_size) : max(max_size), two_slots(false), real_max(2*max_size) {
-	
-// }
 
 
 Typed_element Local_variable::get_typed_element(int index)  {
@@ -33,14 +30,20 @@ void Local_variable::insert_typed_element(Typed_element typed_element, int index
 		throw std::runtime_error("Indice fora dos limites!");
 
 
-	index *= 2;
+	// index *= 2;
 
-	this->types[index] = typed_element.type;
+	this->types.push_back(typed_element.type);
+
+	// this->types[index] = typed_element.type;
 	if (this->types[index] == TYPE_LONG || this->types[index] == TYPE_DOUBLE || (this->types[index] == TYPE_REFERENCE && BITS)) {
+		this->elements.push_back(Element());
+		this->elements.push_back(Element());
 		this->elements[index].i = typed_element.value.i;
 		this->elements[++index].i = int(typed_element.value.l >> 32);
+		
 		this->types[index] = INVALID;
 	} else {
+		this->elements.push_back(Element());
 		this->elements[index].i = typed_element.value.i;
 	}
 }

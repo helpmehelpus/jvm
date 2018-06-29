@@ -28,10 +28,13 @@ Frame_stack::Frame_stack(Reader *reader) {
 
 void Frame_stack::execute() {
 	while (next_instruction()) {
+		
 		cout << "Opcode: " << opcode << "\tMnemonico: " << Attribute_info::get_mnemonic(opcode) << flush << endl;
 		Operations::run(opcode);
-		// threads->top()->operand_stack->debug_operand_stack();
-		// getchar();
+
+
+		threads->top()->operand_stack->debug_operand_stack();
+		getchar();
 	}
 }
 
@@ -101,11 +104,12 @@ void Frame_stack::add_frame(Method_info method_info, vector<Cp_info> cp_vector) 
 }
 
 void Frame_stack::set_arguments(vector<Typed_element> param) {
+	
 	for (int i = 0, j=0; i < param.size(); i++, j++) {
+		
 		threads->top()->local_variables->insert_typed_element(param[i], j);
 		
-		//testa se o i-esimo argumento ocupou dois slots
-		if (threads->top()->local_variables->types[j] == TYPE_LONG ||
+		if (threads->top()->local_variables->get_typed_element(j).type == TYPE_LONG ||
 		    threads->top()->local_variables->get_typed_element(j).type == TYPE_DOUBLE ||
 		    (threads->top()->local_variables->get_typed_element(j).type == TYPE_REFERENCE && BITS)) {
 			j++;

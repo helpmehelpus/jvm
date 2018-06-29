@@ -9,7 +9,7 @@ Operand_stack::Operand_stack(int maximum_size) : max_size(maximum_size), real_ma
 void Operand_stack::push_type(Typed_element typed_element) {
 	this->real_types.push(typed_element.real_type);
 	typed_element_pushed = true;
-	// this->push(typed_element.value, typed_element.type);
+	this->push(typed_element.value, typed_element.type);
 }
 
 //acrescenta um int ao topo da pilha

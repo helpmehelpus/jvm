@@ -130,6 +130,7 @@ void Operations::aconst_null()
 void Operations::iconst_m1()
 {
     frame->operand_stack->push_type(int(-1));
+
 }
 
 void Operations::iconst_0()
@@ -1230,6 +1231,7 @@ void Operations::getstatic(){
 
     // JAVA LANG
     if (class_name == "java/lang/System" && descriptor == "Ljava/io/PrintStream;" ) {
+        cout << "Saida 1 " << endl;
         frame->current_pc_index++;
 
         return;
@@ -1241,6 +1243,8 @@ void Operations::getstatic(){
 
     // // Caso <clinit> seja empilhado.
     if (threads->top() != aux_frame) {
+        cout << "Saida 2 " << endl;
+
         return;
     }
 
@@ -1526,6 +1530,7 @@ void Operations::invokestatic()
     if(cp_element.tag != METHODREF)
         throw runtime_error("INVOKESTATIC: Pointed constant pool element is not METHODREF");
     
+    
     string class_name = Displayer::dereference_index(frame->cp_vector, cp_element.info[0].u2);
     Cp_info name_and_type_element = frame->cp_vector[cp_element.info[1].u2];
 
@@ -1535,8 +1540,10 @@ void Operations::invokestatic()
 
     string name = Displayer::dereference_index(frame->cp_vector, name_and_type_element.info[0].u2);
     string descriptor = Displayer::dereference_index(frame->cp_vector, name_and_type_element.info[1].u2);
+    
 
     if (class_name == "java/lang/Object" && name == "registerNatives") {
+        cout << "saida 1" << endl;
         frame->current_pc_index++;
         return;
     }
@@ -1583,15 +1590,22 @@ void Operations::invokestatic()
             }
             
             frame->current_pc_index--;
+            
+
             return;
         }
+        
+
         
         frame_stack->add_frame(
             static_class->reader_class->get_method(name,descriptor), 
             static_class->reader_class->get_searched_method_class(name,descriptor)->cp->cp_vector
         );
 
+        
         frame_stack->set_arguments(args);
+        
+
 
     }
 
