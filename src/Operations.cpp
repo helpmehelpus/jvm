@@ -769,18 +769,63 @@ void Operations::astore_3()
 
 void Operations::iastore()
 {
+    Element value = frame->operand_stack->pop_element();
+	Element index = frame->operand_stack->pop_element();
+	int *vector = frame->operand_stack->pop_element().pi;
+
+	// if(vector.pi == NULL)
+	// 	throw(NullPointerException);
+	// if(index < 0 || index >= (vector.pi).capacity())
+	// 	throw(ArrayIndexOutOfBoundsException);
+
+	if (vector == nullptr) throw std::runtime_error("NullPointerException");
+		Typed_element aux;
+		aux.value.i = value.i;
+		aux.type = TYPE_INT;
+		aux.real_type = RT_INT;
+		vector[index.i] = value.i;
 }
 
 void Operations::lastore()
 {
+    Element value = frame->operand_stack->pop_element();
+	Element index = frame->operand_stack->pop_element();
+	Local_variable *vetor = (Local_variable *) frame->operand_stack->pop_element().pi;
+	
+	if (vetor == nullptr) throw std::runtime_error("NullPointerException");
+		Typed_element aux;
+		aux.value.l = value.l;
+		aux.type = TYPE_LONG;
+		aux.real_type = RT_LONG;
+		vetor->insert_typed_element(aux, index.i);
 }
 
 void Operations::fastore()
 {
+    Element value = frame->operand_stack->pop_element();
+	Element index = frame->operand_stack->pop_element();
+	Local_variable *vetor = (Local_variable *) frame->operand_stack->pop_element().pi;
+	
+	if (vetor == nullptr) throw std::runtime_error("NullPointerException");
+		Typed_element aux;
+		aux.value.f = value.f;
+		aux.type = TYPE_FLOAT;
+		aux.real_type = RT_FLOAT;
+		vetor->insert_typed_element(aux, index.i);
 }
 
 void Operations::dastore()
 {
+    Element value = frame->operand_stack->pop_element();
+	Element index = frame->operand_stack->pop_element();
+	Local_variable *vetor = (Local_variable *) frame->operand_stack->pop_element().pi;
+	
+	if (vetor == nullptr) throw std::runtime_error("NullPointerException");
+		Typed_element aux;
+		aux.value.d = value.d;
+		aux.type = TYPE_DOUBLE;
+		aux.real_type = RT_DOUBLE;
+		vetor->insert_typed_element(aux,index.i);
 }
 
 void Operations::aastore()
@@ -789,6 +834,7 @@ void Operations::aastore()
 
 void Operations::bastore()
 {
+    
 }
 
 void Operations::castore()
