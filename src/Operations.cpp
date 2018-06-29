@@ -414,35 +414,75 @@ void Operations::aload_3()
 
 void Operations::iaload()
 {
-    
+    Element value1, value2;
+
+	value1 = frame->operand_stack->pop_element();
+  	value2 = frame->operand_stack->pop_element();
+  	int *ref = value2.pi;
+
+  	if (ref == nullptr)
+    	throw runtime_error("Null pointer");
+	frame->operand_stack->push_type(ref[value1.i]);
 }
 
 void Operations::laload()
 {
+    Element value1, value2;
+	Typed_element result;
+
+	value1 = frame->operand_stack->pop_element();
+  	value2 = frame->operand_stack->pop_element();
+  	Local_variable *ref = (Local_variable *) value2.pi;
+  	if (ref == nullptr)
+    	throw runtime_error("Null pointer");
+
+	frame->operand_stack->push_type(ref->get_typed_element(value1.i));
 }
 
 void Operations::faload()
 {
+    int index = frame->operand_stack->pop_element().i;
+	Local_variable *arrayref = (Local_variable *) frame->operand_stack->pop_element().pi;
+	
+    // if(arrayref == NULL){
+	// }
+    
+	frame->operand_stack->push_type(arrayref->get_typed_element(index));
 }
 
 void Operations::daload()
 {
+    int index = frame->operand_stack->pop_element().i;
+	Local_variable *arrayref = (Local_variable *) frame->operand_stack->pop_element().pi;
+	frame->operand_stack->push_type(arrayref->get_typed_element(index));
 }
 
 void Operations::aaload()
 {
+    int index = frame->operand_stack->pop_element().i;
+	Local_variable *arrayref = (Local_variable *) frame->operand_stack->pop_element().pi;
+	frame->operand_stack->push_type(arrayref->get_typed_element(index));
 }
 
 void Operations::baload()
 {
+    int index = frame->operand_stack->pop_element().i;
+	Local_variable *arrayref = (Local_variable *) frame->operand_stack->pop_element().pi;
+	frame->operand_stack->push_type(arrayref->get_typed_element(index));
 }
 
 void Operations::caload()
 {
+    int index = frame->operand_stack->pop_element().i;
+	std::vector<char> *arrayref = (std::vector<char> *) frame->operand_stack->pop_element().pi;
+	frame->operand_stack->push_type(arrayref->at(index));
 }
 
 void Operations::saload()
 {
+    int index = frame->operand_stack->pop_element().i;
+	Local_variable *arrayref = (Local_variable *) frame->operand_stack->pop_element().pi;
+	frame->operand_stack->push_type(arrayref->get_typed_element(index));
 }
 
 void Operations::istore()
