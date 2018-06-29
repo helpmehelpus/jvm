@@ -1044,6 +1044,89 @@ void Operations::invokevirtual()
 
 void Operations::invokespecial()
 {
+    Frame *aux_frame = threads->top();
+    uint16_t index_byte = get_n_bytes_value(2, frame->pc);
+
+    Cp_info cp_element = frame->cp_vector[index_byte];
+    if(cp_element.tag != METHODREF) {
+        throw runtime_error("Elemento da constant pool apontado por index, não é uma referencia para METHOD_REF!");
+    }
+
+
+    string classe = Displayer::dereference_index(frame->cp_vector, cp_element.info[0].u2);
+
+    Cp_info metodo = frame->cp_vector[cp_element.info[1].u2];
+    if(metodo.tag != NAMEANDTYPE) {
+        throw runtime_error("Elemento da constant pool apontado por index, não é uma referencia para NAME_AND_TYPE!");
+    }
+
+    string name = Displayer::dereference_index(frame->cp_vector, metodo.info[0].u2);
+    string desc = Displayer::dereference_index(frame->cp_vector, metodo.info[1].u2);
+    
+    if ((classe == "java/lang/Object" || classe == "java/lang/String") && name == "<init>") {
+        if (classe == "java/lang/String") {
+            frame->operand_stack->pop_element();
+        }
+        return;
+    }
+    
+    if (classe.find("java/") != string::npos) {
+        cerr << "ERRO: \"" << name << "\" nao definido." << endl;
+        exit(1);
+    } else {
+        uint16_t count = 0;
+        uint16_t i = 1;
+
+        while (desc[i] != ')') {
+            char baseType = desc[i];
+            if (baseType == 'D' || baseType == 'J') {
+                (++count)++;
+            } else if (baseType == 'L') {
+                count++;
+                while (desc[++i] != ';');
+            } else if (baseType == '[') {
+                count++;
+                while (desc[++i] == '[');
+                if (desc[i] == 'L') {
+                    while (desc[++i] != ';');
+                }
+            } else {
+                count++;
+            }
+            i++;
+        }
+
+        vector<Typed_element> parametros;
+        for (int i = 0; i < count; i++) {
+            Typed_element prox = frame->operand_stack->pop_typed_element();
+            parametros.insert(parametros.begin(), prox);
+        }
+        
+        Typed_element object_element = frame->operand_stack->pop_typed_element();
+
+        parametros.insert(parametros.begin(), object_element);
+
+        Instance_class* instance = (Instance_class *) object_element.value.pi;
+
+        Static_class *classRuntime = Method_area::get_class(classe);
+
+        if (threads->top() != aux_frame) {
+            frame->operand_stack->push_type(parametros[0]);
+            while (count-- > 0) {
+                frame->operand_stack->push_type(parametros[count]);
+            }
+            frame->current_pc_index--;
+            return;
+        }
+
+        frame_stack->add_frame(
+            instance->static_class->reader_class->get_method(name,desc), 
+            instance->static_class->reader_class->get_searched_method_class(name,desc)->cp->cp_vector
+        );        
+        //adiciona os parâmetros ao vetor de variáveis locais
+        frame_stack->set_arguments(parametros);
+
+    }
 }
 
 void Operations::invokestatic()

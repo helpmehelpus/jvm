@@ -31,4 +31,4 @@ sample: working
 lookup-i: all
 	bin/main i exp/lookupswitch.class
 sample-i: all
-	bin/main i exp/sample.class
+	bin/main i exp/Sample.class
