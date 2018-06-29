@@ -1150,13 +1150,13 @@ void Operations::invokevirtual()
         uint16_t i = 1; // pulando o primeiro '('
         while (descriptor[i] != ')') 
         {
-            char baseType = descriptor[i];
-            if (baseType == 'D' || baseType == 'J') {
+            char base_type = descriptor[i];
+            if (base_type == 'D' || base_type == 'J') {
                 num_args += 2;
-            } else if (baseType == 'L') {
+            } else if (base_type == 'L') {
                 num_args++;
                 while (descriptor[++i] != ';');
-            } else if (baseType == '[') {
+            } else if (base_type == '[') {
                 num_args++;
                 while (descriptor[++i] == '[');
                 if (descriptor[i] == 'L') while (descriptor[++i] != ';');
@@ -1206,7 +1206,7 @@ void Operations::invokespecial()
 
     Cp_info cp_element = frame->cp_vector[index_byte];
     if(cp_element.tag != METHODREF) {
-        throw runtime_error("Elemento da constant pool apontado por index, não é uma referencia para METHOD_REF!");
+        throw runtime_error("INVOKESPECIAL: Pointed constant pool element is not METHODREF");
     }
 
 
@@ -1214,7 +1214,7 @@ void Operations::invokespecial()
 
     Cp_info metodo = frame->cp_vector[cp_element.info[1].u2];
     if(metodo.tag != NAMEANDTYPE) {
-        throw runtime_error("Elemento da constant pool apontado por index, não é uma referencia para NAME_AND_TYPE!");
+        throw runtime_error("INVOKESPECIAL: Pointed constant pool element is not NAMEANDTYPE");
     }
 
     string name = Displayer::dereference_index(frame->cp_vector, metodo.info[0].u2);
@@ -1228,20 +1228,20 @@ void Operations::invokespecial()
     }
     
     if (classe.find("java/") != string::npos) {
-        cerr << "ERRO: \"" << name << "\" nao definido." << endl;
+        cerr << "INVOKESPECIAL: ERROR: \"" << name << "\" not defined." << endl;
         exit(1);
     } else {
         uint16_t count = 0;
         uint16_t i = 1;
 
         while (desc[i] != ')') {
-            char baseType = desc[i];
-            if (baseType == 'D' || baseType == 'J') {
+            char base_type = desc[i];
+            if (base_type == 'D' || base_type == 'J') {
                 (++count)++;
-            } else if (baseType == 'L') {
+            } else if (base_type == 'L') {
                 count++;
                 while (desc[++i] != ';');
-            } else if (baseType == '[') {
+            } else if (base_type == '[') {
                 count++;
                 while (desc[++i] == '[');
                 if (desc[i] == 'L') {
@@ -1293,13 +1293,13 @@ void Operations::invokestatic()
     Cp_info cp_element = frame->cp_vector[index_byte];
 
     if(cp_element.tag != METHODREF)
-        throw std::runtime_error("Elemento da constant pool apontado por index, não é uma referencia para METHOD_REF!");
+        throw runtime_error("INVOKESTATIC: Pointed constant pool element is not METHODREF");
     
     string class_name = Displayer::dereference_index(frame->cp_vector, cp_element.info[0].u2);
     Cp_info name_and_type_element = frame->cp_vector[cp_element.info[1].u2];
 
     if(name_and_type_element.tag != NAMEANDTYPE) {
-        throw std::runtime_error("Elemento da constant pool apontado por index, não é uma referencia para NAME_AND_TYPE!");
+        throw runtime_error("INVOKESTATIC: Pointed constant pool element is not NAMEANDTYPE");
     }
 
     
@@ -1312,19 +1312,19 @@ void Operations::invokestatic()
     }
 
     if (class_name.find("java/") != string::npos) {
-        cerr << "Tentando invocar metodo estatico invalido: " << name << endl;
+        cerr << "INVOKESTATIC: Invalid static method invocation: " << name << endl;
     }
     else {
         uint16_t nargs = 0;
         uint16_t i = 1;
         while (descriptor[i] != ')') {
-            char baseType = descriptor[i];
-            if (baseType == 'D' || baseType == 'J') {
+            char base_type = descriptor[i];
+            if (base_type == 'D' || base_type == 'J') {
                 nargs += 2;
-            } else if (baseType == 'L') {
+            } else if (base_type == 'L') {
                 nargs++;
                 while (descriptor[++i] != ';');
-            } else if (baseType == '[') {
+            } else if (base_type == '[') {
                 nargs++;
                 while (descriptor[++i] == '[');
                 if (descriptor[i] == 'L') while (descriptor[++i] != ';');
@@ -1365,6 +1365,73 @@ void Operations::invokestatic()
 
 void Operations::invokeinterface()
 {
+    Frame *aux_frame = threads->top();
+    uint16_t index_byte = get_n_bytes_value(2, frame->pc);
+    Cp_info cp_element = frame->cp_vector[index_byte];
+
+    if (cp_element.tag != INTERFACEMETHODREF){
+        throw runtime_error("INVOKEINTERFACE: Pointed constant pool element is not METHODREF");
+    }
+
+    string class_name = Displayer::dereference_index(frame->cp_vector, cp_element.info[0].u2);
+    Cp_info name_and_type_element = frame->cp_vector[cp_element.info[1].u2];
+    if(name_and_type_element.tag != NAMEANDTYPE) {
+        throw runtime_error("INVOKEINTERFACE: Pointed constant pool element is not NAMEANDTYPE");
+    }
+
+    string name = Displayer::dereference_index(frame->cp_vector, name_and_type_element.info[0].u2);
+    string descriptor = Displayer::dereference_index(frame->cp_vector, name_and_type_element.info[1].u2);
+
+    if (class_name.find("java/") != string::npos) {
+        throw runtime_error("INVOKEINTERFACE Invalid interface method invocation");
+    } else {
+        uint16_t num_args = 0; 
+        uint16_t i = 1; 
+        while (descriptor[i] != ')') {
+            char base_type = descriptor[i];
+            if (base_type == 'D' || base_type == 'J') {      
+                num_args += 2;
+            } else if (base_type == 'L') {                  
+                num_args++;
+                while (descriptor[++i] != ';');
+            } else if (base_type == '[') {                  
+                num_args++;
+                while (descriptor[++i] == '[');
+                if (descriptor[i] == 'L') while (descriptor[++i] != ';');
+            } else {
+                num_args++;
+            }
+            i++;
+        }
+        
+        vector<Typed_element> parametros;
+        for (int i = 0; i < num_args; i++) {
+            Typed_element elemento = frame->operand_stack->pop_typed_element();
+            parametros.insert(parametros.begin(), elemento);
+        }
+
+        Typed_element object_element = frame->operand_stack->pop_typed_element();
+        if (object_element.type != TYPE_REFERENCE){
+            throw runtime_error("INVOKEINTERFACE: Top of stack element is not TYPE_REFERENCE");
+        }
+        parametros.insert(parametros.begin(), object_element);
+        
+        Instance_class *instance = (Instance_class *) object_element.value.pi;
+
+        if (threads->top() != aux_frame) {
+            while (num_args-- > 0) {
+                frame->operand_stack->push_type(parametros[num_args]);
+            }
+            frame->current_pc_index--;
+            return;
+        }
+        
+        frame_stack->add_frame(
+            instance->static_class->reader_class->get_method(name,descriptor), 
+            instance->static_class->reader_class->get_searched_method_class(name,descriptor)->cp->cp_vector
+        );
+        frame_stack->set_arguments(parametros);
+    }
 }
 
 void Operations::func_new()
