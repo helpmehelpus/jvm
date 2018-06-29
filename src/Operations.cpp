@@ -555,18 +555,42 @@ void Operations::lstore()
 
 void Operations::lstore_0()
 {
+    Typed_element var = frame->operand_stack->pop_typed_element();
+	if(var.type == TYPE_LONG) {
+		frame->local_variables->insert_typed_element(var,0);
+	}
+	else
+		printf("Operando no topo != TYPE_LONG\n");
 }
 
 void Operations::lstore_1()
 {
+    if(frame->operand_stack->top_type() == TYPE_LONG) {
+		Typed_element aux = frame->operand_stack->pop_typed_element();
+		frame->local_variables->insert_typed_element(aux, 1);
+	}
+	else
+		printf("Operando no topo != TYPE_LONG\n");
 }
 
 void Operations::lstore_2()
 {
+    if(frame->operand_stack->top_type() == TYPE_LONG) {
+		Typed_element aux = frame->operand_stack->pop_typed_element();
+		frame->local_variables->insert_typed_element(aux, 2);
+	}
+	else
+		printf("Operando no topo != TYPE_LONG\n");
 }
 
 void Operations::lstore_3()
 {
+    if(frame->operand_stack->top_type() == TYPE_LONG) {
+		Typed_element aux = frame->operand_stack->pop_typed_element();
+		frame->local_variables->insert_typed_element(aux, 3);
+	}
+	else
+		printf("Operando no topo != TYPE_LONG\n");
 }
 
 void Operations::fstore()
@@ -589,18 +613,42 @@ void Operations::fstore()
 
 void Operations::fstore_0()
 {
+    if(frame->operand_stack->top_type() == TYPE_FLOAT) {
+		Typed_element aux = frame->operand_stack->pop_typed_element();
+		frame->local_variables->insert_typed_element(aux, 0);
+	}
+	else
+		printf("Operando no topo != TYPE_FLOAT\n");
 }
 
 void Operations::fstore_1()
 {
+    if(frame->operand_stack->top_type() == TYPE_FLOAT) {
+		Typed_element aux = frame->operand_stack->pop_typed_element();
+		frame->local_variables->insert_typed_element(aux, 1);
+	}
+	else
+		printf("Operando no topo != TYPE_FLOAT\n");
 }
 
 void Operations::fstore_2()
 {
+    if(frame->operand_stack->top_type() == TYPE_FLOAT) {
+		Typed_element aux = frame->operand_stack->pop_typed_element();
+		frame->local_variables->insert_typed_element(aux, 2);
+	}
+	else
+		printf("Operando no topo != TYPE_FLOAT\n");
 }
 
 void Operations::fstore_3()
 {
+    if(frame->operand_stack->top_type() == TYPE_FLOAT) {
+		Typed_element aux = frame->operand_stack->pop_typed_element();
+		frame->local_variables->insert_typed_element(aux, 3);
+	}
+	else
+		printf("Operando no topo != TYPE_FLOAT\n");
 }
 
 void Operations::dstore()
@@ -623,18 +671,42 @@ void Operations::dstore()
 
 void Operations::dstore_0()
 {
+    if(frame->operand_stack->top_type() == TYPE_DOUBLE) {
+		Typed_element aux = frame->operand_stack->pop_typed_element();
+		frame->local_variables->insert_typed_element(aux, 0);
+	}
+	else
+		printf("Operando no topo != TYPE_DOUBLE\n");
 }
 
 void Operations::dstore_1()
 {
+    if(frame->operand_stack->top_type() == TYPE_DOUBLE) {
+		Typed_element aux = frame->operand_stack->pop_typed_element();
+		frame->local_variables->insert_typed_element(aux, 1);
+	}
+	else
+		printf("Operando no topo != TYPE_DOUBLE\n");
 }
 
 void Operations::dstore_2()
 {
+    if(frame->operand_stack->top_type() == TYPE_DOUBLE) {
+		Typed_element aux = frame->operand_stack->pop_typed_element();
+		frame->local_variables->insert_typed_element(aux, 2);
+	}
+	else
+		printf("Operando no topo != TYPE_DOUBLE\n");
 }
 
 void Operations::dstore_3()
 {
+    if(frame->operand_stack->top_type() == TYPE_DOUBLE) {
+		Typed_element aux = frame->operand_stack->pop_typed_element();
+		frame->local_variables->insert_typed_element(aux, 3);
+	}
+	else
+		printf("Operando no topo != TYPE_DOUBLE\n");
 }
 
 void Operations::astore()
@@ -657,34 +729,103 @@ void Operations::astore()
 
 void Operations::astore_0()
 {
+    if(frame->operand_stack->top_type() == TYPE_REFERENCE) {
+		Typed_element aux = frame->operand_stack->pop_typed_element();
+		frame->local_variables->insert_typed_element(aux, 0);
+	}
+	else
+		printf("Operando no topo != TYPE_REFERENCE\n");
 }
 
 void Operations::astore_1()
 {
+    if(frame->operand_stack->top_type() == TYPE_REFERENCE) {
+		Typed_element aux = frame->operand_stack->pop_typed_element();
+		frame->local_variables->insert_typed_element(aux, 1);
+	}
+	else
+		printf("Operando no topo != TYPE_REFERENCE\n");
 }
 
 void Operations::astore_2()
 {
+    if(frame->operand_stack->top_type() == TYPE_REFERENCE) {
+		Typed_element aux = frame->operand_stack->pop_typed_element();
+		frame->local_variables->insert_typed_element(aux, 2);
+	}
+	else
+		printf("Operando no topo != TYPE_REFERENCE\n");
 }
 
 void Operations::astore_3()
 {
+    if(frame->operand_stack->top_type() == TYPE_REFERENCE) {
+		Typed_element aux = frame->operand_stack->pop_typed_element();
+		frame->local_variables->insert_typed_element(aux, 3);
+	}
+	else
+		printf("Operando no topo != TYPE_REFERENCE\n");
 }
 
 void Operations::iastore()
 {
+    Element value = frame->operand_stack->pop_element();
+	Element index = frame->operand_stack->pop_element();
+	int *vector = frame->operand_stack->pop_element().pi;
+
+	// if(vector.pi == NULL)
+	// 	throw(NullPointerException);
+	// if(index < 0 || index >= (vector.pi).capacity())
+	// 	throw(ArrayIndexOutOfBoundsException);
+
+	if (vector == nullptr) throw std::runtime_error("NullPointerException");
+		Typed_element aux;
+		aux.value.i = value.i;
+		aux.type = TYPE_INT;
+		aux.real_type = RT_INT;
+		vector[index.i] = value.i;
 }
 
 void Operations::lastore()
 {
+    Element value = frame->operand_stack->pop_element();
+	Element index = frame->operand_stack->pop_element();
+	Local_variable *vetor = (Local_variable *) frame->operand_stack->pop_element().pi;
+	
+	if (vetor == nullptr) throw std::runtime_error("NullPointerException");
+		Typed_element aux;
+		aux.value.l = value.l;
+		aux.type = TYPE_LONG;
+		aux.real_type = RT_LONG;
+		vetor->insert_typed_element(aux, index.i);
 }
 
 void Operations::fastore()
 {
+    Element value = frame->operand_stack->pop_element();
+	Element index = frame->operand_stack->pop_element();
+	Local_variable *vetor = (Local_variable *) frame->operand_stack->pop_element().pi;
+	
+	if (vetor == nullptr) throw std::runtime_error("NullPointerException");
+		Typed_element aux;
+		aux.value.f = value.f;
+		aux.type = TYPE_FLOAT;
+		aux.real_type = RT_FLOAT;
+		vetor->insert_typed_element(aux, index.i);
 }
 
 void Operations::dastore()
 {
+    Element value = frame->operand_stack->pop_element();
+	Element index = frame->operand_stack->pop_element();
+	Local_variable *vetor = (Local_variable *) frame->operand_stack->pop_element().pi;
+	
+	if (vetor == nullptr) throw std::runtime_error("NullPointerException");
+		Typed_element aux;
+		aux.value.d = value.d;
+		aux.type = TYPE_DOUBLE;
+		aux.real_type = RT_DOUBLE;
+		vetor->insert_typed_element(aux,index.i);
 }
 
 void Operations::aastore()
@@ -693,6 +834,7 @@ void Operations::aastore()
 
 void Operations::bastore()
 {
+    
 }
 
 void Operations::castore()
