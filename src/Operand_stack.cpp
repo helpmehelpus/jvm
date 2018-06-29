@@ -89,6 +89,10 @@ void Operand_stack::push_type(int *x) {
 	typed_element_pushed = false;
 }
 
+uint8_t Operand_stack::top_type() {
+	return ((!this->types.empty()) ? (this->types.top()) : (-1));
+}
+
 
 
 void Operand_stack::push(Element x, uint8_t tipo) {
