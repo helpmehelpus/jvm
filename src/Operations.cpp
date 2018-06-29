@@ -5,7 +5,7 @@ using namespace std;
 Frame* Operations::frame = new Frame();
 stack<Frame*>* Operations::threads = nullptr;
 Frame_stack* Operations::frame_stack = nullptr;
-// bool Operations::is_wide = false;
+bool Operations::is_wide = false;
 
 const func Operations::functions[] = { &Operations::nop, &Operations::aconst_null, &Operations::iconst_m1,
     &Operations::iconst_0, &Operations::iconst_1, &Operations::iconst_2, &Operations::iconst_3, &Operations::iconst_4,
@@ -50,8 +50,7 @@ const func Operations::functions[] = { &Operations::nop, &Operations::aconst_nul
 // 	frame = ref;
 // }
 
-U4 Operations::get_n_bytes_value(uint8_t n, vector<U2> pc)
-{
+U4 Operations::get_n_bytes_value(uint8_t n, vector<U2> pc){
   U4 value = pc[frame->current_pc_index];
   frame->current_pc_index++;
   for(int i = 1; i < n; i++){
@@ -61,8 +60,7 @@ U4 Operations::get_n_bytes_value(uint8_t n, vector<U2> pc)
   return value;
 }
 
-Static_class* Operations::get_static_class_with_field(Static_class* base, string field_name) 
-{
+Static_class* Operations::get_static_class_with_field(Static_class* base, string field_name) {
     Typed_element ret = base->get_field(field_name);
     if(ret.type != TYPE_NOT_SET) {
         return base;
@@ -97,18 +95,26 @@ void Operations::run(int opcode) {
 
 void Operations::lload_n(short index)
 {
+    Typed_element aux = frame->local_variables->get_typed_element(index);
+	frame->operand_stack->push_type(long(aux.value.l));
 }
 
 void Operations::fload_n(short index)
 {
+    Typed_element aux = frame->local_variables->get_typed_element(index);
+	frame->operand_stack->push_type(aux.value.f);
 }
 
 void Operations::dload_n(short index)
 {
+    Typed_element aux = frame->local_variables->get_typed_element(index);
+	frame->operand_stack->push_type(aux.value.d);
 }
 
 void Operations::aload_n(short index)
 {
+    Typed_element aux = frame->local_variables->get_typed_element(index);
+	frame->operand_stack->push_type(aux.value.pi);
 }
 
 void Operations::nop()
@@ -117,10 +123,12 @@ void Operations::nop()
 
 void Operations::aconst_null()
 {
+    frame->operand_stack->push_type((int*)(nullptr));
 }
 
 void Operations::iconst_m1()
 {
+    frame->operand_stack->push_type(int(-1));
 }
 
 void Operations::iconst_0()
@@ -130,50 +138,62 @@ void Operations::iconst_0()
 
 void Operations::iconst_1()
 {
+    frame->operand_stack->push_type(int(1));
 }
 
 void Operations::iconst_2()
 {
+    frame->operand_stack->push_type(int(2));
 }
 
 void Operations::iconst_3()
 {
+    frame->operand_stack->push_type(int(3));
 }
 
 void Operations::iconst_4()
 {
+    frame->operand_stack->push_type(int(4));
 }
 
 void Operations::iconst_5()
 {
+    frame->operand_stack->push_type(int(5));
 }
 
 void Operations::lconst_0()
 {
+    frame->operand_stack->push_type(long(0));
 }
 
 void Operations::lconst_1()
 {
+    frame->operand_stack->push_type(long(1));
 }
 
 void Operations::fconst_0()
 {
+    frame->operand_stack->push_type(float(0.0));
 }
 
 void Operations::fconst_1()
 {
+    frame->operand_stack->push_type(float(1.0));
 }
 
 void Operations::fconst_2()
 {
+    frame->operand_stack->push_type(float(2.0));
 }
 
 void Operations::dconst_0()
 {
+    frame->operand_stack->push_type(double(0.0));
 }
 
 void Operations::dconst_1()
 {
+    frame->operand_stack->push_type(double(1.0));
 }
 
 void Operations::bipush()
@@ -234,66 +254,82 @@ void Operations::iload_3()
 
 void Operations::lload_0()
 {
+    lload_n(0);
 }
 
 void Operations::lload_1()
 {
+    lload_n(1);
 }
 
 void Operations::lload_2()
 {
+    lload_n(2);
 }
 
 void Operations::lload_3()
 {
+    lload_n(3);
 }
 
 void Operations::fload_0()
 {
+    fload_n(0);
 }
 
 void Operations::fload_1()
 {
+    fload_n(1);
 }
 
 void Operations::fload_2()
 {
+    fload_n(2);
 }
 
 void Operations::fload_3()
 {
+    fload_n(3);
 }
 
 void Operations::dload_0()
 {
+    dload_n(0);
 }
 
 void Operations::dload_1()
 {
+    dload_n(1);
 }
 
 void Operations::dload_2()
 {
+    dload_n(2);
 }
 
 void Operations::dload_3()
 {
+    dload_n(3);
 }
 
 void Operations::aload_0()
 {
+    aload_n(0);
 }
 
 void Operations::aload_1()
 {
+    aload_n(1);
 }
 
 void Operations::aload_2()
 {
+    aload_n(2);
 }
 
 void Operations::aload_3()
 {
+    aload_n(3);
 }
 
 void Operations::iaload()
@@ -912,7 +948,7 @@ void Operations::invokevirtual()
                         printf("%f", element.value.f);
                         break;
                     case RT_LONG:
-                        printf("%lld", element.value.ls);
+                        printf("%ld", element.value.ls);
                         break;
                     case RT_REFERENCE:
                         cout << Displayer::display_UTF8((unsigned char *)element.value.pi, 0);

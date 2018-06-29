@@ -16,7 +16,7 @@ typedef void (*func)(void);
 class Operations {
 public:
 	// Operations(Frame*);
-	// static bool is_wide;
+	static bool is_wide;
 	static Frame* frame;
 	static stack<Frame*>* threads;
 	static Frame_stack* frame_stack;
