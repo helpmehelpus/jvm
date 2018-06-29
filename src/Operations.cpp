@@ -1072,6 +1072,7 @@ void Operations::func_return()
 
 void Operations::getstatic(){
     uint16_t index_byte = get_n_bytes_value(2, frame->pc);
+    frame->current_pc_index--;
     Frame* aux_frame = frame;
     Cp_info cp_element = frame->cp_vector[index_byte];
     if(cp_element.tag != FIELDREF) {
@@ -1088,6 +1089,7 @@ void Operations::getstatic(){
     // JAVA LANG
     if (class_name == "java/lang/System" && descriptor == "Ljava/io/PrintStream;" ) {
         frame->current_pc_index++;
+
         return;
     }
 
@@ -1109,6 +1111,7 @@ void Operations::getstatic(){
     }
 
     frame->operand_stack->push_type(element);
+    
 
     frame->current_pc_index++;
 }

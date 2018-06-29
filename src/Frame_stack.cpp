@@ -30,8 +30,8 @@ void Frame_stack::execute() {
 	while (next_instruction()) {
 		cout << "Opcode: " << opcode << "\tMnemonico: " << Attribute_info::get_mnemonic(opcode) << flush << endl;
 		Operations::run(opcode);
-		//threads.top()->operandos->printALL();
-		//getchar();
+		// threads->top()->operand_stack->debug_operand_stack();
+		// getchar();
 	}
 }
 
@@ -51,17 +51,13 @@ bool Frame_stack::next_instruction() {
 		
 	//checa se nao esgotamos as Operations do metodo corrente
 	if (threads->top()->current_pc_index < threads->top()->method_info.attributes[0].info.code.code.size()) {
-		//pega o proximo opcode a ser executado
 		opcode = threads->top()->get_current_pc();
-		//anda com pc em uma instrucao
-		//caso existam argumentos, a funcao chamada os utilizara
-		//e anda com pc as posicoes correspondentes
 		threads->top()->current_pc_index++;
 		return true;
 	}
 
 	//retira do topo caso nao tenham mais instrucoes no metodo corrente
-	threads->pop();
+	this->pop();
 
 	//checa se apos o pop ainda restam elementos
 	if (threads->empty()) {
@@ -71,28 +67,20 @@ bool Frame_stack::next_instruction() {
 	return true;
 }
 
-// 	//retira do topo caso nao tenham mais instrucoes no metodo corrente
-// 	this->pop();
 
-// 	//checa se apos o pop ainda restam elementos
-// 	if (threads.empty())
-// 		return false;
 
-// 	return true;
-// }
-
-// void Frame_stack::pop() {
-// 	if (!threads.empty()) {
-// 		delete threads.top()->operand_stack;
-// 		delete threads.top()->local_variables;
-// 		threads.pop();
-// 	}
-// 	if (threads.empty()) {
-// 		exit(0);
-// 	}
-// 	Operations::set_frame(threads.top());
-// 	Operations::set_threads(threads);
-// }
+void Frame_stack::pop() {
+	if (!threads->empty()) {
+		delete threads->top()->operand_stack;
+		delete threads->top()->local_variables;
+		threads->pop();
+	}
+	if (threads->empty()) {
+		exit(0);
+	}
+	Operations::set_frame(threads->top());
+	Operations::set_threads(threads);
+}
 
 void Frame_stack::add_frame(Method_info method_info, vector<Cp_info> cp_vector) {
 	Frame* frame = new Frame();

@@ -182,3 +182,42 @@ Element Operand_stack::top_value() {
 
 	return element;
 }
+
+void Operand_stack::debug_operand_stack(){
+	Operand_stack operand_stack(this->max_size);
+	while(!this->elements.empty()){
+		cout << this->get_string() << endl;
+		operand_stack.push_type(this->pop_typed_element());
+	}
+	while(!operand_stack.elements.empty()){
+		this->push_type(operand_stack.pop_typed_element());
+	}
+
+}
+
+string Operand_stack::get_string(){
+	std::stringstream ret;
+
+	switch (this->top_type()) {
+		case TYPE_INT:
+			ret << "(int) " << int(this->top_value().i);
+			break;
+		case TYPE_LONG:
+			ret << "(long) " << long(this->top_value().l);
+			break;
+		case TYPE_FLOAT:
+			ret << "(float) " << this->top_value().f;
+			break;
+		case TYPE_DOUBLE:
+			ret << "(double) " << this->top_value().d;
+			break;
+		case TYPE_BOOL:
+			ret << "(bool) " << (int) this->top_value().b;
+			break;
+		case TYPE_REFERENCE:
+			ret << "(reference) " << this->top_value().pi;
+			break;
+	}
+
+	return ret.str();
+}

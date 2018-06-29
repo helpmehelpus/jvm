@@ -39,7 +39,6 @@ public:
 	Element top_value();
 	Element pop_element();
 	Typed_element pop_typed_element();
-    string get_string();
 	void push_type(int);
     void push_type(long);
     void push_type(float);
@@ -50,6 +49,9 @@ public:
 	void push_type(Element, uint8_t);
 	void push(Element x, uint8_t tipo);
 	int size();
+
+    string get_string();
+	void debug_operand_stack();
 	
 	bool empty();
 	void printALL();
