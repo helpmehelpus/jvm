@@ -17,6 +17,9 @@ typedef uint32_t U4;
 #define RT_REFERENCE 8
 #define RT_LONG 9
 
+#define Float_NaN 0x7f800001
+#define Double_NaN 0x7ff0000000000001L
+
 
 #endif
 

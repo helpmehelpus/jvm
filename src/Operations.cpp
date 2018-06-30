@@ -1377,82 +1377,288 @@ void Operations::ddiv()
 
 void Operations::irem()
 {
+    Element value1, value2;
+	Typed_element result;
+
+    value2 = frame->operand_stack->pop_element();
+    if (value2.i == 0) {
+        throw std::runtime_error("Arithmetic Exeption: divisao por z    ");
+    }
+
+
+    value1 = frame->operand_stack->pop_element();
+
+    result.type = TYPE_INT;
+    result.real_type = RT_INT;
+    result.value.i = value1.i - int(value1.i/value2.i) * value2.i;
+    frame->operand_stack->push_type(result);
 }
 
 void Operations::lrem()
 {
+    Element value1, value2;
+	Typed_element result;
+
+    
+    value2 = frame->operand_stack->pop_element();
+    if (value2.l == 0) {
+        throw std::runtime_error("Arithmetic Exeption: divisao por zero.");
+    }
+
+    value1 = frame->operand_stack->pop_element();
+
+    result.type = TYPE_LONG;
+    result.real_type = RT_LONG;
+    result.value.l = value1.l - int(value1.l/value2.l) * value2.l;
+    frame->operand_stack->push_type(result);
 }
 
 void Operations::frem()
 {
+    Element value1, value2;
+	Typed_element result;
+
+    value2 = frame->operand_stack->pop_element();
+    value1 = frame->operand_stack->pop_element();
+
+    if (check_float(value1.f) == 3 || check_float(value2.f) == 3) {
+        result.value.i = Float_NaN;
+    } else if (check_float(value1.f) == 1 || check_float(value1.f) == 2 || value2.f == 0.0) {
+        result.value.i = Float_NaN;
+    } else if (check_float(value1.f) == 0 && (check_float(value2.f) == 1 || check_float(value2.f) == 2)) {
+        result.value.f = value1.f;
+    } else if (value1.f == 0.0 && check_float(value2.f) == 0) {
+        result.value.f = 0.0;
+    } else {
+        result.value.f = fmod(value1.f, value2.f);
+    }
+
+    result.type = TYPE_FLOAT;
+    result.real_type = RT_FLOAT;
+    frame->operand_stack->push_type(result);
 }
 
 void Operations::drem()
 {
+    Element value1, value2;
+	Typed_element result;
+
+    value2 = frame->operand_stack->pop_element();
+    value1 = frame->operand_stack->pop_element();
+
+    if (check_double(value1.d) == 3 || check_double(value2.d) == 3) {
+        result.value.l = Double_NaN;
+    } else if (check_double(value1.d) == 1 || check_double(value1.d) == 2 || value2.d == double(0.0)) {
+        result.value.l = Double_NaN;
+    } else if (check_double(value1.d) == 0 && (check_double(value2.d) == 1 || check_double(value2.d) == 2)) {
+        result.value.d = value1.d;
+    } else if (value1.d == 0.0 && check_double(value2.d) == 0) {
+        result.value.d = 0.0;
+    } else {
+        result.value.d = fmod(value1.d, value2.d);
+    }
+
+    result.type = TYPE_DOUBLE;
+    result.real_type = RT_DOUBLE;
+    frame->operand_stack->push_type(result);
 }
 
 void Operations::ineg()
 {
+    Element value;
+	Typed_element result;
+
+    value = frame->operand_stack->pop_element();
+
+    result.type = TYPE_INT;
+    result.real_type = RT_INT;
+    result.value.is = 0 - value.is;
+    frame->operand_stack->push_type(result);
 }
 
 void Operations::lneg()
 {
+    Element value;
+	Typed_element result;
+
+    value = frame->operand_stack->pop_element();
+
+    result.type = TYPE_LONG;
+    result.real_type = RT_LONG;
+    result.value.ls = 0 - value.ls;
+    frame->operand_stack->push_type(result);
 }
 
 void Operations::fneg()
 {
+    Element value;
+    Typed_element result;
+
+    value = frame->operand_stack->pop_element();
+
+    result.type = TYPE_FLOAT;
+    result.real_type = RT_FLOAT;
+    //inverte o bit 31
+    result.value.i = value.i + 0x80000000;
+    frame->operand_stack->push_type(result);
 }
 
 void Operations::dneg()
 {
+    Element value;
+    Typed_element result;
+
+    value = frame->operand_stack->pop_element();
+
+    result.type = TYPE_DOUBLE;
+    result.real_type = RT_DOUBLE;
+    //inverte o bit 63
+    result.value.l = value.l + 0x8000000000000000;
+    frame->operand_stack->push_type(result);
 }
 
 void Operations::ishl()
 {
+    Element value1, value2;
+    Typed_element result;
+
+    value2 = frame->operand_stack->pop_element();
+    value1 = frame->operand_stack->pop_element();   
+
+    result.type = TYPE_INT;
+    result.real_type = RT_INT;
+    result.value.i = value1.i << (value2.i & 0b011111);
+    frame->operand_stack->push_type(result);
 }
 
 void Operations::lshl()
 {
+    Element value1, value2;
+    Typed_element result;
+
+    value2 = frame->operand_stack->pop_element();
+    value1 = frame->operand_stack->pop_element();   
+
+    result.type = TYPE_LONG;
+    result.real_type = RT_LONG;
+    result.value.l = value1.l << (value2.i & 0b0111111);
+    frame->operand_stack->push_type(result);
 }
 
 void Operations::ishr()
 {
+    Element value1, value2;
+    Typed_element result;
+
+    value2 = frame->operand_stack->pop_element();
+    value1 = frame->operand_stack->pop_element();   
+
+    result.type = TYPE_INT;
+    result.real_type = RT_INT;
+    result.value.is = value1.is >> (value2.i & 0b011111);
+    frame->operand_stack->push_type(result);
 }
 
 void Operations::lshr()
 {
+    Element value1, value2;
+    Typed_element result;
+
+    value2 = frame->operand_stack->pop_element();
+    value1 = frame->operand_stack->pop_element();
+
+    result.type = TYPE_LONG;
+    result.real_type = RT_LONG;
+    result.value.ls = value1.ls >> (value2.i & 0b0111111);
+    frame->operand_stack->push_type(result);
 }
 
 void Operations::iushr()
 {
+    Element value1, value2;
+    Typed_element result;
+
+    value2 = frame->operand_stack->pop_element();
+    value1 = frame->operand_stack->pop_element();
+
+    result.type = TYPE_INT;
+    result.real_type = RT_INT;
+    result.value.i = value1.i >> (value2.i & 0b011111);
+    frame->operand_stack->push_type(result);
 }
 
 void Operations::lushr()
 {
+    Element value1, value2;
+    Typed_element result;
+
+    value2 = frame->operand_stack->pop_element();
+    value1 = frame->operand_stack->pop_element();
+
+    result.type = TYPE_LONG;
+    result.real_type = RT_LONG;
+    result.value.l = value1.l >> (value2.i & 0b0111111);
+    frame->operand_stack->push_type(result);
 }
 
 void Operations::iand()
 {
+    Element value1, value2;
+    Typed_element result;
+
+    value2 = frame->operand_stack->pop_element();
+    value1 = frame->operand_stack->pop_element();   
+
+    result.type = TYPE_INT;
+    result.real_type = RT_INT;
+    result.value.i = value1.i & value2.i;
+    frame->operand_stack->push_type(result);
 }
 
 void Operations::land()
 {
+    Element value1, value2;
+    Typed_element result;
+
+    value2 = frame->operand_stack->pop_element();
+    value1 = frame->operand_stack->pop_element();   
+
+    result.type = TYPE_LONG;
+    result.real_type = RT_LONG;
+    result.value.l = value1.l & value2.l;
+    frame->operand_stack->push_type(result); 
 }
 
 void Operations::ior()
 {
+    Element aux1 = frame->operand_stack->pop_element();
+	Element aux2 = frame->operand_stack->pop_element();
+	aux1.i |= aux2.i;
+	frame->operand_stack->push(aux1, TYPE_INT);
 }
 
 void Operations::lor()
 {
+    Element aux1 = frame->operand_stack->pop_element();
+	Element aux2 = frame->operand_stack->pop_element();
+	aux1.l |= aux2.l;
+	frame->operand_stack->push(aux1, TYPE_LONG);
 }
 
 void Operations::ixor()
 {
+    Element aux1 = frame->operand_stack->pop_element();
+	Element aux2 = frame->operand_stack->pop_element();
+	aux1.i ^= aux2.i;
+	frame->operand_stack->push(aux1, TYPE_INT);
 }
 
 void Operations::lxor()
 {
+    Element aux1 = frame->operand_stack->pop_element();
+	Element aux2 = frame->operand_stack->pop_element();
+	aux1.l ^= aux2.l;
+	frame->operand_stack->push(aux1, TYPE_LONG);
 }
 
 void Operations::iinc()
@@ -2163,3 +2369,35 @@ void Operations::jsr_w()
     
 
 // }
+
+int Operations::check_float (float f) {
+	int ret = 0;
+	Element aux;
+	aux.f = f;
+
+	if ((aux.i >= 0x7f800001 && aux.i <= 0x7fffffff) || (aux.i >= 0xff800001 && aux.i <= 0xffffffff)) {
+		ret = 3;
+	} else if (aux.i == 0x7f800000) {
+		ret = 1;
+	} else if (aux.i == 0xff800000) {
+		ret = 2;
+	}
+
+	return ret;
+}
+
+int Operations::check_double (double d) {
+	int ret = 0;
+	Element aux;
+	aux.d = d;
+
+	if ((aux.l >= 0x7ff0000000000001L && aux.l <= 0x7ffffffffffffL) || (aux.l >= 0xfff0000000000001L && aux.l <= 0xffffffffffffffffL)) {
+		ret = 3;
+	} else if (aux.l == 0x7ff0000000000000L) {
+		ret = 1;
+	} else if (aux.l == 0xfff0000000000000L) {
+		ret = 2;
+	}
+
+	return ret;
+}
