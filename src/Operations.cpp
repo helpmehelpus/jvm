@@ -1663,86 +1663,227 @@ void Operations::lxor()
 
 void Operations::iinc()
 {
+    uint16_t var;
+	int16_t n;
+	
+	if(is_wide){
+		 var = get_n_bytes_value(2, frame->pc);
+		 n = int16_t(get_n_bytes_value(2, frame->pc));
+	}
+	else {
+		 var = get_n_bytes_value(1, frame->pc);
+		 n = int8_t(get_n_bytes_value(1, frame->pc));
+	}
+
+	Typed_element aux = frame->local_variables->get_typed_element(var);
+	if(aux.type == TYPE_INT)
+		aux.value.i += (int32_t)n;
+	frame->local_variables->insert_typed_element( aux, var);
 }
 
 void Operations::i2l()
 {
+    frame->operand_stack->push(frame->operand_stack->pop_element(), TYPE_LONG);
 }
 
 void Operations::i2f()
 {
+    Element aux = frame->operand_stack->pop_element();
+	aux.f = (float)aux.is;
+	frame->operand_stack->push_type(aux.f);
 }
 
 void Operations::i2d()
 {
+    Element aux = frame->operand_stack->pop_element();
+	aux.d = (double)aux.is;
+	frame->operand_stack->push_type(aux.d);
 }
 
 void Operations::l2i()
 {
+    Element aux = frame->operand_stack->pop_element();
+	aux.i = (uint32_t)aux.l;
+	frame->operand_stack->push(aux, TYPE_INT);
 }
 
 void Operations::l2f()
 {
+    Element aux = frame->operand_stack->pop_element();
+	aux.f = (float)aux.l;
+	frame->operand_stack->push(aux, TYPE_FLOAT);
 }
 
 void Operations::l2d()
 {
+    Element aux = frame->operand_stack->pop_element();
+	aux.d = (double)aux.l;
+	frame->operand_stack->push_type(aux.d);
 }
 
 void Operations::f2i()
 {
+    Element aux = frame->operand_stack->pop_element();
+	aux.is = (int32_t)aux.f;
+	frame->operand_stack->push_type(aux.is);
 }
 
 void Operations::f2l()
 {
+    Element aux = frame->operand_stack->pop_element();
+	aux.l = (int64_t)aux.f;
+	frame->operand_stack->push(aux, TYPE_LONG);
 }
 
 void Operations::f2d()
 {
+    Element aux = frame->operand_stack->pop_element();
+	aux.d = (double)aux.f;
+	frame->operand_stack->push_type(aux.d);
 }
 
 void Operations::d2i()
 {
+    Element aux = frame->operand_stack->pop_element();
+	aux.is = (int32_t)aux.d;
+	frame->operand_stack->push_type(aux.is);
 }
 
 void Operations::d2l()
 {
+    Element aux = frame->operand_stack->pop_element();
+	aux.l = (int64_t)aux.d;
+	frame->operand_stack->push(aux, TYPE_LONG);
 }
 
 void Operations::d2f()
 {
+    Element aux = frame->operand_stack->pop_element();
+	aux.f = (float)aux.d;
+	frame->operand_stack->push_type(aux.f);
 }
 
 void Operations::i2b()
 {
+    int8_t value = frame->operand_stack->pop_element().bs;
+	
+	frame->operand_stack->push_type(int(value));
 }
 
 void Operations::i2c()
 {
+    Typed_element value;
+	value.type = TYPE_INT;
+	value.real_type = RT_CHAR;
+	value.value.b = frame->operand_stack->pop_element().b;
+	frame->operand_stack->push_type(value);
 }
 
 void Operations::i2s()
 {
+    Typed_element value;
+	value.type = TYPE_INT;
+	value.real_type = RT_SHORT;
+	value.value.ss = frame->operand_stack->pop_element().ss;
+
+	frame->operand_stack->push_type(value);
 }
 
 void Operations::lcmp()
 {
+    int64_t value2 = frame->operand_stack->pop_element().ls;
+	int64_t value1 = frame->operand_stack->pop_element().ls;
+	
+	if (value1 > value2)
+		frame->operand_stack->push_type(int(1));
+	if (value1 == value2)
+		frame->operand_stack->push_type(int(0));
+	if (value1 < value2)
+		frame->operand_stack->push_type(int(-1));
 }
 
 void Operations::fcmpl()
 {
+    float value2 = frame->operand_stack->pop_element().f;
+	float value1 = frame->operand_stack->pop_element().f;
+	int res1, res2;
+	
+	res1 = check_float(value1);
+	res2 = check_float(value2);
+	
+	if (res1 == 3 || res2 == 3){
+		frame->operand_stack->push_type(int(-1));
+	} else {
+		if (value1 > value2)
+			frame->operand_stack->push_type(int(1));
+		if (value1 == value2)
+			frame->operand_stack->push_type(int(0));
+		if (value1 < value2)
+			frame->operand_stack->push_type(int(-1));
+	}
 }
 
 void Operations::fcmpg()
 {
+    float value2 = frame->operand_stack->pop_element().f;
+	float value1 = frame->operand_stack->pop_element().f;
+	int res1, res2;
+	
+	res1 = check_float(value1);
+	res2 = check_float(value2);
+	
+	if (res1 == 3 || res2 == 3){
+		frame->operand_stack->push_type(int(1));
+	} else {
+		if (value1 > value2)
+			frame->operand_stack->push_type(int(1));
+		if (value1 == value2)
+			frame->operand_stack->push_type(int(0));
+		if (value1 < value2)
+			frame->operand_stack->push_type(int(-1));
+	}
 }
 
 void Operations::dcmpl()
 {
+    double value2 = frame->operand_stack->pop_element().d;
+	double value1 = frame->operand_stack->pop_element().d;
+	int res1, res2;
+	
+	res1 = check_double(value1);
+	res2 = check_double(value2);
+	
+	if (res1 == 3 || res2 == 3){
+		frame->operand_stack->push_type(int(1));
+	} else {
+		if (value1 > value2)
+			frame->operand_stack->push_type(int(1));
+		if (value1 == value2)
+			frame->operand_stack->push_type(int(0));
+		if (value1 < value2)
+			frame->operand_stack->push_type(int(-1));
+	}
 }
 
 void Operations::dcmpg()
 {
+    double value2 = frame->operand_stack->pop_element().d;
+	double value1 = frame->operand_stack->pop_element().d;
+	int res1, res2;
+	
+	res1 = check_double(value1);
+	res2 = check_double(value2);
+	//se value1 ou value2 for NaN entao adiciona 1 na pilha de operandos
+	if (res1 == 3 || res2 == 3){
+		frame->operand_stack->push_type(int(1));
+	} else {
+		if (value1 > value2)
+			frame->operand_stack->push_type(int(1));
+		if (value1 == value2)
+			frame->operand_stack->push_type(int(0));
+		if (value1 < value2)
+			frame->operand_stack->push_type(int(-1));
+	}
 }
 
 void Operations::ifeq()
