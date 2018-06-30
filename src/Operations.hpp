@@ -250,6 +250,9 @@ public:
 	static void ifnonnull();
 	static void goto_w();
 	static void jsr_w();
+	// static void impdep1();
+	// static void impdep2();
+
 
 	
 };

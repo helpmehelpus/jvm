@@ -45,7 +45,7 @@ const func Operations::functions[] = { &Operations::nop, &Operations::aconst_nul
     &Operations::invokestatic, &Operations::invokeinterface, &Operations::nop, &Operations::func_new, &Operations::newarray,
     &Operations::anewarray, &Operations::arraylength, &Operations::athrow, &Operations::nop, &Operations::nop, &Operations::nop,
     &Operations::nop, &Operations::wide, &Operations::multianewarray, &Operations::ifnull, &Operations::ifnonnull,
-    &Operations::goto_w, &Operations::jsr_w };
+    &Operations::goto_w, &Operations::jsr_w};// testar no final, &Operations::nop, &Operations::impdep1, &Operations::impdep2 
 
 // Operations::Operations(Frame* ref) {
 // 	frame = ref;
@@ -828,34 +828,73 @@ void Operations::dastore()
 		aux.real_type = RT_DOUBLE;
 		vetor->insert_typed_element(aux,index.i);
 }
-
+//ve se ta errado
 void Operations::aastore()
 {
-}
+    Element value = frame->operand_stack->pop_element();
+    Element index = frame->operand_stack->pop_element();
+    Local_variable *vetor = (Local_variable *) frame->operand_stack->pop_element().pi;
 
+    if (vetor == nullptr) throw std::runtime_error("NullPointerException");
+        Typed_element aux;
+		aux.value.pi = value.pi;
+		aux.type = TYPE_REFERENCE;
+		aux.real_type = RT_REFERENCE;
+		vetor->insert_typed_element(aux, index.i);
+
+}
+//ve se ta errado
 void Operations::bastore()
 {
+    Element value = frame->operand_stack->pop_element();
+	Element index = frame->operand_stack->pop_element();
+	Local_variable *vetor = (Local_variable *) frame->operand_stack->pop_element().pi;
+
+	if (vetor == nullptr) throw std::runtime_error("NullPointerException");
+		Typed_element aux;
+		aux.value.i = value.i;
+		aux.type = TYPE_INT;
+		aux.real_type = RT_BOOL;
+		vetor->insert_typed_element(aux, index.i);
     
 }
 
-void Operations::castore()
-{
+void Operations::castore(){
+    
+    
 }
-
+//ve se ta certo
 void Operations::sastore()
 {
-}
+    Element value = frame->operand_stack->pop_element();
+	Element index = frame->operand_stack->pop_element();
+	Local_variable *vetor = (Local_variable *) frame->operand_stack->pop_element().pi;
 
+	if (vetor == nullptr) throw std::runtime_error("NullPointerException");
+		Typed_element aux;
+		aux.value.i = value.i;
+		aux.type = TYPE_INT;
+		aux.real_type = RT_SHORT;
+		vetor->insert_typed_element( aux,index.i);
+	
+}
+//ve se ta certo
 void Operations::pop()
 {
+    frame->operand_stack->pop_typed_element();
 }
-
+//ve se ta certo
 void Operations::pop2()
 {
+    Typed_element aux = frame->operand_stack->pop_typed_element();
+	if (aux.type == TYPE_LONG || aux.type == TYPE_DOUBLE) {
+		frame->operand_stack->pop_typed_element();
+	}
 }
 
 void Operations::dup()
 {
+
 }
 
 void Operations::dup_x1()
@@ -1725,3 +1764,12 @@ void Operations::goto_w()
 void Operations::jsr_w()
 {
 }
+
+// void Operations::impdep1(){
+
+// }
+    
+// void Operations::impdep2(){
+    
+
+// }
