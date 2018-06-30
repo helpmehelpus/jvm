@@ -863,27 +863,27 @@ void Operations::castore(){
     
     
 }
-//ve se ta certo
+
 void Operations::sastore()
 {
     Element value = frame->operand_stack->pop_element();
 	Element index = frame->operand_stack->pop_element();
-	Local_variable *vetor = (Local_variable *) frame->operand_stack->pop_element().pi;
+	Local_variable *vector = (Local_variable *) frame->operand_stack->pop_element().pi;
 
-	if (vetor == nullptr) throw std::runtime_error("NullPointerException");
+	if (vector == nullptr) throw std::runtime_error("NullPointerException");
 		Typed_element aux;
 		aux.value.i = value.i;
 		aux.type = TYPE_INT;
 		aux.real_type = RT_SHORT;
-		vetor->insert_typed_element( aux,index.i);
+		vector->insert_typed_element( aux,index.i);
 	
 }
-//ve se ta certo
+
 void Operations::pop()
 {
     frame->operand_stack->pop_typed_element();
 }
-//ve se ta certo
+
 void Operations::pop2()
 {
     Typed_element aux = frame->operand_stack->pop_typed_element();
@@ -894,95 +894,485 @@ void Operations::pop2()
 
 void Operations::dup()
 {
-
+    Typed_element value = frame->operand_stack->pop_typed_element();
+	frame->operand_stack->push_type(value);
+	frame->operand_stack->push_type(value);
 }
 
 void Operations::dup_x1()
 {
+    if (frame->operand_stack->top_type() != TYPE_LONG && frame->operand_stack->top_type() != TYPE_DOUBLE) {
+		Typed_element aux = frame->operand_stack->pop_typed_element();
+		if (frame->operand_stack->top_type() != TYPE_LONG && frame->operand_stack->top_type() != TYPE_DOUBLE) {
+			frame->operand_stack->pop_typed_element();
+		} else {
+			frame->operand_stack->push_type(aux);
+		}
+	}
 }
 
 void Operations::dup_x2()
 {
+    Typed_element aux = frame->operand_stack->pop_typed_element();
+	if (frame->operand_stack->top_type() != TYPE_LONG && frame->operand_stack->top_type() != TYPE_DOUBLE) {
+		Typed_element aux2 = frame->operand_stack->pop_typed_element(), aux3 = frame->operand_stack->pop_typed_element();
+		frame->operand_stack->push_type(aux);
+		frame->operand_stack->push_type(aux3);
+		frame->operand_stack->push_type(aux2);
+		frame->operand_stack->push_type(aux);
+	} else {
+		Typed_element aux2 = frame->operand_stack->pop_typed_element();
+		frame->operand_stack->push_type(aux);
+		frame->operand_stack->push_type(aux2);
+		frame->operand_stack->push_type(aux);
+	}
 }
 
 void Operations::dup2()
 {
+    Typed_element aux = frame->operand_stack->pop_typed_element();
+
+	if (frame->operand_stack->top_type() != TYPE_LONG && frame->operand_stack->top_type() != TYPE_DOUBLE) {
+		Typed_element aux2 = frame->operand_stack->pop_typed_element();
+		frame->operand_stack->push_type(aux2);
+		frame->operand_stack->push_type(aux);
+		frame->operand_stack->push_type(aux2);
+		frame->operand_stack->push_type(aux);
+	} else {
+		frame->operand_stack->push_type(aux);
+		frame->operand_stack->push_type(aux);
+	}
 }
 
 void Operations::dup2_x1()
 {
+    Typed_element aux = frame->operand_stack->pop_typed_element();
+
+	if (frame->operand_stack->top_type() != TYPE_LONG && frame->operand_stack->top_type() != TYPE_DOUBLE) {
+		Typed_element aux2 = frame->operand_stack->pop_typed_element(), aux3 = frame->operand_stack->pop_typed_element();
+		frame->operand_stack->push_type(aux2);
+		frame->operand_stack->push_type(aux);
+		frame->operand_stack->push_type(aux3);
+		frame->operand_stack->push_type(aux2);
+		frame->operand_stack->push_type(aux);
+	} else {
+		Typed_element aux2 = frame->operand_stack->pop_typed_element();
+		frame->operand_stack->push_type(aux);
+		frame->operand_stack->push_type(aux2);
+		frame->operand_stack->push_type(aux);
+	}
 }
 
 void Operations::dup2_x2()
 {
+    Typed_element aux = frame->operand_stack->pop_typed_element();
+
+	if (frame->operand_stack->top_type() != TYPE_LONG && frame->operand_stack->top_type() != TYPE_DOUBLE) {
+		Typed_element aux2 = frame->operand_stack->pop_typed_element(), aux3 = frame->operand_stack->pop_typed_element();
+		if (aux3.type == TYPE_LONG || aux3.type == TYPE_DOUBLE) {
+			frame->operand_stack->push_type(aux2);
+			frame->operand_stack->push_type(aux);
+			frame->operand_stack->push_type(aux3);
+			frame->operand_stack->push_type(aux2);
+			frame->operand_stack->push_type(aux);
+		} else {
+			Typed_element aux4 = frame->operand_stack->pop_typed_element();
+			frame->operand_stack->push_type(aux2);
+			frame->operand_stack->push_type(aux);
+			frame->operand_stack->push_type(aux4);
+			frame->operand_stack->push_type(aux3);
+			frame->operand_stack->push_type(aux2);
+			frame->operand_stack->push_type(aux);
+		}
+	} else {
+		Typed_element aux2 = frame->operand_stack->pop_typed_element();
+		if (aux2.type == TYPE_LONG || aux2.type == TYPE_DOUBLE) {
+			frame->operand_stack->push_type(aux);
+			frame->operand_stack->push_type(aux2);
+			frame->operand_stack->push_type(aux);
+		} else {
+			Typed_element aux3 = frame->operand_stack->pop_typed_element();
+			frame->operand_stack->push_type(aux);
+			frame->operand_stack->push_type(aux3);
+			frame->operand_stack->push_type(aux2);
+			frame->operand_stack->push_type(aux);
+		}
+	}
 }
 
 void Operations::swap()
 {
+    Typed_element aux = frame->operand_stack->pop_typed_element(), aux2 = frame->operand_stack->pop_typed_element();
+	frame->operand_stack->push_type(aux);
+	frame->operand_stack->push_type(aux2);
 }
 
 void Operations::iadd()
 {
+    Element value1, value2;
+	Typed_element result;
+
+    if (frame->operand_stack->top_type() == TYPE_INT) {
+    	value2 = frame->operand_stack->pop_element();
+    } else {
+    	throw std::runtime_error("Elemento lido nao era um inteiro!");
+    }
+
+    if (frame->operand_stack->top_type() == TYPE_INT) {
+		value1 = frame->operand_stack->pop_element();	
+    } else {
+    	throw std::runtime_error("Elemento lido nao era um inteiro!");
+    }
+
+	result.type = TYPE_INT;
+	result.real_type = RT_INT;
+	result.value.i = value1.i + value2.i;
+	frame->operand_stack->push_type(result);
 }
 
 void Operations::ladd()
 {
+    Element value1, value2;
+	Typed_element result;
+
+    if (frame->operand_stack->top_type() == TYPE_LONG) {
+    	value2 = frame->operand_stack->pop_element();
+    } else {
+    	throw std::runtime_error("Elemento lido nao era um long!");
+    }
+
+    if (frame->operand_stack->top_type() == TYPE_LONG) {
+		value1 = frame->operand_stack->pop_element();	
+    } else {
+    	throw std::runtime_error("Elemento lido nao era um long!");
+    }
+
+	result.type = TYPE_LONG;
+	result.real_type = RT_LONG;
+	result.value.l = value1.l + value2.l;
+	frame->operand_stack->push_type(result);
 }
 
 void Operations::fadd()
 {
+    Element value1, value2;
+	Typed_element result;
+
+    if (frame->operand_stack->top_type() == TYPE_FLOAT) {
+    	value2 = frame->operand_stack->pop_element();
+    } else {
+    	throw std::runtime_error("Elemento lido nao era um float!");
+    }
+
+    if (frame->operand_stack->top_type() == TYPE_FLOAT) {
+		value1 = frame->operand_stack->pop_element();	
+    } else {
+    	throw std::runtime_error("Elemento lido nao era um float!");
+    }
+
+	result.type = TYPE_FLOAT;
+	result.real_type = RT_FLOAT;
+	result.value.f = value1.f + value2.f;
+	frame->operand_stack->push_type(result);
 }
 
 void Operations::dadd()
 {
+    Element value1, value2;
+	Typed_element result;
+
+    if (frame->operand_stack->top_type() == TYPE_DOUBLE) {
+    	value2 = frame->operand_stack->pop_element();
+    } else {
+    	throw std::runtime_error("Elemento lido nao era um double!");
+    }
+
+    if (frame->operand_stack->top_type() == TYPE_DOUBLE) {
+		value1 = frame->operand_stack->pop_element();	
+    } else {
+    	throw std::runtime_error("Elemento lido nao era um double!");
+    }
+
+	result.type = TYPE_DOUBLE;
+	result.real_type = RT_DOUBLE;
+	result.value.d = value1.d + value2.d;
+	frame->operand_stack->push_type(result);
 }
 
 void Operations::isub()
 {
+    Element value1, value2;
+	Typed_element result;
+
+    if (frame->operand_stack->top_type() == TYPE_INT) {
+    	value2 = frame->operand_stack->pop_element();
+    } else {
+    	throw std::runtime_error("Elemento lido nao era um inteiro!");
+    }
+
+    if (frame->operand_stack->top_type() == TYPE_INT) {
+		value1 = frame->operand_stack->pop_element();	
+    } else {
+    	throw std::runtime_error("Elemento lido nao era um inteiro!");
+    }
+
+	result.type = TYPE_INT;
+	result.real_type = RT_INT;
+	result.value.i = value1.i - value2.i;
+	frame->operand_stack->push_type(result);
 }
 
 void Operations::lsub()
 {
+    Element value1, value2;
+	Typed_element result;
+
+    if (frame->operand_stack->top_type() == TYPE_LONG) {
+    	value2 = frame->operand_stack->pop_element();
+    } else {
+    	throw std::runtime_error("Elemento lido nao era um long!");
+    }
+
+    if (frame->operand_stack->top_type() == TYPE_LONG) {
+		value1 = frame->operand_stack->pop_element();	
+    } else {
+    	throw std::runtime_error("Elemento lido nao era um long!");
+    }
+
+	result.type = TYPE_LONG;
+	result.real_type = RT_LONG;
+	result.value.l = value1.l - value2.l;
+	frame->operand_stack->push_type(result);
 }
 
 void Operations::fsub()
 {
+    Element value1, value2;
+	Typed_element result;
+
+    if (frame->operand_stack->top_type() == TYPE_FLOAT) {
+    	value2 = frame->operand_stack->pop_element();
+    } else {
+    	throw std::runtime_error("Elemento lido nao era um float!");
+    }
+
+    if (frame->operand_stack->top_type() == TYPE_FLOAT) {
+		value1 = frame->operand_stack->pop_element();	
+    } else {
+    	throw std::runtime_error("Elemento lido nao era um float!");
+    }
+
+	result.type = TYPE_FLOAT;
+	result.real_type = RT_FLOAT;
+	result.value.f = value1.f - value2.f;
+	frame->operand_stack->push_type(result);
 }
 
 void Operations::dsub()
 {
+    Element value1, value2;
+	Typed_element result;
+
+    if (frame->operand_stack->top_type() == TYPE_DOUBLE) {
+    	value2 = frame->operand_stack->pop_element();
+    } else {
+    	throw std::runtime_error("Elemento lido nao era um double!");
+    }
+
+    if (frame->operand_stack->top_type() == TYPE_DOUBLE) {
+		value1 = frame->operand_stack->pop_element();	
+    } else {
+    	throw std::runtime_error("Elemento lido nao era um double!");
+    }
+
+	result.type = TYPE_DOUBLE;
+	result.real_type = RT_DOUBLE;
+	result.value.d = value1.d - value2.d;
+	frame->operand_stack->push_type(result);
 }
 
 void Operations::imul()
 {
+    Element value1, value2;
+	Typed_element result;
+
+    if (frame->operand_stack->top_type() == TYPE_INT) {
+    	value2 = frame->operand_stack->pop_element();
+    } else {
+    	throw std::runtime_error("Elemento lido nao era um inteiro!");
+    }
+
+    if (frame->operand_stack->top_type() == TYPE_INT) {
+		value1 = frame->operand_stack->pop_element();	
+    } else {
+    	throw std::runtime_error("Elemento lido nao era um inteiro!");
+    }
+
+	result.type = TYPE_INT;
+	result.real_type = RT_INT;
+	result.value.i = value1.i * value2.i;
+	frame->operand_stack->push_type(result);
 }
 
 void Operations::lmul()
 {
+    Element value1, value2;
+	Typed_element result;
+
+    if (frame->operand_stack->top_type() == TYPE_LONG) {
+    	value2 = frame->operand_stack->pop_element();
+    } else {
+    	throw std::runtime_error("Elemento lido nao era um long!");
+    }
+
+    if (frame->operand_stack->top_type() == TYPE_LONG) {
+		value1 = frame->operand_stack->pop_element();	
+    } else {
+    	throw std::runtime_error("Elemento lido nao era um long!");
+    }
+
+	result.type = TYPE_LONG;
+	result.real_type = RT_LONG;
+	result.value.l = value1.l * value2.l;
+	frame->operand_stack->push_type(result);
 }
 
 void Operations::fmul()
 {
+    Element value1, value2;
+	Typed_element result;
+
+    if (frame->operand_stack->top_type() == TYPE_FLOAT) {
+    	value2 = frame->operand_stack->pop_element();
+    } else {
+    	throw std::runtime_error("Elemento lido nao era um float!");
+    }
+
+    if (frame->operand_stack->top_type() == TYPE_FLOAT) {
+		value1 = frame->operand_stack->pop_element();	
+    } else {
+    	throw std::runtime_error("Elemento lido nao era um float!");
+    }
+
+	result.type = TYPE_FLOAT;
+	result.real_type = RT_FLOAT;
+	result.value.f = value1.f * value2.f;
+	frame->operand_stack->push_type(result);
 }
 
 void Operations::dmul()
 {
+    Element value1, value2;
+	Typed_element result;
+
+    if (frame->operand_stack->top_type() == TYPE_DOUBLE) {
+    	value2 = frame->operand_stack->pop_element();
+    } else {
+    	throw std::runtime_error("Elemento lido nao era um double!");
+    }
+
+    if (frame->operand_stack->top_type() == TYPE_DOUBLE) {
+		value1 = frame->operand_stack->pop_element();	
+    } else {
+    	throw std::runtime_error("Elemento lido nao era um double!");
+    }
+
+	result.type = TYPE_DOUBLE;
+	result.real_type = RT_DOUBLE;
+	result.value.d = value1.d * value2.d;
+	frame->operand_stack->push_type(result);
 }
 
 void Operations::idiv()
 {
+    Element value1, value2;
+	Typed_element result;
+
+    if (frame->operand_stack->top_type() == TYPE_INT) {
+    	value2 = frame->operand_stack->pop_element();
+    } else {
+    	throw std::runtime_error("Elemento lido nao era um inteiro!");
+    }
+
+    if (frame->operand_stack->top_type() == TYPE_INT) {
+		value1 = frame->operand_stack->pop_element();	
+    } else {
+    	throw std::runtime_error("Elemento lido nao era um inteiro!");
+    }
+
+	result.type = TYPE_INT;
+	result.real_type = RT_INT;
+	result.value.i = value1.i / value2.i;
+	frame->operand_stack->push_type(result);
 }
 
 void Operations::ldiv()
 {
+    Element value1, value2;
+	Typed_element result;
+
+    if (frame->operand_stack->top_type() == TYPE_LONG) {
+    	value2 = frame->operand_stack->pop_element();
+    } else {
+    	throw std::runtime_error("Elemento lido nao era um long!");
+    }
+
+    if (frame->operand_stack->top_type() == TYPE_LONG) {
+		value1 = frame->operand_stack->pop_element();	
+    } else {
+    	throw std::runtime_error("Elemento lido nao era um long!");
+    }
+
+	result.type = TYPE_LONG;
+	result.real_type = RT_LONG;
+	result.value.l = value1.l / value2.l;
+	frame->operand_stack->push_type(result);
 }
 
 void Operations::fdiv()
 {
+    Element value1, value2;
+	Typed_element result;
+
+    if (frame->operand_stack->top_type() == TYPE_FLOAT) {
+    	value2 = frame->operand_stack->pop_element();
+    } else {
+    	throw std::runtime_error("Elemento lido nao era um float!");
+    }
+
+    if (frame->operand_stack->top_type() == TYPE_FLOAT) {
+		value1 = frame->operand_stack->pop_element();	
+    } else {
+    	throw std::runtime_error("Elemento lido nao era um float!");
+    }
+
+	result.type = TYPE_FLOAT;
+	result.real_type = RT_FLOAT;
+	result.value.f = value1.f / value2.f;
+	frame->operand_stack->push_type(result);
 }
 
 void Operations::ddiv()
 {
+    Element value1, value2;
+	Typed_element result;
+
+    if (frame->operand_stack->top_type() == TYPE_DOUBLE) {
+    	value2 = frame->operand_stack->pop_element();
+    } else {
+    	throw std::runtime_error("Elemento lido nao era um double!");
+    }
+
+    if (frame->operand_stack->top_type() == TYPE_DOUBLE) {
+		value1 = frame->operand_stack->pop_element();	
+    } else {
+    	throw std::runtime_error("Elemento lido nao era um double!");
+    }
+
+	result.type = TYPE_DOUBLE;
+	result.real_type = RT_DOUBLE;
+	result.value.d = value1.d / value2.d;
+	frame->operand_stack->push_type(result);
 }
 
 void Operations::irem()
