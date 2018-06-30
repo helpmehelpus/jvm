@@ -1886,105 +1886,202 @@ void Operations::dcmpg()
 	}
 }
 
-void Operations::ifeq()
-{
+void Operations::ifeq(){
+    int value = frame->operand_stack->pop_element().i;
+	int16_t branchbyte = int16_t(get_n_bytes_value(2, frame->pc));
+
+	if (value == 0)
+		frame->current_pc_index += branchbyte - 1;
+
 }
 
-void Operations::ifne()
-{
+void Operations::ifne(){
+    int value = frame->operand_stack->pop_element().i;
+	int16_t branchbyte = int16_t(get_n_bytes_value(2, frame->pc));
+
+	if (value != 0)
+		frame->current_pc_index += branchbyte - 1;
 }
 
-void Operations::iflt()
-{
+void Operations::iflt(){
+    int value = frame->operand_stack->pop_element().i;
+	int16_t branchbyte = int16_t(get_n_bytes_value(2, frame->pc));
+
+	if (value < 0)
+		frame->current_pc_index += branchbyte - 1;
+	
 }
 
-void Operations::ifge()
-{
+void Operations::ifge(){
+    int value = frame->operand_stack->pop_element().i;
+	int16_t branchbyte = int16_t(get_n_bytes_value(2, frame->pc));
+
+	if (value >= 0)
+		frame->current_pc_index += branchbyte - 1;
+
 }
 
-void Operations::ifgt()
-{
+void Operations::ifgt(){
+    int value = frame->operand_stack->pop_element().i;
+	int16_t branchbyte = int16_t(get_n_bytes_value(2, frame->pc));
+
+	if (value > 0)
+		frame->current_pc_index += branchbyte - 1;
+
 }
 
-void Operations::ifle()
-{
+void Operations::ifle(){
+    int value = frame->operand_stack->pop_element().i;
+	int16_t branchbyte = int16_t(get_n_bytes_value(2, frame->pc));
+
+	if (value <= 0)
+		frame->current_pc_index += branchbyte - 1;
 }
 
-void Operations::if_icmpeq()
-{
+void Operations::if_icmpeq(){
+    int value1, value2;
+	int16_t branchbyte = int16_t(get_n_bytes_value(2, frame->pc));
+	
+	value2 = frame->operand_stack->pop_element().i;
+	value1 = frame->operand_stack->pop_element().i;
+
+	if (value1 == value2) {
+		frame->current_pc_index += branchbyte - 1;
+	}
 }
 
-void Operations::if_icmpne()
-{
+void Operations::if_icmpne(){
+    int value1, value2;
+	int16_t branchbyte = int16_t(get_n_bytes_value(2, frame->pc));
+	
+	value2 = frame->operand_stack->pop_element().i;
+	value1 = frame->operand_stack->pop_element().i;
+
+	if (value1 != value2) {
+		frame->current_pc_index += branchbyte - 1;
+	}
+
 }
 
-void Operations::if_icmplt()
-{
+void Operations::if_icmplt(){
+    int value1, value2;
+	int16_t branchbyte = int16_t(get_n_bytes_value(2, frame->pc));
+	
+	value2 = frame->operand_stack->pop_element().i;
+	value1 = frame->operand_stack->pop_element().i;
+
+	if (value1 < value2) {
+		frame->current_pc_index += branchbyte - 1;
+	}
+
 }
 
-void Operations::if_icmpge()
-{
+void Operations::if_icmpge(){
+    int value1, value2;
+	int16_t branchbyte = int16_t(get_n_bytes_value(2, frame->pc));
+	
+	value2 = frame->operand_stack->pop_element().is;
+	value1 = frame->operand_stack->pop_element().is;
+
+	if (value1 >= value2) {
+		frame->current_pc_index += branchbyte - 1;
+	}
+
 }
 
-void Operations::if_icmpgt()
-{
+void Operations::if_icmpgt(){
+    int value1, value2;
+	int16_t branchbyte = int16_t(get_n_bytes_value(2, frame->pc));
+	
+	value2 = frame->operand_stack->pop_element().i;
+	value1 = frame->operand_stack->pop_element().i;
+
+	if (value1 > value2) {
+		frame->current_pc_index += branchbyte - 1;
+	}
+
 }
 
-void Operations::if_icmple()
-{
+void Operations::if_icmple(){
+    int value1, value2;
+	int16_t branchbyte = int16_t(get_n_bytes_value(2, frame->pc));
+	
+	value2 = frame->operand_stack->pop_element().i;
+	value1 = frame->operand_stack->pop_element().i;
+
+	if (value1 <= value2) {
+		frame->current_pc_index += branchbyte - 1;
+	}
+
 }
 
-void Operations::if_acmpeq()
-{
+void Operations::if_acmpeq(){
+    int *value1, *value2;
+	int16_t branchbyte = int16_t(get_n_bytes_value(2, frame->pc));
+	
+	value2 = frame->operand_stack->pop_element().pi;
+	value1 = frame->operand_stack->pop_element().pi;
+
+	if (value1 == value2) {
+		frame->current_pc_index += branchbyte - 1;
+	}
+
 }
 
-void Operations::if_acmpne()
-{
+void Operations::if_acmpne(){
+    int *value1, *value2;
+	int16_t branchbyte = int16_t(get_n_bytes_value(2, frame->pc));
+	
+	value2 = frame->operand_stack->pop_element().pi;
+	value1 = frame->operand_stack->pop_element().pi;
+
+	if (value1 != value2) {
+		frame->current_pc_index += branchbyte - 1;
+	}
+
 }
 
-void Operations::funcgoto()
-{
+void Operations::funcgoto(){
+    int16_t offset;
+
+	offset = int16_t(get_n_bytes_value(2, frame->pc));
+
+	frame->current_pc_index += offset - 1;
+
 }
 
-void Operations::jsr()
-{
+void Operations::jsr(){
 }
 
-void Operations::funcret()
-{
+void Operations::funcret(){
 }
 
-void Operations::tableswitch()
-{
+void Operations::tableswitch(){
 }
 
-void Operations::lookupswitch()
-{
+void Operations::lookupswitch(){
 }
 
-void Operations::ireturn()
-{
+void Operations::ireturn(){
 }
 
-void Operations::lreturn()
-{
+void Operations::lreturn(){
 }
 
-void Operations::freturn()
-{
+void Operations::freturn(){
 }
 
 
-void Operations::dreturn()
-{
+void Operations::dreturn(){
+
 }
 
-void Operations::areturn()
-{
+void Operations::areturn(){
+
 }
 
-void Operations::func_return()
-{
+void Operations::func_return(){
+    
 }
 
 
