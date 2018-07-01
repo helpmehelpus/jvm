@@ -221,3 +221,7 @@ string Operand_stack::get_string(){
 
 	return ret.str();
 }
+//retorna 1 se a pilha esta vazia e 0 caso nao esteja
+bool Operand_stack::empty() {
+	return this->elements.empty();
+}

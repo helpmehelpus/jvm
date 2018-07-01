@@ -45,7 +45,7 @@ const func Operations::functions[] = { &Operations::nop, &Operations::aconst_nul
     &Operations::invokestatic, &Operations::invokeinterface, &Operations::nop, &Operations::func_new, &Operations::newarray,
     &Operations::anewarray, &Operations::arraylength, &Operations::athrow, &Operations::nop, &Operations::nop, &Operations::nop,
     &Operations::nop, &Operations::wide, &Operations::multianewarray, &Operations::ifnull, &Operations::ifnonnull,
-    &Operations::goto_w, &Operations::jsr_w};// testar no final, &Operations::nop, &Operations::impdep1, &Operations::impdep2 
+    &Operations::goto_w, &Operations::jsr_w };// &Operations::breakpoint, &Operations::impdep1, &Operations::impdep2
 
 // Operations::Operations(Frame* ref) {
 // 	frame = ref;
@@ -2051,36 +2051,110 @@ void Operations::funcgoto(){
 }
 
 void Operations::jsr(){
+    // int16_t offset;
+
+	// offset = int16_t(get_n_bytes_value(2, frame->pc));
+
+	// frame->operand_stack->push_type((int *) frame->current_pc_index);
+
+	// frame->current_pc_index += offset - 1;
+
 }
 
 void Operations::funcret(){
+    // if (is_wide){
+	// 	frame->current_pc_index = (int) frame->local_variables->get_typed_element(get_n_bytes_value(2, frame->pc)).value.pi;
+	// 	is_wide = false;
+	// }
+	// else
+	// 	frame->current_pc_index = (int) frame->local_variables->get_typed_element(get_n_bytes_value(1, frame->pc)).value.pi;
 }
 
 void Operations::tableswitch(){
+   
 }
 
 void Operations::lookupswitch(){
 }
-
+//verificar pop das threads
 void Operations::ireturn(){
+    int value = frame->operand_stack->pop_element().i;
+	
+	while (!frame->operand_stack->empty()) {
+		frame->operand_stack->pop_element();
+	}
+
+	threads->pop();
+	frame = threads->top();
+	frame->operand_stack->push_type(value);
 }
+//verificar pop das threads
 
 void Operations::lreturn(){
+    long value = frame->operand_stack->pop_element().l;
+	
+	while (!frame->operand_stack->empty()) {
+		frame->operand_stack->pop_element();
+	}
+
+	threads->pop();
+	frame = threads->top();
+	frame->operand_stack->push_type(value);
 }
+//verificar pop das threads
 
 void Operations::freturn(){
+    float value = frame->operand_stack->pop_element().f;
+	
+	while (!frame->operand_stack->empty()) {
+		frame->operand_stack->pop_element();
+	}
+
+	threads->pop();
+	frame = threads->top();
+	frame->operand_stack->push_type(value);
 }
 
-
+//verificar pop das threads
 void Operations::dreturn(){
+    double value = frame->operand_stack->pop_element().d;
+	
+	while (!frame->operand_stack->empty()) {
+		frame->operand_stack->pop_element();
+	}
+
+	threads->pop();
+	frame = threads->top();
+	frame->operand_stack->push_type(value);
 
 }
-
+//verificar pop das threads
 void Operations::areturn(){
+    Element value;
 
+    if (frame->operand_stack->top_type() == TYPE_REFERENCE) {
+        value = frame->operand_stack->pop_element();
+    
+        while (!frame->operand_stack->empty()) {
+            frame->operand_stack->pop_element();
+        }
+
+    } else {
+        throw std::runtime_error("Elemento lido nao era uma referencia!");
+    }
+
+    threads->pop();
+    frame = threads->top();
+
+    frame->operand_stack->push_type(value.pi);
 }
-
+//verificar pop das threads
 void Operations::func_return(){
+    while (!frame->operand_stack->empty()) {
+        frame->operand_stack->pop_element();
+    }
+
+    frame_stack->pop();
     
 }
 
@@ -2598,12 +2672,16 @@ void Operations::goto_w()
 void Operations::jsr_w()
 {
 }
+// void Operations::breakpoint(){
+
+// }
 
 // void Operations::impdep1(){
 
 // }
     
 // void Operations::impdep2(){
+    
     
 
 // }

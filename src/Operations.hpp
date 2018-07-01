@@ -250,6 +250,7 @@ public:
 	static void ifnonnull();
 	static void goto_w();
 	static void jsr_w();
+	// static void breakpoint();
 	// static void impdep1();
 	// static void impdep2();
 	static int check_float(float f);
