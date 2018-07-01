@@ -2209,16 +2209,82 @@ void Operations::getstatic(){
     frame->current_pc_index++;
 }
 
-void Operations::putstatic()
-{
+void Operations::putstatic(){
+     Frame *aux_frame = frame;
+
+    uint16_t indexByte = get_n_bytes_value(2, frame->pc);
+    Cp_info cp_element = frame->cp_vector[indexByte];
+    if(cp_element.tag != FIELDREF) {
+        throw std::runtime_error("Elemento da constant pool apontado por index, não é uma referencia para FIELD_REF!");
+    }
+
+    string class_name = Displayer::dereference_index(frame->cp_vector, cp_element.info[0].u2);
+
+    Cp_info name_and_type_element = frame->cp_vector[cp_element.info[1].u2];
+    if(name_and_type_element.tag != NAMEANDTYPE) {
+        throw std::runtime_error("Elemento da constant pool apontado por index, não é uma referencia para NAME_AND_TYPE!");
+    }
+
+    string name = Displayer::dereference_index(frame->cp_vector, name_and_type_element.info[0].u2);
+    string descriptor = Displayer::dereference_index(frame->cp_vector, name_and_type_element.info[1].u2);
+
+    // JAVA LANG
+    if (class_name == "java/lang/System" && descriptor == "Ljava/io/PrintStream;" ) {
+        return;
+    }
+
+    Static_class* static_class = get_static_class_with_field( Method_area::get_class(class_name), name);
+
+    if(static_class == NULL) throw std::runtime_error("Field nao existe na classe definida!");
+
+    // Caso <clinit> seja empilhado.
+    if (threads->top() != aux_frame) {
+        return;
+    }
+
+    Typed_element stack_element = frame->operand_stack->pop_typed_element();
+
+    if(descriptor[0] == 'B') 
+    {
+        stack_element.type = TYPE_BOOL;
+    }
+
+    static_class->set_field(name,stack_element);
+
 }
 
-void Operations::getfield()
-{
+void Operations::getfield(){
+    uint16_t indexbyte = get_n_bytes_value(2, frame->pc);
+
+    Instance_class *ci = (Instance_class *) frame->operand_stack->pop_element().pi;
+    
+    if (ci == nullptr) {
+        throw std::runtime_error("Null Pointer Exception");
+    }
+
+    int index = frame->cp_vector[indexbyte].info[1].u2;
+    index = frame->cp_vector[index].info[0].u2;
+    Typed_element ret = ci->getField(Displayer::dereference_index(frame->cp_vector, index));
+    frame->operand_stack->push_type(ret);
 }
 
-void Operations::putfield()
-{
+void Operations::putfield(){
+    Typed_element value = frame->operand_stack->pop_typed_element();
+    Instance_class *ci = (Instance_class *) frame->operand_stack->pop_element().pi;
+    uint16_t indexbyte = get_n_bytes_value(2, frame->pc);
+
+    if (ci == nullptr) {
+        throw std::runtime_error("Null Pointer Exception");
+    }
+
+    int index = frame->cp_vector[indexbyte].info[1].u2;
+    index = frame->cp_vector[index].info[0].u2;
+
+    if (Displayer::dereference_index(frame->cp_vector, frame->method_info.name_index) == "<init>") {
+        ci->set_finals(Displayer::dereference_index(frame->cp_vector, index), value);
+    } else {
+        ci->set_field(Displayer::dereference_index(frame->cp_vector, index), value);
+    }
 }
 
 void Operations::invokevirtual()
@@ -2628,7 +2694,7 @@ void Operations::invokeinterface()
         frame_stack->set_arguments(parametros);
     }
 }
-//olhar add class
+//TODO fazer add class para string
 void Operations::func_new(){
     // uint16_t indexbyte = get_n_bytes_value(2, frame->pc);
     // string classe = Displayer::dereference_index(frame->cp_vector, indexbyte);
@@ -2679,83 +2745,83 @@ void Operations::wide(){
 }
 
 void Operations::multianewarray(){
-    // uint16_t indexbyte = get_n_bytes_value(2, frame->pc);
-	// uint8_t dimensions = get_n_bytes_value(1, frame->pc);
+    uint16_t indexbyte = get_n_bytes_value(2, frame->pc);
+	uint8_t dimensions = get_n_bytes_value(1, frame->pc);
 
-    // Cp_info cp_element = frame->cp_vector[indexbyte];
-    // if(cp_element.tag != CLASS) {
-    //     throw std::runtime_error("Elemento da constant pool apontado por index, não é uma referencia para CLASS!");
-    // }
+    Cp_info cp_element = frame->cp_vector[indexbyte];
+    if(cp_element.tag != CLASS) {
+        throw std::runtime_error("Elemento da constant pool apontado por index, não é uma referencia para CLASS!");
+    }
 
-    // string class_name = Displayer::dereference_index(frame->cp_vector, cp_element.info[0].u2);
+    string class_name = Displayer::dereference_index(frame->cp_vector, cp_element.info[0].u2);
 
-    // Typed_element element;
+    Typed_element element;
 
-    // int count = 0;
+    int count = 0;
     
-	//    while (class_name[count] == '[')
-	//    {
-	//    		count++;
-	//    }
+	   while (class_name[count] == '[')
+	   {
+	   		count++;
+	   }
 
 
-	//    string multiArrayType = class_name.substr(count+1, class_name.size()-count-2); // em caso de ser uma referência (e.g. [[[Ljava/lang/String;)
+	   string multiArrayType = class_name.substr(count+1, class_name.size()-count-2); // em caso de ser uma referência (e.g. [[[Ljava/lang/String;)
 
-	//    switch (class_name[count]) {
-	//        case 'L':
-	//            if (multiArrayType != "java/lang/String") {
-	//                Method_area::getClass(multiArrayType); // verifica se existe classe com esse nome
-	//            }
-	//            element.real_type = RT_REFERENCE;
-	//            element.type = TYPE_REFERENCE;
-	//            break;
-	//        case 'B':
-	//            element.real_type = RT_BYTE;
-	//            element.type = TYPE_INT;
-	//            break;
-	//        case 'C':
-	//            element.real_type = RT_CHAR;
-	//            element.type = TYPE_INT;
-	//            break;
-	//        case 'D':
-	//            element.real_type = RT_DOUBLE;
-	//            element.type = TYPE_DOUBLE;
-	//            break;
-	//        case 'F':
-	//            element.real_type = RT_FLOAT;
-	//            element.type = TYPE_FLOAT;
-	//            break;
-	//        case 'I':
-	//            element.real_type = RT_INT;
-	//            element.type = TYPE_INT;
-	//            break;
-	//        case 'J':
-	//            element.real_type = RT_LONG;
-	//            element.type = TYPE_LONG;
-	//            break;
-	//        case 'S':
-	//            element.real_type = RT_SHORT;
-	//            element.type = TYPE_INT;
-	//            break;
-	//        case 'Z':
-	//            element.real_type = RT_BOOL;
-	//            element.type = TYPE_INT;
-	//            break;
-	//        default:
-	//            exit(1);
-	//    }
+	   switch (class_name[count]) {
+	       case 'L':
+	           if (multiArrayType != "java/lang/String") {
+	               Method_area::get_class(multiArrayType); // verifica se existe classe com esse nome
+	           }
+	           element.real_type = RT_REFERENCE;
+	           element.type = TYPE_REFERENCE;
+	           break;
+	       case 'B':
+	           element.real_type = RT_BYTE;
+	           element.type = TYPE_INT;
+	           break;
+	       case 'C':
+	           element.real_type = RT_CHAR;
+	           element.type = TYPE_INT;
+	           break;
+	       case 'D':
+	           element.real_type = RT_DOUBLE;
+	           element.type = TYPE_DOUBLE;
+	           break;
+	       case 'F':
+	           element.real_type = RT_FLOAT;
+	           element.type = TYPE_FLOAT;
+	           break;
+	       case 'I':
+	           element.real_type = RT_INT;
+	           element.type = TYPE_INT;
+	           break;
+	       case 'J':
+	           element.real_type = RT_LONG;
+	           element.type = TYPE_LONG;
+	           break;
+	       case 'S':
+	           element.real_type = RT_SHORT;
+	           element.type = TYPE_INT;
+	           break;
+	       case 'Z':
+	           element.real_type = RT_BOOL;
+	           element.type = TYPE_INT;
+	           break;
+	       default:
+	           exit(1);
+	   }
     
-    // stack<int> count_dim;
-    // for (int i = 0; i < dimensions; i++) {
-    //     // PRECISO VERIFICAR O TIPO (INT)?
-    //     count_dim.push(frame->operand_stack->pop_typed_element().value.i);
-    // }
+    stack<int> count_dim;
+    for (int i = 0; i < dimensions; i++) {
+        // PRECISO VERIFICAR O TIPO (INT)?
+        count_dim.push(frame->operand_stack->pop_typed_element().value.i);
+    }
 
-	// int* p = (int*)(getNewMultiArray(count_dim));
+	int* p = (int*)(get_new_multi_array(count_dim));
 
-	// element.value.pi = p;
+	element.value.pi = p;
     
-	// f->operandos->push(element);
+	frame->operand_stack->push_type(element);
 }
 
 void Operations::ifnull(){

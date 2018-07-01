@@ -16,6 +16,8 @@ Static_class *Method_area::get_class(string s) {
     return nullptr;
 }
 
+
+
 bool Method_area::add_class(Reader *reader) {
     frame_stack = new Frame_stack(reader);
     Static_class *add = new Static_class(reader);
