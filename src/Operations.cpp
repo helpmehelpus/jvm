@@ -2628,50 +2628,166 @@ void Operations::invokeinterface()
         frame_stack->set_arguments(parametros);
     }
 }
+//olhar add class
+void Operations::func_new(){
+    // uint16_t indexbyte = get_n_bytes_value(2, frame->pc);
+    // string classe = Displayer::dereference_index(frame->cp_vector, indexbyte);
+    // Static_class *aux =  Method_area::get_class(classe);
 
-void Operations::func_new()
-{
+    // if (aux == nullptr) {
+    //     Method_area::add_class(classe);
+    //     aux = Method_area::get_class(classe);
+    // }
+
+    // frame->operand_stack->push_type((int*)aux->get_instance());
 }
 
-void Operations::newarray()
-{
+void Operations::newarray(){
+    
 }
 
-void Operations::anewarray()
-{
+void Operations::anewarray(){
+    
 }
 
 void Operations::arraylength()
 {
+    // Local_variable *arrayref;
+
+    // arrayref = (Local_variable *) frame->operand_stack->pop_element().pi;
+    // if (arrayref == nullptr)
+    //     throw runtime_error("Null pointer");
+
+    // frame->operand_stack->push_type(arrayref->get_max());
 }
 
-void Operations::athrow()
-{
+void Operations::athrow(){
+
+    int type = frame->operand_stack->top_type();
+    Element value = frame->operand_stack->pop_element();
+
+    while (!frame->operand_stack->empty()) {
+        frame->operand_stack->pop_element();
+    }
+    //verificar isso
+    frame->operand_stack->push(value, type); 
 }
 
-void Operations::wide()
-{
+void Operations::wide(){
+    is_wide = true;
+	Operations::run(get_n_bytes_value(1, frame->pc));
 }
 
-void Operations::multianewarray()
-{
+void Operations::multianewarray(){
+    // uint16_t indexbyte = get_n_bytes_value(2, frame->pc);
+	// uint8_t dimensions = get_n_bytes_value(1, frame->pc);
+
+    // Cp_info cp_element = frame->cp_vector[indexbyte];
+    // if(cp_element.tag != CLASS) {
+    //     throw std::runtime_error("Elemento da constant pool apontado por index, não é uma referencia para CLASS!");
+    // }
+
+    // string class_name = Displayer::dereference_index(frame->cp_vector, cp_element.info[0].u2);
+
+    // Typed_element element;
+
+    // int count = 0;
+    
+	//    while (class_name[count] == '[')
+	//    {
+	//    		count++;
+	//    }
+
+
+	//    string multiArrayType = class_name.substr(count+1, class_name.size()-count-2); // em caso de ser uma referência (e.g. [[[Ljava/lang/String;)
+
+	//    switch (class_name[count]) {
+	//        case 'L':
+	//            if (multiArrayType != "java/lang/String") {
+	//                Method_area::getClass(multiArrayType); // verifica se existe classe com esse nome
+	//            }
+	//            element.real_type = RT_REFERENCE;
+	//            element.type = TYPE_REFERENCE;
+	//            break;
+	//        case 'B':
+	//            element.real_type = RT_BYTE;
+	//            element.type = TYPE_INT;
+	//            break;
+	//        case 'C':
+	//            element.real_type = RT_CHAR;
+	//            element.type = TYPE_INT;
+	//            break;
+	//        case 'D':
+	//            element.real_type = RT_DOUBLE;
+	//            element.type = TYPE_DOUBLE;
+	//            break;
+	//        case 'F':
+	//            element.real_type = RT_FLOAT;
+	//            element.type = TYPE_FLOAT;
+	//            break;
+	//        case 'I':
+	//            element.real_type = RT_INT;
+	//            element.type = TYPE_INT;
+	//            break;
+	//        case 'J':
+	//            element.real_type = RT_LONG;
+	//            element.type = TYPE_LONG;
+	//            break;
+	//        case 'S':
+	//            element.real_type = RT_SHORT;
+	//            element.type = TYPE_INT;
+	//            break;
+	//        case 'Z':
+	//            element.real_type = RT_BOOL;
+	//            element.type = TYPE_INT;
+	//            break;
+	//        default:
+	//            exit(1);
+	//    }
+    
+    // stack<int> count_dim;
+    // for (int i = 0; i < dimensions; i++) {
+    //     // PRECISO VERIFICAR O TIPO (INT)?
+    //     count_dim.push(frame->operand_stack->pop_typed_element().value.i);
+    // }
+
+	// int* p = (int*)(getNewMultiArray(count_dim));
+
+	// element.value.pi = p;
+    
+	// f->operandos->push(element);
 }
 
-void Operations::ifnull()
-{
+void Operations::ifnull(){
+    int* ref = frame->operand_stack->pop_element().pi;
+	int16_t branchbyte = int16_t(get_n_bytes_value(2, frame->pc));
+
+	if (ref == nullptr)
+		frame->current_pc_index += branchbyte - 1;
 }
 
-void Operations::ifnonnull()
-{
+void Operations::ifnonnull(){
+    int* ref = frame->operand_stack->pop_element().pi;
+	int16_t branchbyte = int16_t(get_n_bytes_value(2, frame->pc));
+
+	if (ref != nullptr){
+		frame->current_pc_index += branchbyte - 1;
+    }
 }
 
-void Operations::goto_w()
-{
+void Operations::goto_w(){
+    int32_t branchbyte = int32_t(get_n_bytes_value(4, frame->pc));
+	frame->current_pc_index += branchbyte - 2;
 }
 
-void Operations::jsr_w()
-{
+void Operations::jsr_w(){
+    int32_t offset = int32_t(get_n_bytes_value(4, frame->pc));
+
+	frame->operand_stack->push_type(frame->current_pc_index);
+	
+    frame->current_pc_index += offset - 2;
 }
+
 // void Operations::breakpoint(){
 
 // }
@@ -2717,3 +2833,9 @@ int Operations::check_double (double d) {
 
 	return ret;
 }
+
+Array *Operations::get_new_multi_array(stack<int> count_dim){
+
+
+}
+

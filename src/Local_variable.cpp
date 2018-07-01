@@ -47,3 +47,5 @@ void Local_variable::insert_typed_element(Typed_element typed_element, int index
 		this->elements[index].i = typed_element.value.i;
 	}
 }
+
+
