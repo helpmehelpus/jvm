@@ -530,8 +530,8 @@ void Operations::istore_0()
 void Operations::istore_1()
 {
     if(frame->operand_stack->top_type() == TYPE_INT) {
-		Typed_element aux = frame->operand_stack->pop_typed_element();
-		frame->local_variables->insert_typed_element(aux,1);
+        Typed_element aux = frame->operand_stack->pop_typed_element();
+        frame->local_variables->insert_typed_element(aux,1);
 	}
 	else
 		printf("Operando no topo != TYPE_INT\n");

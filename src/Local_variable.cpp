@@ -29,11 +29,16 @@ Typed_element Local_variable::get_typed_element(int index) const {
 }
 
 void Local_variable::insert_typed_element(Typed_element typed_element, int index) {
+	if(types.size() < index){
+		types.resize(index);
+		elements.resize(index);
+	}
+
 	if (index < 0)
 		throw std::runtime_error("Indice fora dos limites!");
 
 	if (typed_element.type == TYPE_LONG || typed_element.type == TYPE_DOUBLE || (typed_element.type == TYPE_REFERENCE && BITS)) {
-		// cout << "nao sei" << endl;
+		
 		index--;
 
 		this->types.insert(types.begin() + index,typed_element.type);
@@ -46,10 +51,10 @@ void Local_variable::insert_typed_element(Typed_element typed_element, int index
 		this->elements.insert(elements.begin() + index, aux2);
 
 	} else {
+		
 		this->types.insert(types.begin() + index,typed_element.type);
 		Element aux;
 		aux.i = typed_element.value.i;
-		this->elements.push_back(Element());
 		this->elements.insert(elements.begin()+index, aux);
 		
 	}
