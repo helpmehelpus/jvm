@@ -75,6 +75,10 @@ void Operand_stack::push_type(bool x) {
 }
 
 void Operand_stack::push_type(int *x) {
+	
+	if (this->elements.size()+bits64 >= max_size) {
+		throw std::out_of_range("Excedeu o limite maximo da pilha!");
+	}	
 	Element element;
 	element.pi = x;
 	this->types.push(TYPE_REFERENCE);
@@ -85,6 +89,7 @@ void Operand_stack::push_type(int *x) {
 		element.l >>= 32;
 		this->elements.push(element.i);
 	}
+	
 
 	typed_element_pushed = false;
 }
@@ -172,6 +177,7 @@ Element Operand_stack::top_value() {
 
 	//pega o primeiro slot da pilha
 	element.i = this->elements.top();
+	
 
 	//checa se e necessario juntas o segundo slot tambem 
 	if (this->types.top() == TYPE_LONG || this->types.top() == TYPE_DOUBLE || (this->types.top() == TYPE_REFERENCE && bits64)) {

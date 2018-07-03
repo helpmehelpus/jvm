@@ -55,6 +55,8 @@ void Local_variable::insert_typed_element(Typed_element typed_element, int index
 		this->types.insert(types.begin() + index,typed_element.type);
 		Element aux;
 		aux.i = typed_element.value.i;
+		
+		
 		this->elements.insert(elements.begin()+index, aux);
 		
 	}
@@ -63,6 +65,6 @@ void Local_variable::insert_typed_element(Typed_element typed_element, int index
 
 void Local_variable::debug_local_variables() const{
 	for(int i = 0; i < this->elements.size(); i++){
-		cout << "[" << i << "]TYPE: " << (int)this->types[i] << " Valor: " << this->elements[i].i << endl;
+		cout << "[" << i << "]TYPE: " << (int)this->types[i] << " Valor: " << int(this->elements[i].i) << endl;
 	}
 }

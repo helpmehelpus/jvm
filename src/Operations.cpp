@@ -219,9 +219,9 @@ void Operations::ldc()
 {
     uint8_t index = get_n_bytes_value(1, frame->pc);
 	Cp_info cp = frame->cp_vector[index]; 
-	if (cp.tag == STRING){						// se o elemento for string
-		// frame->operand_stack->push_type((int*)(frame->cp[cp.info[0].u2].info[1].array));	
-	} else {									   // se o elemento for int ou float
+	if (cp.tag == STRING){
+        frame->operand_stack->push_type((int*)(&frame->cp_vector[cp.info[0].u2].info[1].array[0]));
+    } else {
 		Element aux;
 		aux.i = cp.info[0].u4;
 		if (cp.tag == INTEGER){	
@@ -235,6 +235,12 @@ void Operations::ldc()
 
 void Operations::ldc_w()
 {
+    uint16_t index = get_n_bytes_value(2, frame->pc);
+	Cp_info cp = frame->cp_vector[index]; 
+	if (cp.tag == STRING){				
+		frame->operand_stack->push_type((int*)(&frame->cp_vector[cp.info[0].u2].info[1].array[0]));	
+	} else								
+		frame->operand_stack->push_type(int(cp.info[0].u4));	
 
 }
 
@@ -243,6 +249,7 @@ void Operations::ldc2_w()
     uint8_t index = get_n_bytes_value(2, frame->pc);
 	long val_push_long;
 	double val_push_double; 
+    cout << "ldc2_w index : " << (int)index << endl;
 	if (frame->cp_vector[index].tag == LONG){
 		val_push_long = Displayer::u4_to_long(frame->cp_vector[index].info[0].u4, frame->cp_vector[index+1].info[0].u4);
 		frame->operand_stack->push_type(long(val_push_long));
@@ -541,6 +548,7 @@ void Operations::istore_2()
 {
     if(frame->operand_stack->top_type() == TYPE_INT) {
 		Typed_element aux = frame->operand_stack->pop_typed_element();
+        cout << "Removido da os " << aux.value.i << endl;
 		frame->local_variables->insert_typed_element(aux,2);
 	}
 	else
@@ -1947,8 +1955,10 @@ void Operations::ifle(){
     int value = frame->operand_stack->pop_element().i;
 	int16_t branchbyte = int16_t(get_n_bytes_value(2, frame->pc));
 
-	if (value <= 0)
+	if (value <= 0){
+        cout << "Vai pular" << endl;
 		frame->current_pc_index += branchbyte - 1;
+    }
 }
 
 void Operations::if_icmpeq(){
@@ -2021,9 +2031,9 @@ void Operations::if_icmple(){
 	
 	value2 = frame->operand_stack->pop_element().i;
 	value1 = frame->operand_stack->pop_element().i;
-
+    cout << "Value2: " << value2 << " Value1: " << value1 << endl;
 	if (value1 <= value2) {
-		frame->current_pc_index += branchbyte - 1;
+        frame->current_pc_index += branchbyte - 1;
 	}
 
 }
@@ -2341,13 +2351,13 @@ void Operations::invokevirtual()
                         printf("%c", element.value.bs);
                         break;
                     case RT_SHORT:
-                
                         printf("%d", element.value.ss);
                         break;
                     case RT_INT:
                         printf("%d", element.value.is);
                         break;
                     default:
+                        printf("DEFAULT");
                         printf("%d", element.value.is);
                         break;
                 }

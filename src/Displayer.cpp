@@ -25,7 +25,7 @@ void Displayer::display_cp(Constant_pool *constant_pool, U2 cp_length) {
 		switch (cp[i].tag) {
 			case UTF8: 
                 cout << "\t\t\t";
-				cout <<  display_UTF8(cp[i].info[0].array, cp[i].info[0].u2).c_str();
+				cout <<  display_UTF8(cp[i].info[1].array, cp[i].info[0].u2).c_str();
 				break;
 			case INTEGER: 
 				cout << "\t\t\t";
@@ -67,27 +67,42 @@ void Displayer::display_cp(Constant_pool *constant_pool, U2 cp_length) {
     printf("__________________________________________________________________________________________________________\n\n");
 }
 
-string Displayer::display_UTF8(U1* value, U2 size) {
-	int i;
-	std::vector<unsigned char> *v = (std::vector<unsigned char> *) value;
-	string ret = "";
-	size = v->size();
-
-	for(i = 0; i < size; i++) {
-		if (!(value[i] & 0x80)) { //Single byte UTF8
-			ret += (char)value[i];
-		} else {
-			unsigned short aux_current;
-			if (!(value[i+1] & 0x20)) { //Two byte UTF8
-				aux_current = ((value[i] & 0x1f) << 6) + (value[i+1] & 0x3f);
-			} else { //Three byte UTF8
-				aux_current = ((value[i] & 0xf) << 12) + ((value[i+1] & 0x3f) << 6) + (value[i+2] & 0x3f);
-				i++;
-			}
-			i++;
-			ret += (char)aux_current;
-		}
+string Displayer::display_UTF8(unsigned char* value, U2 size) {
+	size = 0;
+	for(int i = 0; ; i++){
+		if(value[i] != '\0')
+			size++;
+		else
+			break;
 	}
+	vector<unsigned char> aux(value, value + size);
+	string ret = "";
+	ret = display_UTF8(aux,0);
+	// size = v.size();
+	// int i = 0;
+	// while (i < size) {
+		
+	// 	if (!(v.at(i) & 0x80)) { //utf8 de apenas 1 byte
+	// 		cout << v.at(i);
+	// 		ret.push_back(v.at(i));
+	// 	} else {
+			
+
+	// 		unsigned short auxCurrent;
+	// 		if (!(v.at(i+1) & 0x20)) { //utf8 de 2 bytes
+	// 			auxCurrent = ((v.at(i) & 0x1f) << 6) + (v.at(i+1) & 0x3f);
+	// 		} else { //utf8 de 3 bytes
+	// 			auxCurrent = ((v.at(i) & 0xf) << 12) + ((v.at(i+1) & 0x3f) << 6) + (v.at(i+2) & 0x3f);
+	// 			i++;
+	// 		}
+	// 		i++;
+	// 		cout << auxCurrent;
+
+	// 		ret.push_back(auxCurrent);
+	// 	}
+	// 	i++;
+	// }
+
 	return ret;
 }
 
@@ -95,6 +110,7 @@ string Displayer::display_UTF8(vector <U1> value, U2 size) {
 	int i;
 
 	string ret = "";
+	// cout << "size deste caraio" << size << endl;
 
 	for(i = 0; i < value.size(); i++) {
 		if (!(value[i] & 0x80)) { //Single byte UTF8
@@ -158,7 +174,7 @@ double Displayer::u4_to_double(U4 high, U4 low) {
 string Displayer::dereference_index (vector <Cp_info> cp_vector, U2 index) {
 	switch (cp_vector[index].tag) {
 		case UTF8: 
-			return display_UTF8(cp_vector[index].info[0].array, cp_vector[index].info[0].u2);
+			return display_UTF8(cp_vector[index].info[1].array, cp_vector[index].info[0].u2);
 		case CLASS: 
 		case STRING:
 			return dereference_index(cp_vector, cp_vector[index].info[0].u2);

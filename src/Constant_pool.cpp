@@ -20,8 +20,9 @@ Constant_pool::Constant_pool(int cp_length, FILE *fp) {
 
 		switch (cp_vector[i].tag) {
 		case UTF8:
+			cp_vector[i].info.push_back(Class_loader_type());
 			cp_vector[i].info[0].u2 = Reader::read_U2(fp);
-			cp_vector[i].info[0].array = Reader::read_UTF8(fp, cp_vector[i].info[0].u2);
+			cp_vector[i].info[1].array = Reader::read_UTF8(fp, cp_vector[i].info[0].u2);
 			break;
 		case INTEGER:
 		case FLOAT:

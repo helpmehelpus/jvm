@@ -20,7 +20,8 @@ public:
 	static void display_version(U2 min_version, U2 max_version);
 	static void display_cp(Constant_pool *cp, U2 cp_length);
 	static string display_UTF8(vector<U1> values, U2 size);
-	static string display_UTF8(U1* values, U2 size);
+	static string display_UTF8(unsigned char* values, U2 size);
+	
 
 	static float u4_to_float(U4 value);
 	static long u4_to_long(U4 high, U4 low);

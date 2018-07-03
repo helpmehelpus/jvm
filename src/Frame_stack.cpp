@@ -29,12 +29,12 @@ Frame_stack::Frame_stack(Reader *reader) {
 void Frame_stack::execute() {
 	while (next_instruction()) {
 		
-		// cout << "Opcode: " << opcode << "\tMnemonico: " << Attribute_info::get_mnemonic(opcode) << flush << endl;
+		cout  << "Opcode: " << opcode << "\tMnemonico: " << Attribute_info::get_mnemonic(opcode) << flush << endl;
 		Operations::run(opcode);
 
 
-		// threads->top()->operand_stack->debug_operand_stack();
-		// threads->top()->local_variables->debug_local_variables();
+		threads->top()->operand_stack->debug_operand_stack();
+		threads->top()->local_variables->debug_local_variables();
 		// getchar();
 	}
 }
