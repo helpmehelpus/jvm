@@ -91,6 +91,7 @@ void Operand_stack::push_type(int *x) {
 
 uint8_t Operand_stack::top_type() {
 	return ((!this->types.empty()) ? (this->types.top()) : (-1));
+
 }
 
 

@@ -25,7 +25,8 @@ class Local_variable {
     // ~Local_variable();
     void display_all() const;
     void insert_typed_element(Typed_element, int);
-    Typed_element get_typed_element(int);
+    void debug_local_variables() const;
+    Typed_element get_typed_element(int) const;
     
 };
 

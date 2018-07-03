@@ -34,6 +34,7 @@ void Frame_stack::execute() {
 
 
 		threads->top()->operand_stack->debug_operand_stack();
+		threads->top()->local_variables->debug_local_variables();
 		getchar();
 	}
 }

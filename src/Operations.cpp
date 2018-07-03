@@ -97,7 +97,7 @@ void Operations::run(int opcode) {
 void Operations::lload_n(short index)
 {
     Typed_element aux = frame->local_variables->get_typed_element(index);
-	frame->operand_stack->push_type(long(aux.value.l));
+    frame->operand_stack->push_type(long(aux.value.l));
 }
 
 void Operations::fload_n(short index)
@@ -217,7 +217,20 @@ void Operations::sipush()
 
 void Operations::ldc()
 {
-    // Arrumar array antes de implementar essa função
+    uint8_t index = get_n_bytes_value(1, frame->pc);
+	Cp_info cp = frame->cp_vector[index]; 
+	if (cp.tag == STRING){						// se o elemento for string
+		// frame->operand_stack->push_type((int*)(frame->cp[cp.info[0].u2].info[1].array));	
+	} else {									   // se o elemento for int ou float
+		Element aux;
+		aux.i = cp.info[0].u4;
+		if (cp.tag == INTEGER){	
+			frame->operand_stack->push(aux, TYPE_INT);
+		} else {
+			frame->operand_stack->push(aux, TYPE_FLOAT);
+
+		}
+	}
 }
 
 void Operations::ldc_w()
@@ -2178,9 +2191,7 @@ void Operations::getstatic(){
 
     // JAVA LANG
     if (class_name == "java/lang/System" && descriptor == "Ljava/io/PrintStream;" ) {
-        cout << "Saida 1 " << endl;
         frame->current_pc_index++;
-
         return;
     }
 
@@ -2190,8 +2201,6 @@ void Operations::getstatic(){
 
     // // Caso <clinit> seja empilhado.
     if (threads->top() != aux_frame) {
-        cout << "Saida 2 " << endl;
-
         return;
     }
 

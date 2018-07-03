@@ -1,6 +1,9 @@
 #ifndef OPERATIONS
 #define OPERATIONS
 
+#include<math.h>
+
+
 #include "Array.hpp"
 #include "Base_types.hpp"
 #include "Frame.hpp"
