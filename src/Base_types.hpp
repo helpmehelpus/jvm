@@ -7,6 +7,10 @@ typedef uint8_t U1;
 typedef uint16_t U2;
 typedef uint32_t U4;
 
+/*! \def RT_BYTE
+    \brief A macro that returns the maximum of \a a and \a b.
+
+*/
 #define RT_BYTE 1
 #define RT_BOOL 2
 #define RT_CHAR 3

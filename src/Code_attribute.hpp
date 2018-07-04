@@ -11,6 +11,8 @@ using namespace std;
 
 class Attribute_info;
 
+/*! \struct Struct responsável por armazenar todos os tamanhos de variáveis da JVM
+*/
 typedef struct {
     U2 max_stack;
     U2 max_locals;
