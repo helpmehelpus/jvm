@@ -51,14 +51,23 @@ const func Operations::functions[] = { &Operations::nop, &Operations::aconst_nul
 // 	frame = ref;
 // }
 
-U4 Operations::get_n_bytes_value(uint8_t n, vector<U2> pc){
-  U4 value = pc[frame->current_pc_index];
-  frame->current_pc_index++;
-  for(int i = 1; i < n; i++){
-    value = (value << 8) | pc[frame->current_pc_index];
-    frame->current_pc_index++;
-  }
-  return value;
+U4 Operations::get_n_bytes_value(uint8_t n, unsigned char** pc){
+//   U4 value = pc[frame->current_pc_index];
+//   frame->pc+= 3;
+//   for(int i = 1; i < n; i++){
+//     value = (value << 8) | pc[frame->current_pc_index];
+//     frame->pc+= 3;
+//   }
+//   return value;
+    U4 value = **pc;
+    *pc+=1;
+    for(int i = 1; i < n; i++){
+        value = (value << 8) | **pc;
+        *pc+=1;
+
+    }
+    return value;
+
 }
 
 Static_class* Operations::get_static_class_with_field(Static_class* base, string field_name) {
@@ -201,8 +210,8 @@ void Operations::dconst_1()
 void Operations::bipush()
 {
     int32_t aux;
-	int8_t byte = get_n_bytes_value(1, frame->pc);
-	aux = (int32_t) (int8_t) byte; // extendendo o sinal
+	int8_t byte = get_n_bytes_value(1, &frame->pc);
+    aux = (int32_t) (int8_t) byte; // extendendo o sinal
 	frame->operand_stack->push_type(int(aux));
 }
 
@@ -210,14 +219,14 @@ void Operations::sipush()
 {
     uint16_t val_short;
 	int32_t val_push_short;
-	val_short = get_n_bytes_value(2, frame->pc);
+    val_short = get_n_bytes_value(2, &frame->pc);
 	val_push_short = (int32_t) (int16_t) val_push_short;  // extendendo o sinal
 	frame->operand_stack->push_type(int(val_push_short));
 }
 
 void Operations::ldc()
 {
-    uint8_t index = get_n_bytes_value(1, frame->pc);
+    uint8_t index = get_n_bytes_value(1, &frame->pc);
 	Cp_info cp = frame->cp_vector[index]; 
 	if (cp.tag == STRING){
         frame->operand_stack->push_type((int*)(&frame->cp_vector[cp.info[0].u2].info[1].array[0]));
@@ -235,7 +244,7 @@ void Operations::ldc()
 
 void Operations::ldc_w()
 {
-    uint16_t index = get_n_bytes_value(2, frame->pc);
+    uint16_t index = get_n_bytes_value(2, &frame->pc);
 	Cp_info cp = frame->cp_vector[index]; 
 	if (cp.tag == STRING){				
 		frame->operand_stack->push_type((int*)(&frame->cp_vector[cp.info[0].u2].info[1].array[0]));	
@@ -246,7 +255,7 @@ void Operations::ldc_w()
 
 void Operations::ldc2_w()
 {
-    uint8_t index = get_n_bytes_value(2, frame->pc);
+    uint8_t index = get_n_bytes_value(2, &frame->pc);
 	long val_push_long;
 	double val_push_double; 
     if (frame->cp_vector[index].tag == LONG){
@@ -270,10 +279,10 @@ void Operations::iload()
     uint16_t index = 0;
 
 	if (is_wide){
-		index = get_n_bytes_value(2, frame->pc);
+		index = get_n_bytes_value(2, &frame->pc);
 		is_wide = false;
 	} else {
-		index = get_n_bytes_value(1, frame->pc);
+		index = get_n_bytes_value(1, &frame->pc);
 	}
 	
 	Typed_element aux = frame->local_variables->get_typed_element(int(index));
@@ -284,10 +293,10 @@ void Operations::lload()
 {
     uint16_t index = 0;
 	if (is_wide) {
-		index = get_n_bytes_value(2, frame->pc);
+		index = get_n_bytes_value(2, &frame->pc);
 		is_wide = false;
 	}else
-		index = get_n_bytes_value(1, frame->pc);
+		index = get_n_bytes_value(1, &frame->pc);
 	
 	Typed_element aux = frame->local_variables->get_typed_element(int(index));
 	frame->operand_stack->push_type(long(aux.value.l));
@@ -298,10 +307,10 @@ void Operations::fload()
     uint16_t index = 0;
 
 	if (is_wide) {
-		index = get_n_bytes_value(2, frame->pc);
+		index = get_n_bytes_value(2, &frame->pc);
 		is_wide = false;
 	}else
-		index = get_n_bytes_value(1, frame->pc);
+		index = get_n_bytes_value(1, &frame->pc);
 	
 	Typed_element aux = frame->local_variables->get_typed_element(int(index));
 	frame->operand_stack->push_type(float(aux.value.f));
@@ -312,10 +321,10 @@ void Operations::dload()
     uint16_t index;
 
 	if (is_wide) {
-		index = get_n_bytes_value(2, frame->pc);
+		index = get_n_bytes_value(2, &frame->pc);
 		is_wide = false;
 	} else
-		index = get_n_bytes_value(1, frame->pc);
+		index = get_n_bytes_value(1, &frame->pc);
 	
 	Typed_element aux = frame->local_variables->get_typed_element(int(index));
 	frame->operand_stack->push_type(double(aux.value.d));
@@ -326,10 +335,10 @@ void Operations::aload()
     uint16_t index = 0;
 
 	if (is_wide) {
-		index = get_n_bytes_value(2, frame->pc);
+		index = get_n_bytes_value(2, &frame->pc);
 		is_wide = false;
 	}else
-		index = get_n_bytes_value(1, frame->pc);
+		index = get_n_bytes_value(1, &frame->pc);
 	
 	Typed_element aux = frame->local_variables->get_typed_element(int(index));
 	frame->operand_stack->push_type((int*)(aux.value.pi));
@@ -517,10 +526,10 @@ void Operations::istore()
     uint16_t index = 0;
 
 	if (is_wide) {
-		index = get_n_bytes_value(2, frame->pc);
+		index = get_n_bytes_value(2, &frame->pc);
 		is_wide = false;
 	}else
-		index = get_n_bytes_value(1, frame->pc);   
+		index = get_n_bytes_value(1, &frame->pc);   
 
 	if(frame->operand_stack->top_type() == TYPE_INT) {
 		Typed_element aux = frame->operand_stack->pop_typed_element();
@@ -572,9 +581,17 @@ void Operations::istore_3()
 
 void Operations::lstore()
 {
+    uint16_t index = 0;
+
+   if (is_wide) {
+		index = get_n_bytes_value(2, &frame->pc);
+		is_wide = false;
+	}else
+		index = get_n_bytes_value(1, &frame->pc);
+	
     if(frame->operand_stack->top_type() == TYPE_LONG) {
 		Typed_element aux = frame->operand_stack->pop_typed_element();
-		frame->local_variables->insert_typed_element(aux, 1);
+		frame->local_variables->insert_typed_element(aux, index);
 	}
 	else
 		printf("Operando no topo != TYPE_LONG\n");
@@ -625,10 +642,10 @@ void Operations::fstore()
     uint16_t index = 0;
 
 	if (is_wide) {
-		index = get_n_bytes_value(2, frame->pc);
+		index = get_n_bytes_value(2, &frame->pc);
 		is_wide = false;
 	}else
-		index = get_n_bytes_value(1, frame->pc); 
+		index = get_n_bytes_value(1, &frame->pc); 
 	
 	if(frame->operand_stack->top_type() == TYPE_FLOAT) {
 		Typed_element aux = frame->operand_stack->pop_typed_element();
@@ -683,10 +700,10 @@ void Operations::dstore()
     uint16_t index = 0;
 
 	if (is_wide) {
-		index = get_n_bytes_value(2, frame->pc);
+		index = get_n_bytes_value(2, &frame->pc);
 		is_wide = false;
 	} else
-		index = get_n_bytes_value(1, frame->pc); 
+		index = get_n_bytes_value(1, &frame->pc); 
 
 	if(frame->operand_stack->top_type() == TYPE_DOUBLE) {
 		Typed_element aux = frame->operand_stack->pop_typed_element();
@@ -741,10 +758,10 @@ void Operations::astore()
     uint16_t index = 0;
 
    	if (is_wide) {
-		index = get_n_bytes_value(2, frame->pc);
+		index = get_n_bytes_value(2, &frame->pc);
 		is_wide = false;
 	} else
-		index = get_n_bytes_value(1, frame->pc); 
+		index = get_n_bytes_value(1, &frame->pc); 
 
 	if(frame->operand_stack->top_type() == TYPE_REFERENCE) {
 		Typed_element aux = frame->operand_stack->pop_typed_element();
@@ -1693,12 +1710,12 @@ void Operations::iinc()
 	int16_t n;
 	
 	if(is_wide){
-		 var = get_n_bytes_value(2, frame->pc);
-		 n = int16_t(get_n_bytes_value(2, frame->pc));
+		 var = get_n_bytes_value(2, &frame->pc);
+		 n = int16_t(get_n_bytes_value(2, &frame->pc));
 	}
 	else {
-		 var = get_n_bytes_value(1, frame->pc);
-		 n = int8_t(get_n_bytes_value(1, frame->pc));
+		 var = get_n_bytes_value(1, &frame->pc);
+		 n = int8_t(get_n_bytes_value(1, &frame->pc));
 	}
 
 	Typed_element aux = frame->local_variables->get_typed_element(var);
@@ -1914,157 +1931,157 @@ void Operations::dcmpg()
 
 void Operations::ifeq(){
     int value = frame->operand_stack->pop_element().i;
-	int16_t branchbyte = int16_t(get_n_bytes_value(2, frame->pc));
+	int16_t branchbyte = int16_t(get_n_bytes_value(2, &frame->pc));
 
 	if (value == 0)
-		frame->current_pc_index += branchbyte - 1;
+		frame->pc += branchbyte - 3;
 
 }
 
 void Operations::ifne(){
     int value = frame->operand_stack->pop_element().i;
-	int16_t branchbyte = int16_t(get_n_bytes_value(2, frame->pc));
+	int16_t branchbyte = int16_t(get_n_bytes_value(2, &frame->pc));
 
 	if (value != 0)
-		frame->current_pc_index += branchbyte - 1;
+		frame->pc += branchbyte - 3;
 }
 
 void Operations::iflt(){
     int value = frame->operand_stack->pop_element().i;
-	int16_t branchbyte = int16_t(get_n_bytes_value(2, frame->pc));
+	int16_t branchbyte = int16_t(get_n_bytes_value(2, &frame->pc));
 
 	if (value < 0)
-		frame->current_pc_index += branchbyte - 1;
+		frame->pc += branchbyte - 3;
 	
 }
 
 void Operations::ifge(){
     int value = frame->operand_stack->pop_element().i;
-	int16_t branchbyte = int16_t(get_n_bytes_value(2, frame->pc));
+	int16_t branchbyte = int16_t(get_n_bytes_value(2, &frame->pc));
 
 	if (value >= 0)
-		frame->current_pc_index += branchbyte - 1;
+		frame->pc += branchbyte - 3;
 
 }
 
 void Operations::ifgt(){
     int value = frame->operand_stack->pop_element().i;
-	int16_t branchbyte = int16_t(get_n_bytes_value(2, frame->pc));
+	int16_t branchbyte = int16_t(get_n_bytes_value(2, &frame->pc));
 
 	if (value > 0)
-		frame->current_pc_index += branchbyte - 1;
+		frame->pc += branchbyte - 3;
 
 }
 
 void Operations::ifle(){
     int value = frame->operand_stack->pop_element().i;
-	int16_t branchbyte = int16_t(get_n_bytes_value(2, frame->pc));
+	int16_t branchbyte = int16_t(get_n_bytes_value(2, &frame->pc));
 
 	if (value <= 0){
         cout << "Vai pular" << endl;
-		frame->current_pc_index += branchbyte - 1;
+		frame->pc += branchbyte - 3;
     }
 }
 
 void Operations::if_icmpeq(){
     int value1, value2;
-	int16_t branchbyte = int16_t(get_n_bytes_value(2, frame->pc));
+	int16_t branchbyte = int16_t(get_n_bytes_value(2, &frame->pc));
 	
 	value2 = frame->operand_stack->pop_element().i;
 	value1 = frame->operand_stack->pop_element().i;
 
 	if (value1 == value2) {
-		frame->current_pc_index += branchbyte - 1;
+		frame->pc += branchbyte - 3;
 	}
 }
 
 void Operations::if_icmpne(){
     int value1, value2;
-	int16_t branchbyte = int16_t(get_n_bytes_value(2, frame->pc));
+	int16_t branchbyte = int16_t(get_n_bytes_value(2, &frame->pc));
 	
 	value2 = frame->operand_stack->pop_element().i;
 	value1 = frame->operand_stack->pop_element().i;
 
 	if (value1 != value2) {
-		frame->current_pc_index += branchbyte - 1;
+		frame->pc += branchbyte - 3;
 	}
 
 }
 
 void Operations::if_icmplt(){
     int value1, value2;
-	int16_t branchbyte = int16_t(get_n_bytes_value(2, frame->pc));
+	int16_t branchbyte = int16_t(get_n_bytes_value(2, &frame->pc));
 	
 	value2 = frame->operand_stack->pop_element().i;
 	value1 = frame->operand_stack->pop_element().i;
 
 	if (value1 < value2) {
-		frame->current_pc_index += branchbyte - 1;
+		frame->pc += branchbyte - 3;
 	}
 
 }
 
 void Operations::if_icmpge(){
     int value1, value2;
-	int16_t branchbyte = int16_t(get_n_bytes_value(2, frame->pc));
+	int16_t branchbyte = int16_t(get_n_bytes_value(2, &frame->pc));
 	
 	value2 = frame->operand_stack->pop_element().is;
 	value1 = frame->operand_stack->pop_element().is;
 
 	if (value1 >= value2) {
-		frame->current_pc_index += branchbyte - 1;
+		frame->pc += branchbyte - 3;
 	}
 
 }
 
 void Operations::if_icmpgt(){
     int value1, value2;
-	int16_t branchbyte = int16_t(get_n_bytes_value(2, frame->pc));
+	int16_t branchbyte = int16_t(get_n_bytes_value(2, &frame->pc));
 	
 	value2 = frame->operand_stack->pop_element().i;
 	value1 = frame->operand_stack->pop_element().i;
 
 	if (value1 > value2) {
-		frame->current_pc_index += branchbyte - 1;
+		frame->pc += branchbyte - 3;
 	}
 
 }
 
 void Operations::if_icmple(){
     int value1, value2;
-	int16_t branchbyte = int16_t(get_n_bytes_value(2, frame->pc));
+	int16_t branchbyte = int16_t(get_n_bytes_value(2, &frame->pc));
 	
 	value2 = frame->operand_stack->pop_element().i;
 	value1 = frame->operand_stack->pop_element().i;
     cout << "Value2: " << value2 << " Value1: " << value1 << endl;
 	if (value1 <= value2) {
-        frame->current_pc_index += branchbyte - 1;
+        frame->pc += branchbyte - 3;
 	}
 
 }
 
 void Operations::if_acmpeq(){
     int *value1, *value2;
-	int16_t branchbyte = int16_t(get_n_bytes_value(2, frame->pc));
+	int16_t branchbyte = int16_t(get_n_bytes_value(2, &frame->pc));
 	
 	value2 = frame->operand_stack->pop_element().pi;
 	value1 = frame->operand_stack->pop_element().pi;
 
 	if (value1 == value2) {
-		frame->current_pc_index += branchbyte - 1;
+		frame->pc += branchbyte - 3;
 	}
 
 }
 
 void Operations::if_acmpne(){
     int *value1, *value2;
-	int16_t branchbyte = int16_t(get_n_bytes_value(2, frame->pc));
+	int16_t branchbyte = int16_t(get_n_bytes_value(2, &frame->pc));
 	
 	value2 = frame->operand_stack->pop_element().pi;
 	value1 = frame->operand_stack->pop_element().pi;
 
 	if (value1 != value2) {
-		frame->current_pc_index += branchbyte - 1;
+		frame->pc += branchbyte - 3;
 	}
 
 }
@@ -2072,30 +2089,31 @@ void Operations::if_acmpne(){
 void Operations::funcgoto(){
     int16_t offset;
 
-	offset = int16_t(get_n_bytes_value(2, frame->pc));
+	offset = int16_t(get_n_bytes_value(2, &frame->pc));
 
-	frame->current_pc_index = offset/128;
+	frame->pc+= offset - 3;
 
 }
 
 void Operations::jsr(){
     // int16_t offset;
 
-	// offset = int16_t(get_n_bytes_value(2, frame->pc));
+	// offset = int16_t(get_n_bytes_value(2, &frame->pc));
 
 	// frame->operand_stack->push_type((int *) frame->current_pc_index);
 
-	// frame->current_pc_index += offset - 1;
+	// frame->pc += offset - 1;
 
 }
 
 void Operations::funcret(){
+
     // if (is_wide){
-	// 	frame->current_pc_index = (int) frame->local_variables->get_typed_element(get_n_bytes_value(2, frame->pc)).value.pi;
+	// 	frame->pc = (int) frame->local_variables->get_typed_element(get_n_bytes_value(2, frame->pc)).value.pi;
 	// 	is_wide = false;
 	// }
 	// else
-	// 	frame->current_pc_index = (int) frame->local_variables->get_typed_element(get_n_bytes_value(1, frame->pc)).value.pi;
+	// 	frame->pc = (int) frame->local_variables->get_typed_element(get_n_bytes_value(1, &frame->pc)).value.pi;
 }
 
 void Operations::tableswitch(){
@@ -2189,8 +2207,8 @@ void Operations::func_return(){
 
 
 void Operations::getstatic(){
-    uint16_t index_byte = get_n_bytes_value(2, frame->pc);
-    frame->current_pc_index--;
+    uint16_t index_byte = get_n_bytes_value(2, &frame->pc);
+    frame->pc-= 3;
     Frame* aux_frame = frame;
     Cp_info cp_element = frame->cp_vector[index_byte];
     if(cp_element.tag != FIELDREF) {
@@ -2206,7 +2224,7 @@ void Operations::getstatic(){
 
     // JAVA LANG
     if (class_name == "java/lang/System" && descriptor == "Ljava/io/PrintStream;" ) {
-        frame->current_pc_index++;
+        frame->pc+= 3;
         return;
     }
 
@@ -2230,13 +2248,13 @@ void Operations::getstatic(){
     frame->operand_stack->push_type(element);
     
 
-    frame->current_pc_index++;
+    frame->pc+= 3;
 }
 
 void Operations::putstatic(){
      Frame *aux_frame = frame;
 
-    uint16_t indexByte = get_n_bytes_value(2, frame->pc);
+    uint16_t indexByte = get_n_bytes_value(2, &frame->pc);
     Cp_info cp_element = frame->cp_vector[indexByte];
     if(cp_element.tag != FIELDREF) {
         throw std::runtime_error("Elemento da constant pool apontado por index, não é uma referencia para FIELD_REF!");
@@ -2278,7 +2296,7 @@ void Operations::putstatic(){
 }
 
 void Operations::getfield(){
-    uint16_t indexbyte = get_n_bytes_value(2, frame->pc);
+    uint16_t indexbyte = get_n_bytes_value(2, &frame->pc);
 
     Instance_class *ci = (Instance_class *) frame->operand_stack->pop_element().pi;
     
@@ -2295,7 +2313,7 @@ void Operations::getfield(){
 void Operations::putfield(){
     Typed_element value = frame->operand_stack->pop_typed_element();
     Instance_class *ci = (Instance_class *) frame->operand_stack->pop_element().pi;
-    uint16_t indexbyte = get_n_bytes_value(2, frame->pc);
+    uint16_t indexbyte = get_n_bytes_value(2, &frame->pc);
 
     if (ci == nullptr) {
         throw std::runtime_error("Null Pointer Exception");
@@ -2314,7 +2332,7 @@ void Operations::putfield(){
 void Operations::invokevirtual()
 {
     Frame *aux_frame = frame;
-    uint16_t index_byte = get_n_bytes_value(2, frame->pc);
+    uint16_t index_byte = get_n_bytes_value(2, &frame->pc);
 
     Cp_info cp_element = frame->cp_vector[index_byte];
     if(cp_element.tag != METHODREF) {
@@ -2458,7 +2476,7 @@ void Operations::invokevirtual()
 
         // Caso <clinit> seja empilhado.
         if (threads->top() != aux_frame) {
-        	frame->current_pc_index--;
+        	frame->pc-= 3;
         	return;
     	}
 
@@ -2474,7 +2492,7 @@ void Operations::invokevirtual()
 void Operations::invokespecial()
 {
     Frame *aux_frame = threads->top();
-    uint16_t index_byte = get_n_bytes_value(2, frame->pc);
+    uint16_t index_byte = get_n_bytes_value(2, &frame->pc);
 
     Cp_info cp_element = frame->cp_vector[index_byte];
     if(cp_element.tag != METHODREF) {
@@ -2544,7 +2562,7 @@ void Operations::invokespecial()
             while (count-- > 0) {
                 frame->operand_stack->push_type(parametros[count]);
             }
-            frame->current_pc_index--;
+            frame->pc-= 3;
             return;
         }
 
@@ -2561,7 +2579,7 @@ void Operations::invokespecial()
 void Operations::invokestatic()
 {
     Frame *aux_frame = threads->top();
-    uint16_t index_byte = get_n_bytes_value(2, frame->pc);
+    uint16_t index_byte = get_n_bytes_value(2, &frame->pc);
     Cp_info cp_element = frame->cp_vector[index_byte];
 
     if(cp_element.tag != METHODREF)
@@ -2581,7 +2599,7 @@ void Operations::invokestatic()
 
     if (class_name == "java/lang/Object" && name == "registerNatives") {
         cout << "saida 1" << endl;
-        frame->current_pc_index++;
+        frame->pc+= 3;
         return;
     }
 
@@ -2626,7 +2644,7 @@ void Operations::invokestatic()
                 frame->operand_stack->push_type(args[num_args]);
             }
             
-            frame->current_pc_index--;
+            frame->pc-= 3;
             
 
             return;
@@ -2651,7 +2669,7 @@ void Operations::invokestatic()
 void Operations::invokeinterface()
 {
     Frame *aux_frame = threads->top();
-    uint16_t index_byte = get_n_bytes_value(2, frame->pc);
+    uint16_t index_byte = get_n_bytes_value(2, &frame->pc);
     Cp_info cp_element = frame->cp_vector[index_byte];
 
     if (cp_element.tag != INTERFACEMETHODREF){
@@ -2707,7 +2725,7 @@ void Operations::invokeinterface()
             while (num_args-- > 0) {
                 frame->operand_stack->push_type(parametros[num_args]);
             }
-            frame->current_pc_index--;
+            frame->pc-= 3;
             return;
         }
         
@@ -2720,7 +2738,7 @@ void Operations::invokeinterface()
 }
 //TODO fazer add class para string
 void Operations::func_new(){
-    // uint16_t indexbyte = get_n_bytes_value(2, frame->pc);
+    // uint16_t indexbyte = get_n_bytes_value(2, &frame->pc);
     // string classe = Displayer::dereference_index(frame->cp_vector, indexbyte);
     // Static_class *aux =  Method_area::get_class(classe);
 
@@ -2733,7 +2751,7 @@ void Operations::func_new(){
 }
 
 void Operations::newarray(){
-    uint8_t type = get_n_bytes_value(1, frame->pc);
+    uint8_t type = get_n_bytes_value(1, &frame->pc);
     int32_t index = frame->operand_stack->pop_element().is;
 
     if (index < 0)
@@ -2775,7 +2793,7 @@ void Operations::newarray(){
 }
 
 void Operations::anewarray(){
-    uint16_t indexbyte = get_n_bytes_value(2, frame->pc);
+    uint16_t indexbyte = get_n_bytes_value(2, &frame->pc);
     int32_t count = frame->operand_stack->pop_element().is;
 
     if (count < 0)
@@ -2817,12 +2835,12 @@ void Operations::athrow(){
 
 void Operations::wide(){
     is_wide = true;
-	Operations::run(get_n_bytes_value(1, frame->pc));
+    Operations::run(get_n_bytes_value(1, &frame->pc));
 }
 
 void Operations::multianewarray(){
-    uint16_t indexbyte = get_n_bytes_value(2, frame->pc);
-	uint8_t dimensions = get_n_bytes_value(1, frame->pc);
+    uint16_t indexbyte = get_n_bytes_value(2, &frame->pc);
+	uint8_t dimensions = get_n_bytes_value(1, &frame->pc);
 
     Cp_info cp_element = frame->cp_vector[indexbyte];
     if(cp_element.tag != CLASS) {
@@ -2902,32 +2920,32 @@ void Operations::multianewarray(){
 
 void Operations::ifnull(){
     int* ref = frame->operand_stack->pop_element().pi;
-	int16_t branchbyte = int16_t(get_n_bytes_value(2, frame->pc));
+	int16_t branchbyte = int16_t(get_n_bytes_value(2, &frame->pc));
 
 	if (ref == nullptr)
-		frame->current_pc_index += branchbyte - 1;
+		frame->pc += branchbyte - 3;
 }
 
 void Operations::ifnonnull(){
     int* ref = frame->operand_stack->pop_element().pi;
-	int16_t branchbyte = int16_t(get_n_bytes_value(2, frame->pc));
+	int16_t branchbyte = int16_t(get_n_bytes_value(2, &frame->pc));
 
 	if (ref != nullptr){
-		frame->current_pc_index += branchbyte - 1;
+		frame->pc += branchbyte - 3;
     }
 }
 
 void Operations::goto_w(){
-    int32_t branchbyte = int32_t(get_n_bytes_value(4, frame->pc));
-	frame->current_pc_index += branchbyte - 2;
+    int32_t branchbyte = int32_t(get_n_bytes_value(4, &frame->pc));
+	frame->pc += branchbyte - 5;
 }
 
 void Operations::jsr_w(){
-    int32_t offset = int32_t(get_n_bytes_value(4, frame->pc));
+    int32_t offset = int32_t(get_n_bytes_value(4, &frame->pc));
 
-	frame->operand_stack->push_type(frame->current_pc_index);
+	frame->operand_stack->push_type(frame->pc);
 	
-    frame->current_pc_index += offset - 2;
+    frame->pc += offset - 5;
 }
 
 // void Operations::breakpoint(){

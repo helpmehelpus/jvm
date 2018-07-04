@@ -34,15 +34,16 @@ void Frame_stack::execute() {
 		Operations::run(opcode);
 
 
-		threads->top()->operand_stack->debug_operand_stack();
+		// threads->top()->operand_stack->debug_operand_stack();
 		// threads->top()->local_variables->debug_local_variables();
 		
 	}
 }
 
 void Frame_stack::set_start_PC(Frame* frame) {
-    frame->pc = frame->method_info.attributes[0].info.code.code;
-    frame->current_pc_index = 0;
+
+    frame->pc = &frame->method_info.attributes[0].info.code.code[0];
+    // frame->current_pc_index = 0;
 	
 }
 
@@ -55,9 +56,14 @@ bool Frame_stack::next_instruction() {
 
 		
 	//checa se nao esgotamos as Operations do metodo corrente
-	if (threads->top()->current_pc_index < threads->top()->method_info.attributes[0].info.code.code.size()) {
-		opcode = threads->top()->get_current_pc();
-		threads->top()->current_pc_index++;
+	// if (threads->top()->current_pc_index < threads->top()->method_info.attributes[0].info.code.code.size()) {
+	// 	opcode = threads->top()->get_current_pc();
+	// 	threads->top()->current_pc_index++;
+	// 	return true;
+	// }
+	if ((threads->top()->pc - &threads->top()->method_info.attributes[0].info.code.code[0]) < threads->top()->method_info.attributes[0].info.code.code_length) {
+		opcode = *threads->top()->pc;
+		threads->top()->pc++;
 		return true;
 	}
 

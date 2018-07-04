@@ -4,6 +4,8 @@ using namespace std;
 
 Operand_stack::Operand_stack(int maximum_size) : max_size(maximum_size), real_max_size(2*maximum_size) {
     typed_element_pushed = false;
+	
+
 };
 
 void Operand_stack::push_type(Typed_element typed_element) {
@@ -76,7 +78,7 @@ void Operand_stack::push_type(bool x) {
 
 void Operand_stack::push_type(int *x) {
 	
-	if (this->elements.size()+bits64 >= max_size) {
+	if (this->elements.size()+bits64 >= real_max_size) {
 		throw std::out_of_range("Excedeu o limite maximo da pilha!");
 	}	
 	Element element;

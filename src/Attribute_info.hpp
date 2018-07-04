@@ -69,14 +69,14 @@ public:
      * @param index    
      * @return Retorna .
     */
-    U4 get_n_bytes_value(uint8_t n, vector<U2> code, int* index);
+    U4 get_n_bytes_value(uint8_t n, vector<unsigned char> code, int* index);
     /**
      * Descrição
      * @param n 
      * @param code 
      * @return Retorna .
     */
-    void get_opcode_params(vector<U2> code, int* index);
+    void get_opcode_params(vector<unsigned char> code, int* index);
 };
 
 #endif

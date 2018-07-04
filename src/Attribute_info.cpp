@@ -308,7 +308,8 @@ string Attribute_info::get_mnemonic(int opcode) {
   }
 }
 
-U4 Attribute_info::get_n_bytes_value(U1 n, vector<U2> code, int* index) {
+
+U4 Attribute_info::get_n_bytes_value(U1 n, vector<unsigned char> code, int* index) {
   U4 value = code[(*index)++];
 
   for(int i = 1; i < n; i++)
@@ -317,7 +318,7 @@ U4 Attribute_info::get_n_bytes_value(U1 n, vector<U2> code, int* index) {
   return value;
 }
 
-void Attribute_info::get_opcode_params(vector<U2> code, int* index) {
+void Attribute_info::get_opcode_params(vector<unsigned char> code, int* index) {
   switch(code[(*index)++]) {
       case(0x10): //"bipush";
       case(0x15): //"iload";

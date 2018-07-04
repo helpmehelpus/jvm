@@ -19,7 +19,7 @@ typedef struct {
     U2 exception_table_length;
     U2 attribute_count;
     U4 code_length;
-    vector<U2> code;
+    vector<unsigned char> code;
     vector <T_exception_table> exception_table;
     vector <Attribute_info> attributes;
 } Code_attribute;
