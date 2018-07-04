@@ -1,7 +1,13 @@
 #include "Local_variable.hpp"
 
-
-
+Local_variable::Local_variable(U2 size){
+	this->elements.resize(size);
+	this->types.resize(size);
+	
+}
+Local_variable::Local_variable(){
+	
+}
 Typed_element Local_variable::get_typed_element(int index) const {
 	// index *= 2;
 	// if (index >= real_max || index < 0)

@@ -28,5 +28,5 @@ int main(int argc, char* argv[]){
 	else 
 		printf("Did not run anyting\n");
   
-  return 0;
+  return 7;
 }

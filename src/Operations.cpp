@@ -2728,7 +2728,45 @@ void Operations::func_new(){
 }
 
 void Operations::newarray(){
-    
+    uint8_t type = get_n_bytes_value(1, frame->pc);
+    int32_t index = frame->operand_stack->pop_element().is;
+
+    if (index < 0)
+        throw std::runtime_error("Negative Array Size.");
+
+    int *array;
+
+    switch(type){
+        case T_BOOLEAN:
+        array = (int*) new Local_variable(index);
+        break;
+        case T_CHAR:
+        array = (int*) new std::vector<uint8_t>(index);
+        break;
+        case T_FLOAT:
+        array = (int*) new Local_variable(index);
+        break;
+        case T_DOUBLE:
+        array = (int*) new Local_variable(2*index); // tinha , true
+        break;
+        case T_BYTE:
+        array = (int*) new Local_variable(index);
+        break;
+        case T_SHORT:
+        array = (int*) new Local_variable(index);
+        break;
+        case T_INT:
+        array = (int*) malloc(sizeof(index));
+        break;
+        case T_LONG:
+        array = (int*) new Local_variable(2*index); // tinha true
+        break;
+        default:
+        array = (int*) new Local_variable(index);
+        break;
+    }
+    cout << array << endl;
+    frame->operand_stack->push_type(array);
 }
 
 void Operations::anewarray(){
