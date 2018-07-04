@@ -11,7 +11,7 @@ Frame_stack::Frame_stack(Reader *reader) {
 	frame->method_info = reader->get_main();
 	frame->cp_vector = reader->cp->cp_vector;
 	frame->operand_stack = new Operand_stack(frame->method_info.attributes[0].info.code.max_stack);
-	frame->local_variables = new Local_variable();
+	frame->local_variables = new Local_variable(frame->method_info.attributes[0].info.code.max_locals*2);
 	set_start_PC(frame);
 	threads = new stack<Frame*>;
 	threads->push(frame);
@@ -35,7 +35,7 @@ void Frame_stack::execute() {
 
 
 		threads->top()->operand_stack->debug_operand_stack();
-		threads->top()->local_variables->debug_local_variables();
+		// threads->top()->local_variables->debug_local_variables();
 		
 	}
 }
@@ -93,7 +93,7 @@ void Frame_stack::add_frame(Method_info method_info, vector<Cp_info> cp_vector) 
 	frame->method_info = method_info;
 	frame->cp_vector = cp_vector;
 	frame->operand_stack = new Operand_stack(frame->method_info.attributes[0].info.code.max_stack);
-	frame->local_variables = new Local_variable();
+	frame->local_variables = new Local_variable(frame->method_info.attributes[0].info.code.max_locals*2);
 
 	set_start_PC(frame);
 	

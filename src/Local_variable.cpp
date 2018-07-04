@@ -1,5 +1,6 @@
 #include "Local_variable.hpp"
 
+
 Local_variable::Local_variable(U2 size){
 	this->elements.resize(size);
 	this->types.resize(size);
@@ -35,35 +36,43 @@ Typed_element Local_variable::get_typed_element(int index) const {
 }
 
 void Local_variable::insert_typed_element(Typed_element typed_element, int index) {
-	if(types.size() < index){
-		types.resize(index);
-		elements.resize(index);
-	}
+	// if(types.size() < index){
+	// 	types.resize(index);
+	// 	elements.resize(index);
+	// }
 
 	if (index < 0)
 		throw std::runtime_error("Indice fora dos limites!");
 
 	if (typed_element.type == TYPE_LONG || typed_element.type == TYPE_DOUBLE || (typed_element.type == TYPE_REFERENCE && BITS)) {
 		
-		index--;
+//		index--;
 
-		this->types.insert(types.begin() + index,typed_element.type);
-		this->types.insert(types.begin() + index, INVALID);
-		Element aux;
-		Element aux2;
-		aux.i = typed_element.value.i;
-		aux2.i = int(typed_element.value.l >> 32);
-		this->elements.insert(elements.begin()+ index, aux);
-		this->elements.insert(elements.begin() + index, aux2);
+		this->types[index] = typed_element.type;
+		this->elements[index].i = typed_element.value.i;
+		this->elements[++index].i = int(typed_element.value.l >> 32);
+		this->types[index] = INVALID;
+
+
+		// this->types.insert(types.begin() + index, INVALID);
+		// this->types.insert(types.begin() + index,typed_element.type);
+		// Element aux;
+		// Element aux2;
+		// aux.i = typed_element.value.i;
+		// aux2.i = int(typed_element.value.l >> 32);
+		// this->elements.insert(elements.begin() + index, aux2);
+		// this->elements.insert(elements.begin()+ index, aux);
 
 	} else {
+		this->types[index] = typed_element.type;
+		this->elements[index].i = typed_element.value.i;
 		
-		this->types.insert(types.begin() + index,typed_element.type);
-		Element aux;
-		aux.i = typed_element.value.i;
+		// this->types.insert(types.begin() + index,typed_element.type);
+		// Element aux;
+		// aux.i = typed_element.value.i;
 		
 		
-		this->elements.insert(elements.begin()+index, aux);
+		// this->elements.insert(elements.begin()+index, aux);
 		
 	}
 }
@@ -71,6 +80,15 @@ void Local_variable::insert_typed_element(Typed_element typed_element, int index
 
 void Local_variable::debug_local_variables() const{
 	for(int i = 0; i < this->elements.size(); i++){
+		if(this->types[i] == TYPE_DOUBLE){
+			cout << "[" << i << "]TYPE: DOUBLE";
+			cout << " Valor: " << double((long(elements[i+1].i)<<32) + this->elements[i].i) << endl;
+			i++;
+			continue;
+
+		}
+
 		cout << "[" << i << "]TYPE: " << (int)this->types[i] << " Valor: " << int(this->elements[i].i) << endl;
 	}
 }
+

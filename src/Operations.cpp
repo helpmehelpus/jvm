@@ -249,13 +249,19 @@ void Operations::ldc2_w()
     uint8_t index = get_n_bytes_value(2, frame->pc);
 	long val_push_long;
 	double val_push_double; 
-    cout << "ldc2_w index : " << (int)index << endl;
-	if (frame->cp_vector[index].tag == LONG){
+    if (frame->cp_vector[index].tag == LONG){
 		val_push_long = Displayer::u4_to_long(frame->cp_vector[index].info[0].u4, frame->cp_vector[index+1].info[0].u4);
 		frame->operand_stack->push_type(long(val_push_long));
 	} else {
-		val_push_double = Displayer::u4_to_double(frame->cp_vector[index].info[0].u4, frame->cp_vector[index+1].info[0].u4);
-		frame->operand_stack->push_type(double(val_push_double));
+        frame->operand_stack->elements.push(frame->cp_vector[index+1].info[0].u4);
+        frame->operand_stack->elements.push(frame->cp_vector[index].info[0].u4);
+        frame->operand_stack->types.push(TYPE_DOUBLE);
+        frame->operand_stack->real_types.push(RT_DOUBLE);
+
+
+
+		// val_push_double = Displayer::u4_to_double(frame->cp_vector[index].info[0].u4, frame->cp_vector[index+1].info[0].u4);
+		// frame->operand_stack->push_type(double(val_push_double));
 	}
 }
 
@@ -548,8 +554,7 @@ void Operations::istore_2()
 {
     if(frame->operand_stack->top_type() == TYPE_INT) {
 		Typed_element aux = frame->operand_stack->pop_typed_element();
-        cout << "Removido da os " << aux.value.i << endl;
-		frame->local_variables->insert_typed_element(aux,2);
+        frame->local_variables->insert_typed_element(aux,2);
 	}
 	else
 		printf("Operando no topo != TYPE_INT\n");
@@ -2069,7 +2074,7 @@ void Operations::funcgoto(){
 
 	offset = int16_t(get_n_bytes_value(2, frame->pc));
 
-	frame->current_pc_index += offset - 1;
+	frame->current_pc_index = offset/128;
 
 }
 
@@ -2741,7 +2746,7 @@ void Operations::newarray(){
         array = (int*) new Local_variable(index);
         break;
         case T_CHAR:
-        array = (int*) new std::vector<uint8_t>(index);
+        array = (int*) new std::vector<uint8_t>(index); // TODO: verificar possibilidade 
         break;
         case T_FLOAT:
         array = (int*) new Local_variable(index);
@@ -2770,18 +2775,32 @@ void Operations::newarray(){
 }
 
 void Operations::anewarray(){
-    
+    uint16_t indexbyte = get_n_bytes_value(2, frame->pc);
+    int32_t count = frame->operand_stack->pop_element().is;
+
+    if (count < 0)
+        throw std::runtime_error("Negative Array Size.");
+
+    Local_variable *array = new Local_variable(count * (BITS ? 2:1));
+    for (int i = 0; i < count; i++) {
+        Typed_element aux;
+        aux.type = TYPE_REFERENCE;
+        aux.value.pi = nullptr;
+        array->insert_typed_element(aux, i);
+    }
+
+    frame->operand_stack->push_type((int*)array);
 }
 
 void Operations::arraylength()
 {
-    // Local_variable *arrayref;
+    Local_variable *arrayref;
 
-    // arrayref = (Local_variable *) frame->operand_stack->pop_element().pi;
-    // if (arrayref == nullptr)
-    //     throw runtime_error("Null pointer");
+    arrayref = (Local_variable *) frame->operand_stack->pop_element().pi;
+    if (arrayref == nullptr)
+        throw runtime_error("ARRAYLENGTH: Null pointer");
 
-    // frame->operand_stack->push_type(arrayref->get_max());
+    frame->operand_stack->push_type((int)arrayref->elements.size());
 }
 
 void Operations::athrow(){
