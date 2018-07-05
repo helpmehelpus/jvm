@@ -13,10 +13,10 @@ using namespace std;
  */
 struct Class_loader_type {
         /*@{*/
-        vector<U1> array; /**< the x coordinate */
-        U1 u1; /**< the y coordinate */
-        U2 u2; /**< the z coordinate */
-        U4 u4; /**< the k coordinate */
+        vector<U1> array; /**< vetor de elementos de 1 byte */
+        U1 u1; /**< variável que contém 1 byte  */
+        U2 u2; /**< variável que contém 2 bytes */
+        U4 u4; /**< variável que contém 4 bytes */
         
         /*@}*/
 };

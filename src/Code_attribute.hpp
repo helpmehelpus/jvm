@@ -11,17 +11,22 @@ using namespace std;
 
 class Attribute_info;
 
-/*! \struct Struct responsável por armazenar todos os tamanhos de variáveis da JVM
-*/
+/**
+ * 
+ * Struct responsável por armazenar os as instruções da JVM e informação auxiliares para metodos, etc
+ */
+
 typedef struct {
-    U2 max_stack;
-    U2 max_locals;
-    U2 exception_table_length;
-    U2 attribute_count;
-    U4 code_length;
-    vector<unsigned char> code;
-    vector <T_exception_table> exception_table;
-    vector <Attribute_info> attributes;
+    /*@{*/
+    U2 max_stack; /**< Fornece a profundidade máxima da pilha de operandos */
+    U2 max_locals; /**< Fornece o número de variáveis locais na matriz da variável local alocada na invocação de um metódo */
+    U2 exception_table_length; /**< Cada entrada no vetor exception_table descreve um manipulador de exceção na vetor de código */
+    U2 attribute_count; /**< Indica o número de atributos. */
+    U4 code_length; /**< Fornece o número de bytes no vetor de atributo "code"  */
+    vector<unsigned char> code; /**< Vetor de códigos que fornece os bytes reais do código da JVM. */
+    vector <T_exception_table> exception_table; /**< Cada entrada no vetor exception_table descreve um manipulador de exceção na vetor de código */
+    vector <Attribute_info> attributes; /**< Cada valor da tabela de atributos é uma estrutura de atributos */
+    /*@}*/
 } Code_attribute;
 
 #endif

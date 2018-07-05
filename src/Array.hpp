@@ -11,10 +11,15 @@
 #define T_LONG 11
 
 
-
+/**
+ * 
+ * Struct que contém estrutura de um array
+ */
 struct Array {
-  int* dimensions;
-  int* array;
+  /*@{*/
+  int* dimensions; /**< ponteiro de inteiro que contém as dimensões do array */
+  int* array; /**< ponteiro de inteiro que armazena os dados do array */
+  /*@}*/
 };
 
 #endif
