@@ -35,7 +35,7 @@ public:
 	static void display_cp(Constant_pool *cp, U2 cp_length);
 	
     /*!
-    * Imprime UTF8.
+    * Imprime \e string na codificação \e UTF8.
     * @param values.
     * @param size.
     */
@@ -105,23 +105,23 @@ public:
 	
     /*!
     * Imprime uma interface dado um índice.
-    * @param interfaces referência para as interfaces
+    * @param interfaces referência para as interfaces.
     * @param cp_vector referência para o \e Constant \e Pool.
-    * @param index índice da interface
+    * @param index índice da interface.
     */
 	static void display_interface_by_index(U2 interfaces, vector<Cp_info> cp_vector, int);
 	
     /*!
-    * Imprime os fields.
-    * @param fields vetor de fields.
+    * Imprime os campos.
+    * @param fields vetor de campos.
     * @param cp_vector Vetor para armazenamento de dados do ConstantPool.
-	* @param length tamanho das interfaces.
+	* @param length tamanho dos campos.
     */
 	static void display_fields(vector <Field_info>, vector<Cp_info>, int);
 	
     /*!
-    * Imprime os fields dado um índice.
-    * @param fields referência para as fields.
+    * Imprime os campos dado um índice.
+    * @param fields referência para as campos.
     * @param cp_vector referência para o \e Constant \e Pool.
     * @param index índice da interface.
     */
