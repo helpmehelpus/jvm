@@ -10,8 +10,8 @@
 
 using namespace std;
 
-
-/*! \brief Classe responsável por armazenar informações das variáveis locais
+/*! \class Local_variable
+ * \brief Classe responsável por armazenar informações das variáveis locais
  *
  * 
  */

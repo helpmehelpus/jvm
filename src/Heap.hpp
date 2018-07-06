@@ -8,8 +8,8 @@ class Instance_class;
 
 
 using namespace std;
-
-/*! \brief Classe responsável pela área de dados de tempo de execução a partir da qual a memória para todas as instâncias e matrizes de classe é alocada
+/*! \class Heap
+ * \brief Classe responsável pela área de dados de tempo de execução a partir da qual a memória para todas as instâncias e matrizes de classe é alocada
  *
  * 
  */

@@ -15,7 +15,8 @@ using namespace std;
 
 class Attribute_info;
 
-/*! \brief Classe que contém informações dos atributos da JVM
+/*! \class Attribute_info
+ *  \brief Classe que contém informações dos atributos da JVM
  *         
  *
  *  Essa classe contém todos os dados dos atributos da JVM

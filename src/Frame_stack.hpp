@@ -14,7 +14,8 @@ using namespace std;
 
 class Reader;
 
-/*! \brief Classe responsável pela execução das instruções e dos frames da JVM
+/*! \class Frame_stack
+ * \brief Classe responsável pela execução das instruções e dos frames da JVM
  *
  * 
  */

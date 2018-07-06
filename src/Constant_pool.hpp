@@ -68,7 +68,8 @@
 
 using namespace std;
 
-/*! \brief Classe responsável por armazenar as constantes definidas da classe.
+/*! \class Constant_pool
+ *  \brief Classe responsável por armazenar as constantes definidas da classe.
  *        
  */
 class Constant_pool{

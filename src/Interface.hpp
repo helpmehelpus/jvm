@@ -6,7 +6,8 @@
 
 using namespace std;
 
-/*! \brief Classe responsável por ler as interfaces de um .class
+/*! \class Interface
+ *  \brief Classe responsável por ler as interfaces de um .class
  *
  * 
  */

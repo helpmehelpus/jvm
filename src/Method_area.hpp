@@ -18,7 +18,8 @@ class Reader;
 class Static_class;
 class Frame_stack;
 
-/*! \brief Classe responsável por realizar as operações referentes ao \e Method Area da JVM
+/*! \class Method_area
+ * \brief Classe responsável por realizar as operações referentes ao \e Method Area da JVM
  *
  * 
  */
