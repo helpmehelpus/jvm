@@ -2737,18 +2737,9 @@ void Operations::invokeinterface()
         frame_stack->set_arguments(parametros);
     }
 }
-//TODO fazer add class para string
+
 void Operations::func_new(){
-    // uint16_t indexbyte = get_n_bytes_value(2, &frame->pc);
-    // string classe = Displayer::dereference_index(frame->cp_vector, indexbyte);
-    // Static_class *aux =  Method_area::get_class(classe);
-
-    // if (aux == nullptr) {
-    //     Method_area::add_class(classe);
-    //     aux = Method_area::get_class(classe);
-    // }
-
-    // frame->operand_stack->push_type((int*)aux->get_instance());
+    // TODO : Implementar
 }
 
 void Operations::newarray(){
@@ -2762,22 +2753,22 @@ void Operations::newarray(){
 
     switch(type){
         case T_BOOLEAN:
-        array = (int*) new Local_variable(index);
+        array = (int*) new Local_variable(2*index);
         break;
         case T_CHAR:
-        array = (int*) new std::vector<uint8_t>(index); // TODO: verificar possibilidade 
+        array = (int*) new std::vector<uint8_t>(2*index); // TODO: verificar possibilidade 
         break;
         case T_FLOAT:
-        array = (int*) new Local_variable(index);
+        array = (int*) new Local_variable(2*index);
         break;
         case T_DOUBLE:
         array = (int*) new Local_variable(2*index); // tinha , true
         break;
         case T_BYTE:
-        array = (int*) new Local_variable(index);
+        array = (int*) new Local_variable(2*index);
         break;
         case T_SHORT:
-        array = (int*) new Local_variable(index);
+        array = (int*) new Local_variable(2*index);
         break;
         case T_INT:
         array = (int*) malloc(sizeof(int)*index);
@@ -2790,7 +2781,7 @@ void Operations::newarray(){
         array = (int*) new Local_variable(2*index); // tinha true
         break;
         default:
-        array = (int*) new Local_variable(index);
+        array = (int*) new Local_variable(2*index);
         break;
     }
     cout << array << endl;

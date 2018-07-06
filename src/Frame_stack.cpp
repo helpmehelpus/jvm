@@ -51,13 +51,6 @@ bool Frame_stack::next_instruction() {
 		return false;
 	}
 
-		
-	//checa se nao esgotamos as Operations do metodo corrente
-	// if (threads->top()->current_pc_index < threads->top()->method_info.attributes[0].info.code.code.size()) {
-	// 	opcode = threads->top()->get_current_pc();
-	// 	threads->top()->current_pc_index++;
-	// 	return true;
-	// }
 	if ((threads->top()->pc - &threads->top()->method_info.attributes[0].info.code.code[0]) < threads->top()->method_info.attributes[0].info.code.code_length) {
 		opcode = *threads->top()->pc;
 		threads->top()->pc++;
