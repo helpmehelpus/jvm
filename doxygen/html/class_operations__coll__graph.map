@@ -1,0 +1,7 @@
+<map id="Operations" name="Operations">
+<area shape="rect" id="node2" href="$struct_frame.html" title="Struct que contém estrutura de um array. " alt="" coords="158,95,217,121"/>
+<area shape="rect" id="node3" href="$class_local__variable.html" title="Classe responsável por armazenar informações das variáveis locais. " alt="" coords="5,5,108,32"/>
+<area shape="rect" id="node4" href="$class_operand__stack.html" title="Classe responsável por garantir que cada frame contenha uma pilha LIFO. " alt="" coords="132,5,243,32"/>
+<area shape="rect" id="node5" href="$class_method__info.html" title="Classe responsável por estruturar cada inicialização de interface e classes. " alt="" coords="267,5,359,32"/>
+<area shape="rect" id="node6" href="$class_frame__stack.html" title="Classe responsável pela execução das instruções e dos frames da JVM. " alt="" coords="241,95,339,121"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="Instance_class" name="Instance_class">
+<area shape="rect" id="node2" href="$class_static__class.html" title="Classe que define as classes estáticas. " alt="" coords="13,184,107,211"/>
+<area shape="rect" id="node3" href="$class_reader.html" title="Classe responsável por fazer a leitura do .class. " alt="" coords="29,95,91,121"/>
+<area shape="rect" id="node4" href="$class_constant__pool.html" title="Classe responsável por armazenar as constantes definidas da classe. " alt="" coords="7,5,113,32"/>
+</map>

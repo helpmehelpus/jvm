@@ -1,0 +1,5 @@
+<map id="Frame" name="Frame">
+<area shape="rect" id="node2" href="$class_local__variable.html" title="Classe responsável por armazenar informações das variáveis locais. " alt="" coords="5,5,108,32"/>
+<area shape="rect" id="node3" href="$class_operand__stack.html" title="Classe responsável por garantir que cada frame contenha uma pilha LIFO. " alt="" coords="132,5,243,32"/>
+<area shape="rect" id="node4" href="$class_method__info.html" title="Classe responsável por estruturar cada inicialização de interface e classes. " alt="" coords="267,5,359,32"/>
+</map>
