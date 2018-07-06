@@ -60,7 +60,10 @@ void Local_variable::debug_local_variables() const{
 	for(int i = 0; i < this->elements.size(); i++){
 		
 
-		cout << "[" << i << "]TYPE: " << (int)this->types[i] << " Valor: " << int(this->elements[i].i) << "Hexa: " << int(this->elements[i].i) << hex << endl;
+		cout << "[" << i << "]TYPE: " << (int)this->types[i];
+		printf(" Hex: %x", this->elements[i].i);
+		cout << " Valor: " << int(this->elements[i].i) << endl;
+		// cout << " Hexa: " << int(this->elements[i].i) << hex << endl;
 	}
 }
 
