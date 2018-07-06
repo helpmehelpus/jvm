@@ -308,7 +308,7 @@ public:
 	static void baload();
 
 	/*!
-	* Instrução que caractere de um vetor.
+	* Instrução que carrega caractere de um vetor.
     */
 	static void caload();
 
@@ -451,7 +451,6 @@ public:
 	* Instrução que salva em um vetor de \e longs.
     */
 
-
 	static void lastore();
 
 	/*!
@@ -490,618 +489,574 @@ public:
 	static void pop();
 
 	/*!
-	* Instrução que desempilha o primeirou ou segundo topos da pilha.
+	* Instrução que desempilha o primeiro ou segundo topos da pilha.
     */
 	static void pop2();
 
 	/*!
-	* Instrução que
+	* Instrução que duplica o topo da pilha.
     */
 	static void dup();
 
 	/*!
-	* Instrução que
+	* Instrução que duplica o topo da pilha e insere dois valores.
     */
 	static void dup_x1();
 
 	/*!
-	* Instrução que
+	* Instrução que duplica o topo da pilha e insere três valores.
     */
 	static void dup_x2();
 
 	/*!
-	* Instrução que
+	* Instrução que duplica o primeiro ou segundo topos da pilha
     */
 	static void dup2();
 
 	/*!
-	* Instrução que
+	* Instrução que duplica o primeiro ou segundo topos da pilha e insere dois ou três valores.
     */
 	static void dup2_x1();
 
 	/*!
-	* Instrução que
+	* Instrução que duplica o primeiro ou segundo topos da pilha e insere dois, três ou quatro valores.
     */
 	static void dup2_x2();
 
 	/*!
-	* Instrução que
+	* Instrução que troca os dois primeiros topos da pilha.
     */
 	static void swap();
 
 	/*!
-	* Instrução que
-    */
-
-
-/*!
-	* Instrução que
+	* Instrução que soma inteiros.
     */
 	static void iadd();
 
 	/*!
-	* Instrução que
+	* Instrução que soma \e longs.
     */
 	static void ladd();
 
 	/*!
-	* Instrução que
+	* Instrução que soma \e floats.
     */
 	static void fadd();
 
 	/*!
-	* Instrução que
+	* Instrução que soma \e doubles.
     */
 	static void dadd();
 
 	/*!
-	* Instrução que
+	* Instrução que subtrai inteiros.
     */
 	static void isub();
 
 	/*!
-	* Instrução que
+	* Instrução que subtrai \e longs.
     */
 	static void lsub();
 
 	/*!
-	* Instrução que
+	* Instrução que subtrai \e floats.
     */
 	static void fsub();
 
 	/*!
-	* Instrução que
+	* Instrução que subtrai \e doubles.
     */
 	static void dsub();
 
 	/*!
-	* Instrução que
+ 	* Instrução que multiplica inteiros.
     */
 	static void imul();
 
 	/*!
-	* Instrução que
+	* Instrução que multiplica \e longs.
     */
 	static void lmul();
 
 	/*!
-	* Instrução que
+	* Instrução que multiplica \e floats.
     */
 	static void fmul();
 
 	/*!
-	* Instrução que
+	* Instrução que multiplica \e doubles.
     */
 	static void dmul();
 
 	/*!
-	* Instrução que
+	* Instrução que divide inteiros.
     */
 	static void idiv();
 
 	/*!
-	* Instrução que
+	* Instrução que divide \e longs.
     */
 	static void ldiv();
 
 	/*!
-	* Instrução que
+	* Instrução que divide \e floats.
     */
 	static void fdiv();
 
 	/*!
-	* Instrução que
+	* Instrução que divide \e doubles.
     */
 	static void ddiv();
 
 	/*!
-	* Instrução que
-    */
-
-
-/*!
-	* Instrução que
+	* Instrução que retorna o resto de uma divisão inteira.
     */
 	static void irem();
 
 	/*!
-	* Instrução que
+	* Instrução que retorna o resto de uma divisão de \e longs.
     */
 	static void lrem();
 
 	/*!
-	* Instrução que
+	* Instrução que retorna o resto de uma divisão de \e floats.
     */
 	static void frem();
 
 	/*!
-	* Instrução que
+	* Instrução que retorna o resto de uma divisão \e doubles	.
     */
 	static void drem();
 
 	/*!
-	* Instrução que
+	* Instrução que nega um inteiro.
     */
 	static void ineg();
 
 	/*!
-	* Instrução que
+	* Instrução que nega um \e long.
     */
 	static void lneg();
 
 	/*!
-	* Instrução que
+	* Instrução que nega um \e float.
     */
 	static void fneg();
 
 	/*!
-	* Instrução que
+	* Instrução que nega um \e double.
     */
 	static void dneg();
 
 	/*!
-	* Instrução que
+	* Instrução que aritmético-desloca um inteiro para a esquerda.
     */
 	static void ishl();
 
 	/*!
-	* Instrução que
+	* Instrução que aritmético-desloca um \e long para a esquerda.
     */
 	static void lshl();
 
 	/*!
-	* Instrução que
+	* Instrução que aritmético-desloca um inteiro para a direita.
     */
 	static void ishr();
 
 	/*!
-	* Instrução que
+	* Instrução que aritmético-desloca um \e long para a direita.
     */
 	static void lshr();
 
 	/*!
-	* Instrução que
+	* Instrução que lógico-desloca um inteiro para a direita
     */
 	static void iushr();
 
 	/*!
-	* Instrução que
+	* Instrução que lógico-desloca um \e long para a direita
     */
 	static void lushr();
 
 	/*!
-	* Instrução que
+	* Instrução que realiza um E \e bit a \e bit entre inteiros.
     */
 	static void iand();
 
 	/*!
-	* Instrução que
+	* Instrução que realiza um E \e bit a \e bit entre \e longs
     */
 	static void land();
 
 	/*!
-	* Instrução que
+	* Instrução que realiza um OU \e bit a \e bit entre inteiros.
     */
 
-
-/*!
-	* Instrução que
-    */
 	static void ior();
-
 	/*!
-	* Instrução que
+	* Instrução que realiza um OU \e bit a \e bit entre \e longs.
     */
+
 	static void lor();
 
 	/*!
-	* Instrução que
+	* Instrução que realiza um XOR \e bit a \e bit entre inteiros.
     */
+
 	static void ixor();
 
 	/*!
-	* Instrução que
+	* Instrução que realiza um XOR \e bit a \e bit entre \e longs.
     */
 	static void lxor();
 
 	/*!
-	* Instrução que
+	* Instrução que incrementa variável local por uma constante.
     */
 	static void iinc();
 
 	/*!
-	* Instrução que
+	* Instrução que converte inteiro para \e long.
     */
 	static void i2l();
 
 	/*!
-	* Instrução que
+	* Instrução que converte inteiro para \e float.
     */
 	static void i2f();
 
 	/*!
-	* Instrução que
+	* Instrução que converte inteiro para \e double.
     */
 	static void i2d();
 
 	/*!
-	* Instrução que
+	* Instrução que converte \e long para inteiro.
     */
 	static void l2i();
 
 	/*!
-	* Instrução que
+	* Instrução que converte \e long para \e float.
     */
 	static void l2f();
 
 	/*!
-	* Instrução que
+	* Instrução que converte \e long para \e double.
     */
 	static void l2d();
 
 	/*!
-	* Instrução que
+	* Instrução que converte \e float para inteiro.
     */
 	static void f2i();
 
 	/*!
-	* Instrução que
+	* Instrução que converte \e float para \e long.
     */
 	static void f2l();
 
 	/*!
-	* Instrução que
+	* Instrução que converte \e float para \e double.
     */
 	static void f2d();
 
 	/*!
-	* Instrução que
+	* Instrução que converte \e double para inteiro.
     */
 	static void d2i();
 
 	/*!
-	* Instrução que
+	* Instrução que converte  \e double para \e long.
     */
 	static void d2l();
 
 	/*!
-	* Instrução que
-    */
-
-
-/*!
-	* Instrução que
+	* Instrução que convete \e double para \e float.
     */
 	static void d2f();
 
 	/*!
-	* Instrução que
+	* Instrução que converte inteiro para byte.
     */
 	static void i2b();
 
 	/*!
-	* Instrução que
+	* Instrução que converte inteiro para \e char.
     */
 	static void i2c();
 
 	/*!
-	* Instrução que
+	* Instrução que converte intero para \e short.
     */
 	static void i2s();
 
 	/*!
-	* Instrução que
+	* Instrução que compara \e longs.
     */
 	static void lcmp();
 
 	/*!
-	* Instrução que
+	* Instrução que compara \e floats (menor).
     */
 	static void fcmpl();
 
 	/*!
-	* Instrução que
+	* Instrução que compara \e floats (maior).
     */
 	static void fcmpg();
 
 	/*!
-	* Instrução que
+	* Instrução que compara \e doubles (menor).
     */
 	static void dcmpl();
 
 	/*!
-	* Instrução que
+	* Instrução que compara \e doubles (maior).
     */
 	static void dcmpg();
 
 	/*!
-	* Instrução que
+	* Instrução que realiza um e branch caso a comparação seja zero (igual).
     */
 	static void ifeq();
 
 	/*!
-	* Instrução que
+	* Instrução que realiza um e branch caso a comparação seja zero (diferente).
     */
 	static void ifne();
 
 	/*!
-	* Instrução que
+	* Instrução que realiza um e branch caso a comparação seja zero (menor).
     */
 	static void iflt();
 
 	/*!
-	* Instrução que
+	* Instrução que realiza um e branch caso a comparação seja zero (maior igual).
     */
 	static void ifge();
 
 	/*!
-	* Instrução que
+	* Instrução que realiza um e branch caso a comparação seja zero (maior).
     */
 	static void ifgt();
 
 	/*!
-	* Instrução que
+	* Instrução que realiza um e branch caso a comparação seja zero (menor igual).
     */
 	static void ifle();
 
 	/*!
-	* Instrução que
+	* Instrução que realiza um \e branch se a comparação de inteiros é satisfeita (iguais).
     */
 	static void if_icmpeq();
 
 	/*!
-	* Instrução que
+	* Instrução que realiza um \e branch se a comparação de inteiros é satisfeita (diferentes).
     */
 
-
-/*!
-	* Instrução que
-    */
 	static void if_icmpne();
 
 	/*!
-	* Instrução que
+	* Instrução que realiza um \e branch se a comparação de inteiros é satisfeita (menor).
     */
 	static void if_icmplt();
 
 	/*!
-	* Instrução que
+	* Instrução que realiza um \e branch se a comparação de inteiros é satisfeita (maior igual).
     */
 	static void if_icmpge();
 
 	/*!
-	* Instrução que
+	* Instrução que realiza um \e branch se a comparação de inteiros é satisfeita (maior).
     */
 	static void if_icmpgt();
 
 	/*!
-	* Instrução que
+	* Instrução que realiza um \e branch se a comparação de inteiros é satisfeita (menor igual).
     */
 	static void if_icmple();
 
 	/*!
-	* Instrução que
+	* Instrução que realiza um \e branch se a comparação de referências é satisfeita (igual).
     */
 	static void if_acmpeq();
 
 	/*!
-	* Instrução que
+	* Instrução que realiza um \e branch se a comparação de referências é satisfeita (diferente).
     */
 	static void if_acmpne();
 
 	/*!
-	* Instrução que
+	* Instrução que sempre realiza um branch.
     */
 	static void funcgoto();
 
 	/*!
-	* Instrução que
+	* Instrução que pula para uma subrotina.
     */
 	static void jsr();
 
 	/*!
-	* Instrução que
+	* Instrução que retorna de uma subrotina
     */
 	static void funcret();
 
 	/*!
-	* Instrução que
+	* Instrução que acessa a tabela de jump por indice e pula.
     */
 	static void tableswitch();
 
 	/*!
-	* Instrução que
+	* Instrução queacessa a tabela de jump por correspondência de chave e pula.
     */
 	static void lookupswitch();
 
 	/*!
-	* Instrução que
+	* Instrução que retorna um inteiro de um método.
     */
 	static void ireturn();
 
 	/*!
-	* Instrução que
+	* Instrução que um \e long de um método.
     */
 	static void lreturn();
 
 	/*!
-	* Instrução que
+	* Instrução que retorna um \e float de um método.
     */
 	static void freturn();
 
 	/*!
-	* Instrução que
+	* Instrução que retorna um \e double de um método.
     */
 	static void dreturn();
 
 	/*!
-	* Instrução que
+	* Instrução que retorna uma referência de um método.
     */
 
-
-/*!
-	* Instrução que
-    */
 	static void areturn();
 
 	/*!
-	* Instrução que
+	* Instrução que retorna void de um método.
     */
 	static void func_return();
 
 	/*!
-	* Instrução que
+	* Instrução que retorna um campo estático de um método.
     */
 	static void getstatic();
 
 	/*!
-	* Instrução que
+	* Instrução que define um campo estático para um método.
     */
 	static void putstatic();
 
 	/*!
-	* Instrução que
+	* Instrução que busca um campo de um objeto.
     */
 	static void getfield();
 
 	/*!
-	* Instrução que
+	* Instrução que define um campo de um objeto.
     */
 	static void putfield();
 
 	/*!
-	* Instrução que
+	* Instrução que invoca a instância de um método.
     */
 	static void invokevirtual();
 
 	/*!
-	* Instrução que
+	* Instrução que invoca a instância de um método.tratamento especial para invocações de método de inicialização de superclasse, privada e instância
     */
 	static void invokespecial();
 
 	/*!
-	* Instrução que
+	* Instrução que um método de uma classe estática .
     */
 	static void invokestatic();
 
 	/*!
-	* Instrução que
+	* Instrução que invoca o método de interface.
     */
 	static void invokeinterface();
 
 	/*!
-	* Instrução que
+	* Instrução que cria um objeto.
     */
 
-
-/*!
-	* Instrução que
-    */
 	static void func_new();
 
 	/*!
-	* Instrução que
+	* Instrução que um vetor.
     */
 	static void newarray();
 
 	/*!
-	* Instrução que
+	* Instrução que um vetor de referências.
     */
 	static void anewarray();
 
 	/*!
-	* Instrução que
+	* Instrução que retorna o tamanho do array.
     */
 	static void arraylength();
 
 	/*!
-	* Instrução que
+	* Instrução que lança uma exceção ou erro.
     */
 	static void athrow();
 
 	/*!
-	* Instrução que
+	* Instrução que estende o índice de variáveis locais por bytes adicionais
     */
 
-
-/*!
-	* Instrução que
-    */
 	static void wide();
 
 	/*!
-	* Instrução que
+	* Instrução que um array multidimensional.
     */
 	static void multianewarray();
 
 	/*!
-	* Instrução que
+	* Instrução que realiza um \e branch se a referência é nula.
     */
 	static void ifnull();
 
 	/*!
-	* Instrução que
+	* Instrução que realiza um \e branch se a referência não 	é nula.
     */
 	static void ifnonnull();
 
 	/*!
-	* Instrução que
+	* Instrução que realiza um \e branch sempre, índice amplo.
     */
 	static void goto_w();
 
 	/*!
-	* Instrução que
+	* Instrução que oula para a subrotina, índice largo.
     */
 	static void jsr_w();
 
-	/*!
-	* Instrução que
-    */
+
 	// static void breakpoint();
 
-	/*!
-	* Instrução que
-    */
+	
 	// static void impdep1();
 
-	/*!
-	* Instrução que
-    */
 	// static void impdep2();
 
 	/*!
-	* Instrução que
+	* Instrução que checa um \e float.
     */
 	static int check_float(float f);
 
 	/*!
-	* Instrução que
+	* Instrução que checa um \e double.
     */
 	static int check_double(double d);
 
-	/*!
-	* Instrução que
-    */
 	
 };
 
