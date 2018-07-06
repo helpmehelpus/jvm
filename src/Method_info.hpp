@@ -19,6 +19,7 @@ public:
     unsigned char attributes_count;
     vector <Attribute_info> attributes;
 
+    
     static vector <Method_info> read_methods(FILE*, vector<Cp_info>, int);
     static Method_info read_method(FILE*, vector<Cp_info>);
     static string get_method_flags(unsigned short flags);
