@@ -162,13 +162,13 @@ bool Reader::has_clinit(){
   return found;
 }
 
-string Reader::get_path() {
-	string path= "", auxFilename(this->file_name);
-	string result;
+// string Reader::get_path() {
+// 	string path= "", auxFilename(this->file_name);
+// 	string result;
 	
-  //TODO: Tratar caminho do arquivo
-  return "Jogador.class";
-}
+//   //TODO: Tratar caminho do arquivo
+//   return "Jogador.class";
+// }
 
 Method_info Reader::get_main() {
   return methods[main_index];

@@ -11,6 +11,10 @@
 
 using namespace std;
 
+/*! \brief Classe responsável por estruturar cada inicialização de interface e classes
+ *
+ * 
+ */
 class Method_info {
 public:
     unsigned char access_flags;

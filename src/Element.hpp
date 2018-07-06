@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+/** \brief Union que armazena os elementos utilizados na pilha de operandos e pilha de variáveis locais
+ */
 typedef union {
 	double d;
 	float f;
