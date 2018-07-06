@@ -273,6 +273,7 @@ void Operations::iload()
 		is_wide = false;
 	} else {
 		index = get_n_bytes_value(1, &frame->pc);
+        index++;
 	}
 	
 	Typed_element aux = frame->local_variables->get_typed_element(int(index));
@@ -285,9 +286,10 @@ void Operations::lload()
 	if (is_wide) {
 		index = get_n_bytes_value(2, &frame->pc);
 		is_wide = false;
-	}else
+	}else{
 		index = get_n_bytes_value(1, &frame->pc);
-	
+        index++;
+    }
 	Typed_element aux = frame->local_variables->get_typed_element(int(index));
 	frame->operand_stack->push_type(long(aux.value.l));
 }
@@ -299,9 +301,10 @@ void Operations::fload()
 	if (is_wide) {
 		index = get_n_bytes_value(2, &frame->pc);
 		is_wide = false;
-	}else
+	}else{
 		index = get_n_bytes_value(1, &frame->pc);
-	
+        index++;
+    }
 	Typed_element aux = frame->local_variables->get_typed_element(int(index));
 	frame->operand_stack->push_type(float(aux.value.f));
 }
@@ -313,9 +316,10 @@ void Operations::dload()
 	if (is_wide) {
 		index = get_n_bytes_value(2, &frame->pc);
 		is_wide = false;
-	} else
+	} else{
 		index = get_n_bytes_value(1, &frame->pc);
-	
+        index++;
+    }
 	Typed_element aux = frame->local_variables->get_typed_element(int(index));
 	frame->operand_stack->push_type(double(aux.value.d));
 }
@@ -327,9 +331,10 @@ void Operations::aload()
 	if (is_wide) {
 		index = get_n_bytes_value(2, &frame->pc);
 		is_wide = false;
-	}else
+	}else{
 		index = get_n_bytes_value(1, &frame->pc);
-	
+        index++;
+    }
 	Typed_element aux = frame->local_variables->get_typed_element(int(index));
 	frame->operand_stack->push_type((int*)(aux.value.pi));
 }
@@ -445,9 +450,10 @@ void Operations::iaload()
 	value1 = frame->operand_stack->pop_element();
   	value2 = frame->operand_stack->pop_element();
   	int *ref = value2.pi;
-
+    
   	if (ref == nullptr)
     	throw runtime_error("Null pointer");
+    
 	frame->operand_stack->push_type(ref[value1.i]);
 }
 
@@ -518,9 +524,10 @@ void Operations::istore()
 	if (is_wide) {
 		index = get_n_bytes_value(2, &frame->pc);
 		is_wide = false;
-	}else
+	}else{
 		index = get_n_bytes_value(1, &frame->pc);   
-
+        index++;
+    }
 	if(frame->operand_stack->top_type() == TYPE_INT) {
 		Typed_element aux = frame->operand_stack->pop_typed_element();
 		frame->local_variables->insert_typed_element(aux, index);
@@ -576,9 +583,10 @@ void Operations::lstore()
    if (is_wide) {
 		index = get_n_bytes_value(2, &frame->pc);
 		is_wide = false;
-	}else
+	}else{
 		index = get_n_bytes_value(1, &frame->pc);
-	
+        index++;
+    }
     if(frame->operand_stack->top_type() == TYPE_LONG) {
 		Typed_element aux = frame->operand_stack->pop_typed_element();
 		frame->local_variables->insert_typed_element(aux, index);
@@ -634,9 +642,10 @@ void Operations::fstore()
 	if (is_wide) {
 		index = get_n_bytes_value(2, &frame->pc);
 		is_wide = false;
-	}else
+	}else{
 		index = get_n_bytes_value(1, &frame->pc); 
-	
+        index++;
+    }
 	if(frame->operand_stack->top_type() == TYPE_FLOAT) {
 		Typed_element aux = frame->operand_stack->pop_typed_element();
 		frame->local_variables->insert_typed_element(aux, index);
@@ -692,9 +701,10 @@ void Operations::dstore()
 	if (is_wide) {
 		index = get_n_bytes_value(2, &frame->pc);
 		is_wide = false;
-	} else
+	} else{
 		index = get_n_bytes_value(1, &frame->pc); 
-
+        index++;
+    }
 	if(frame->operand_stack->top_type() == TYPE_DOUBLE) {
 		Typed_element aux = frame->operand_stack->pop_typed_element();
 		frame->local_variables->insert_typed_element(aux, index);
@@ -750,9 +760,10 @@ void Operations::astore()
    	if (is_wide) {
 		index = get_n_bytes_value(2, &frame->pc);
 		is_wide = false;
-	} else
+	} else{
 		index = get_n_bytes_value(1, &frame->pc); 
-
+        index++;
+    }
 	if(frame->operand_stack->top_type() == TYPE_REFERENCE) {
 		Typed_element aux = frame->operand_stack->pop_typed_element();
 		frame->local_variables->insert_typed_element(aux, index);
@@ -2769,7 +2780,11 @@ void Operations::newarray(){
         array = (int*) new Local_variable(index);
         break;
         case T_INT:
-        array = (int*) malloc(sizeof(index));
+        array = (int*) malloc(sizeof(int)*index);
+        // array = (int*)new vector<int>(index);
+
+
+
         break;
         case T_LONG:
         array = (int*) new Local_variable(2*index); // tinha true
