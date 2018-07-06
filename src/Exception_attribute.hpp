@@ -6,9 +6,7 @@
 #include "Base_types.hpp"
 
 using namespace std;
-/**
- * 
- * Struct que verifica quais exceções um método pode lançar
+/** \brief Struct que verifica quais exceções um método pode lançar
  */
 typedef struct {
     /*@{*/

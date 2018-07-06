@@ -7,9 +7,7 @@
 
 using namespace std;
 
-/**
- * 
- * Struct responsável por armazenar todos os tamanhos de variáveis da JVM 
+/** \brief Struct responsável por armazenar todos os tamanhos de variáveis da JVM 
  */
 struct Class_loader_type {
         /*@{*/

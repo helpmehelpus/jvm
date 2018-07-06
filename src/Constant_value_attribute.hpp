@@ -3,9 +3,7 @@
 
 #include "Base_types.hpp"
 
-/**
- * 
- * Struct responsável por representar o valor de um campo constante
+/** \brief Struct responsável por representar o valor de um campo constante
  */
 typedef struct {
     /*@{*/

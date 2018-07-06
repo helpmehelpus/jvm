@@ -370,11 +370,6 @@ public:
 	/*!
 	* Instrução que
     */
-
-
-/*!
-	* Instrução que
-    */
 	static void lstore_1();
 
 	/*!

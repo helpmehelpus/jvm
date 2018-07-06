@@ -11,9 +11,7 @@
 #define T_LONG 11
 
 
-/**
- * 
- * Struct que contém estrutura de um array
+/** \brief Struct que contém estrutura de um array
  */
 struct Array {
   /*@{*/

@@ -8,9 +8,7 @@
 
 using namespace std;
 
-/**
- * 
- * Struct que tem a função de ser usada por depuradores para determinar o valor de uma determinada variável local durante a execução de um método.
+/** \brief Struct que tem a função de ser usada por depuradores para determinar o valor de uma determinada variável local durante a execução de um método.
  */
 typedef struct {
     /*@{*/

@@ -8,9 +8,7 @@
 
 using namespace std;
 
-/**
- * 
- * Struct que tem a função de ser usada por depuradores para determinar qual parte do vetor de código da JVM corresponde a uma determinada linha no arquivo de origem original
+/** \brief Struct que tem a função de ser usada por depuradores para determinar qual parte do vetor de código da JVM corresponde a uma determinada linha no arquivo de origem original
  */
 typedef struct {
     /*@{*/

@@ -6,9 +6,7 @@
 #include "Method_info.hpp"
 #include "Operand_stack.hpp"
 
-/**
- * 
- * Struct que contém estrutura de um array
+/** \brief Struct que contém estrutura de um array
  */
 typedef struct  {
     /*@{*/

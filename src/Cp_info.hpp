@@ -8,9 +8,7 @@
 
 using namespace std;
 
-/**
- * 
- * Struct que representa uma entrada do \e Constant Pool
+/** \brief Struct que representa uma entrada do \e Constant Pool
  */
 struct Cp_info {
     /*@{*/
