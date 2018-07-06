@@ -11,7 +11,7 @@ using namespace std;
 
 class Attribute_info;
 
-/** \brief Struct responsável por armazenar os as instruções da JVM e informação auxiliares para metodos, etc
+/** \brief Struct responsável por armazenar as instruções da JVM e informação auxiliares para metodos, etc
  */
 
 typedef struct {

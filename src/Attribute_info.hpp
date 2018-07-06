@@ -35,8 +35,8 @@ public:
     static vector<Attribute_info> read_attributes(FILE* fp, vector<Cp_info> cp_vector, int length);
     /**
      * Lê um atributo específico de uma classe.
-     * @see read_attributes()
-     * @param fp Ponteiro para o arquivo (.Class)
+     * @see Read_attributes()
+     * @param fp Ponteiro Para o arquivo (.Class)
      * @param cp_vector Vetor que contém dados do \e Constant \e Pool.
      * @return Retorna o atributo lido.
     */
@@ -57,23 +57,23 @@ public:
     */
     static T_exception_table read_exception_handler(FILE* fp);
     /**
-     * Retorna o mnemônico de uma função dado um opcode.
-     * @param opcode Opcode da função
+     * Verifica o mnemônico de uma função dado um opcode.
+     * @param Opcode Opcode da função
      * @return Retorna o mnemônico a partir do opcode.
     */
     static string get_mnemonic(int opcode);
     /**
-     * Retonar o valor correspondente dado um número de bytes.
-     * @param n número de bytes.
-     * @param code referência para os bytes do código.
-     * @param index referência para o endereço do parâmetro do opcode.
-     * @return Retorna o valor correspondente ao número de bytes dado.
+     * Calcula o valor correspondente dado um número de \e bytes.
+     * @param n Número de \e bytes.
+     * @param code Referência para os \e bytes do código.
+     * @param index Referência para o endereço do parâmetro do \e opcode.
+     * @return Retorna o valor correspondente ao número de \e bytes dado.
     */
     U4 get_n_bytes_value(uint8_t n, vector<unsigned char> code, int* index);
     /** 
-     * R
-     * 
-     * 
+     * Provê os parâmetros de um \e opcode.
+     * @param code Ponteiro para código e parâmetros.
+     * @param index Índice para referência do parâmetro.
      * @return Retorna o valor correspondente.
     */
     void get_opcode_params(vector<unsigned char> code, int* index);
