@@ -25,7 +25,8 @@
 
 using namespace std;
 
-/*! \brief Classe responsável por garantir que cada frame contenha uma pilha \e LIFO 
+/*! \class Operand_stack
+ * 	\brief Classe responsável por garantir que cada frame contenha uma pilha \e LIFO 
  *
  * 
  */

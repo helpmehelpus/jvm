@@ -17,7 +17,8 @@
 
 using namespace std;
 
-/*! \brief Classe responsável por fazer a leitura do .class
+/*! \class Reader
+ * \brief Classe responsável por fazer a leitura do .class
  *
  * 
  */

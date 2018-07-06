@@ -15,7 +15,8 @@ class Reader;
 
 using namespace std;
 
-/*! \brief Classe que define as classes estáticas.
+/*! \class Static_class
+ * \brief Classe que define as classes estáticas.
  *         
  */
 class Static_class {

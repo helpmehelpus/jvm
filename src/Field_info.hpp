@@ -10,7 +10,8 @@
 #include "Cp_info.hpp"
 
 using namespace std;
-/*! \brief Classe responsável por armazenar os campos definidos da classe.
+/*! \class Field_info
+ *  \brief Classe responsável por armazenar os campos definidos da classe.
  *        
  */
 class Field_info {

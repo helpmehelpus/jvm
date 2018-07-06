@@ -16,7 +16,8 @@ using namespace std;
 
 typedef void (*func)(void);
 
-/*! \brief Classe responsável por realizar as operações da JVM
+/*! \class Operations
+ *	\brief Classe responsável por realizar as operações da JVM
  *
  * 
  */

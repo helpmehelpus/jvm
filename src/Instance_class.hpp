@@ -11,7 +11,8 @@ using namespace std;
 
 class Static_class; // solve cross referencing
 
-/*! \brief Classe que serve para instanciar classes que são criadas usando uma nova instrução da JVM
+/*! \class Instance_class
+ *  \brief Classe que serve para instanciar classes que são criadas usando uma nova instrução da JVM
  *
  * 
  */

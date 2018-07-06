@@ -14,7 +14,9 @@ using namespace std;
 
 const string name_types[] = {"-", "UTF-8", "-", "Integer", "Float", "Long", "Double", "Class", "String", "Field", "Method", "Interface", "Name/Type"};
 const string flag_names[] = {"ACC_PUBLIC", "ACC_FINAL", "ACC_SUPER", "ACC_INTERFACE", "ACC_ABSTRACT"};
-/*! \brief Classe responsável em imprimir informações da classe
+
+/*! \class Displayer
+ * \brief Classe responsável em imprimir informações da classe
  *
  *  Essa classe exibe de forma estruturada as informações alocadas de uma classe.
  */
