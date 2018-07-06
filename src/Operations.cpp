@@ -47,18 +47,8 @@ const func Operations::functions[] = { &Operations::nop, &Operations::aconst_nul
     &Operations::nop, &Operations::wide, &Operations::multianewarray, &Operations::ifnull, &Operations::ifnonnull,
     &Operations::goto_w, &Operations::jsr_w };// &Operations::breakpoint, &Operations::impdep1, &Operations::impdep2
 
-// Operations::Operations(Frame* ref) {
-// 	frame = ref;
-// }
 
 U4 Operations::get_n_bytes_value(uint8_t n, unsigned char** pc){
-//   U4 value = pc[frame->current_pc_index];
-//   frame->pc+= 3;
-//   for(int i = 1; i < n; i++){
-//     value = (value << 8) | pc[frame->current_pc_index];
-//     frame->pc+= 3;
-//   }
-//   return value;
     U4 value = **pc;
     *pc+=1;
     for(int i = 1; i < n; i++){
@@ -1230,7 +1220,7 @@ void Operations::dsub()
 
 	result.type = TYPE_DOUBLE;
 	result.real_type = RT_DOUBLE;
-	result.value.d = value1.d - value2.d;
+    result.value.d = value1.d - value2.d;
 	frame->operand_stack->push_type(result);
 }
 

@@ -30,7 +30,7 @@ void Frame_stack::execute() {
 	
 	while (next_instruction()) {
 		
-		cout  << "Opcode: " << opcode << "\tMnemonico: " << Attribute_info::get_mnemonic(opcode) << flush << endl;
+		// cout  << "Opcode: " << opcode << "\tMnemonico: " << Attribute_info::get_mnemonic(opcode) << flush << endl;
 		Operations::run(opcode);
 
 
@@ -43,7 +43,7 @@ void Frame_stack::execute() {
 void Frame_stack::set_start_PC(Frame* frame) {
 
     frame->pc = &frame->method_info.attributes[0].info.code.code[0];
-    // frame->current_pc_index = 0;
+    
 	
 }
 
