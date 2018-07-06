@@ -363,137 +363,134 @@ public:
 	static void istore_0();
 
 	/*!
-	* Instrução que desempilha o valor inteiro da variável local no índice 0 na pilha de operandos e o valor da variável local é atribuido ao valor desempilhado.
+	* Instrução que desempilha o valor \e long da variável local no índice 0 na pilha de operandos e o valor da variável local é atribuido ao valor desempilhado.
     */
 	static void lstore_0();
 
 	/*!
-	* Instrução que
+	* Instrução que desempilha o valor \e long da variável local no índice 1 na pilha de operandos e o valor da variável local é atribuido ao valor desempilhado.
     */
 	static void lstore_1();
 
 	/*!
-	* Instrução que
+	* Instrução que desempilha o valor \e long da variável local no índice 2 na pilha de operandos e o valor da variável local é atribuido ao valor desempilhado.
     */
 	static void lstore_2();
 
 	/*!
-	* Instrução que
+	* Instrução que desempilha o valor \e long da variável local no índice 3 na pilha de operandos e o valor da variável local é atribuido ao valor desempilhado.
     */
 	static void lstore_3();
 
 	/*!
-	* Instrução que
+	* Instrução que desempilha o valor \e float da variável local no índice 0 na pilha de operandos e o valor da variável local é atribuido ao valor desempilhado.
     */
 	static void fstore_0();
 
 	/*!
-	* Instrução que
+	* Instrução que desempilha o valor \e float da variável local no índice 0 na pilha de operandos e o valor da variável local é atribuido ao valor desempilhado.
     */
 	static void fstore_1();
 
 	/*!
-	* Instrução que
+	* Instrução que desempilha o valor \e float da variável local no índice 2 na pilha de operandos e o valor da variável local é atribuido ao valor desempilhado.
     */
 	static void fstore_2();
-
+	
 	/*!
-	* Instrução que
+	* Instrução que desempilha o valor \e float da variável local no índice 3 na pilha de operandos e o valor da variável local é atribuido ao valor desempilhado.
     */
 	static void fstore_3();
 
 	/*!
-	* Instrução que
+	* Instrução que desempilha o valor \e double da variável local no índice 0 na pilha de operandos e o valor da variável local é atribuido ao valor desempilhado.
     */
 	static void dstore_0();
 
 	/*!
-	* Instrução que
+	* Instrução que desempilha o valor \e double da variável local no índice 1 na pilha de operandos e o valor da variável local é atribuido ao valor desempilhado.
     */
 	static void dstore_1();
 
 	/*!
-	* Instrução que
+	* Instrução que desempilha o valor \e double da variável local no índice 2 na pilha de operandos e o valor da variável local é atribuido ao valor desempilhado.
     */
 	static void dstore_2();
 
 	/*!
-	* Instrução que
+	* Instrução que desempilha o valor \e double da variável local no índice 3 na pilha de operandos e o valor da variável local é atribuido ao valor desempilhado.
     */
 	static void dstore_3();
 
 	/*!
-	* Instrução que
+	* Instrução que desempilha o valor referência da variável local no índice 0 na pilha de operandos e o valor da variável local é atribuido ao valor desempilhado.
     */
 	static void astore_0();
 
 	/*!
-	* Instrução que
+	* Instrução que desempilha o valor referência da variável local no índice 1 na pilha de operandos e o valor da variável local é atribuido ao valor desempilhado.
     */
 	static void astore_1();
 
 	/*!
-	* Instrução que
+	* Instrução que desempilha o valor referência da variável local no índice 2 na pilha de operandos e o valor da variável local é atribuido ao valor desempilhado.
     */
 	static void astore_2();
 
 	/*!
-	* Instrução que
+	* Instrução que desempilha o valor referência da variável local no índice 3 na pilha de operandos e o valor da variável local é atribuido ao valor desempilhado.
     */
 	static void astore_3();
 
 	/*!
-	* Instrução que
+	* Instrução que salva em um vetor de inteiros.
     */
 	static void iastore();
 
 	/*!
-	* Instrução que
+	* Instrução que salva em um vetor de \e longs.
     */
 
 
-/*!
-	* Instrução que
-    */
 	static void lastore();
 
 	/*!
-	* Instrução que
+	* Instrução que salva em um vetor de \e floats.
     */
 	static void fastore();
 
 	/*!
-	* Instrução que
+	* Instrução que salva em um vetor de \e doubles.
     */
 	static void dastore();
 
 	/*!
-	* Instrução que
+	* Instrução que salva em um vetor de referências.
     */
 	static void aastore();
 
 	/*!
-	* Instrução que
+	* Instrução que salva em um vetor de booleanos.
     */
 	static void bastore();
 
 	/*!
-	* Instrução que
+	* Instrução que salva em um vetor de \e chars.
     */
 	static void castore();
 
 	/*!
-	* Instrução que
+	* Instrução que salva em um vetor de \e shorts.
     */
 	static void sastore();
 
 	/*!
-	* Instrução que
+	* Instrução que desempilha o topo da pilha.
     */
 	static void pop();
 
 	/*!
-	* Instrução que
+	* Instrução que desempilha o topo da pilha.
     */
 	static void pop2();
 
