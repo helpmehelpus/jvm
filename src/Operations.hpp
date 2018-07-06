@@ -490,7 +490,7 @@ public:
 	static void pop();
 
 	/*!
-	* Instrução que desempilha o topo da pilha.
+	* Instrução que desempilha o primeirou ou segundo topos da pilha.
     */
 	static void pop2();
 
